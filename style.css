@@ -1,82 +1,139 @@
-<!DOCTYPE html>
-<html lang="it">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calcolatore CRM</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
-    <div class="container">
-        <h1>Calcolatore CRM</h1>
-        <form id="calculator-form">
-            <div class="form-group">
-                <label for="rooms">N° Stanze:</label>
-                <input type="number" id="rooms" min="1" required>
-            </div>
-            <div class="form-group">
-                <label for="doctors">N° Dottori:</label>
-                <input type="number" id="doctors" min="0" required>
-            </div>
-            <div class="form-group">
-                <label for="cpl">CPL per ogni nuovo paziente:</label>
-                <select id="cpl" required>
-                    <option value="17">Capoluogo (17 euro)</option>
-                    <option value="13">No Capoluogo (13 euro)</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="additional-locations">Sedi aggiuntive:</label>
-                <input type="number" id="additional-locations" min="0" required>
-            </div>
-            <div class="form-group">
-                <label for="noa">NOA:</label>
-                <input type="number" id="noa" min="0" required>
-            </div>
-            <div class="form-group">
-                <label for="noa-price">Prezzo di vendita NOA:</label>
-                <select id="noa-price" required>
-                    <option value="29">29 euro</option>
-                    <option value="39">39 euro</option>
-                </select>
-            </div>
-            <button type="button" id="calculate-btn">Calcola</button>
-        </form>
+:root {
+    --primary-color: #007f6a;
+    --secondary-color: #3d83df;
+    --background-color: #f7f9fa;
+    --card-bg: #ffffff;
+    --text-primary: #1b2734;
+    --input-bg: #f9f9f9;
+    --font-family: Roboto, Helvetica, Arial, sans-serif;
+}
 
-        <div id="results" class="results" style="display: none;">
-            <div class="result-group">
-                <label>Canone Mensile Predefinito:</label>
-                <span id="default-monthly-price">0 €</span>
-            </div>
-            <div class="result-group">
-                <label>Setup Fee (UNA TANTUM):</label>
-                <span id="setup-fee">0 €</span>
-            </div>
-            <div class="result-group">
-                <span id="discount-message" class="blinking">Sono presenti sconti</span>
-            </div>
-        </div>
+body {
+    margin: 0;
+    font-family: var(--font-family);
+    background-color: var(--background-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
 
-        <div id="discount-panel" class="discount-panel" style="display: none;">
-            <div class="result-group">
-                <label>Prezzo totale mese:</label>
-                <span id="monthly-price">0 €</span>
-                <span id="discount-date" class="blinking-date">Valido fino al: --/--/----</span>
-            </div>
-        </div>
+.container {
+    background: var(--card-bg);
+    border-radius: 12px;
+    padding: 30px;
+    width: 100%;
+    max-width: 500px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
 
-        <div id="ctr-panel" class="ctr-panel" style="display: none;">
-            <div class="result-group">
-                <label>Total CTR Value:</label>
-                <span id="sales-commissions">0 €</span>
-            </div>
-        </div>
+h1 {
+    text-align: center;
+    color: var(--primary-color);
+    font-size: 24px;
+    margin-bottom: 20px;
+}
 
-        <div id="calculator-icon" class="calculator-icon" style="display: none;">
-            🧮
-        </div>
-    </div>
+.form-group {
+    margin-bottom: 15px;
+}
 
-    <script src="script.js"></script>
-</body>
-</html>
+label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: var(--text-primary);
+}
+
+input,
+select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 16px;
+    background-color: var(--input-bg);
+}
+
+button {
+    width: 100%;
+    padding: 15px;
+    border: none;
+    background: var(--primary-color);
+    color: #fff;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+button:hover {
+    background: #005e51;
+}
+
+.results, .discount-panel, .ctr-panel {
+    margin-top: 20px;
+    padding: 15px;
+    background-color: #f0f7f4;
+    border: 1px solid #dde3e9;
+    border-radius: 8px;
+}
+
+.result-group {
+    margin-bottom: 10px;
+}
+
+.result-group label {
+    font-size: 14px;
+    color: var(--primary-color);
+    font-weight: bold;
+}
+
+.result-group span {
+    display: block;
+    font-size: 16px;
+    color: var(--text-primary);
+    font-weight: bold;
+}
+
+.blinking {
+    color: red;
+    font-weight: bold;
+    animation: blink 1s infinite;
+    cursor: pointer;
+}
+
+@keyframes blink {
+    0%   { opacity: 1; }
+    50%  { opacity: 0; }
+    100% { opacity: 1; }
+}
+
+.blinking-date {
+    color: red;
+    font
+::contentReference[oaicite:0]{index=0}
+    .blinking-date {
+    color: red;
+    font-weight: bold;
+    animation: blink-date 1.2s infinite;
+    display: block;
+    margin-top: 5px;
+}
+
+@keyframes blink-date {
+    0%   { opacity: 1; }
+    50%  { opacity: 0; }
+    100% { opacity: 1; }
+}
+
+.calculator-icon {
+    font-size: 24px;
+    cursor: pointer;
+    margin-top: 20px;
+    text-align: center;
+    animation: blink 1s infinite;
+    color: var(--primary-color);
+}
+ 
