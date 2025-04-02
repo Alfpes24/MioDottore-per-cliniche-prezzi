@@ -59,8 +59,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const anno = oggi.getFullYear();
     discountDate.textContent = `Valido fino al: ${giorno}/${mese}/${anno}`;
 
-    // Probabilità 80% di mostrare la scritta "Sono presenti sconti clicca qui"
-    if (Math.random() < 0.8) {
+    // Probabilità 10% di mostrare la scritta "Sono presenti sconti clicca qui"
+    if (Math.random() < 0.1) {
       discountMessage.textContent = "Sono presenti sconti clicca qui";
       discountMessage.style.display = "block";
     } else {
