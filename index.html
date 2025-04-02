@@ -1,43 +1,38 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Calcolatore CRM</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <div class="container">
     <h1>Calcolatore CRM</h1>
     <form id="calculator-form">
       <div class="form-group">
-        <label for="rooms">N° Stanze</label>
-        <input type="number" id="rooms" min="1" required>
+        <label for="rooms">N° Ambulatori</label>
+        <input type="number" id="rooms" min="1" required />
       </div>
-
       <div class="form-group">
         <label for="doctors">N° Dottori</label>
-        <input type="number" id="doctors" min="0" required>
+        <input type="number" id="doctors" min="0" required />
       </div>
-
       <div class="form-group">
-        <label for="cpl">Capoluogo/No Capoluogo</label>
+        <label for="cpl">Sede della clinica</label>
         <select id="cpl" required>
           <option value="17">Capoluogo (17 euro)</option>
           <option value="13">No Capoluogo (13 euro)</option>
         </select>
       </div>
-
       <div class="form-group">
         <label for="additional-locations">Sedi aggiuntive</label>
-        <input type="number" id="additional-locations" min="0" required>
+        <input type="number" id="additional-locations" min="0" required />
       </div>
-
       <div class="form-group">
-        <label for="noa">N° licenze NOA</label>
-        <input type="number" id="noa" min="0" required>
+        <label for="noa">N°licenze NOA</label>
+        <input type="number" id="noa" min="0" required />
       </div>
-
       <div class="form-group">
         <label for="noa-price">Prezzo di vendita NOA</label>
         <select id="noa-price" required>
@@ -45,37 +40,35 @@
           <option value="39">39 euro</option>
         </select>
       </div>
-
       <button type="button" id="calculate-btn">Calcola</button>
     </form>
 
-    <!-- Risultati -->
     <div id="results" class="results" style="display: none;">
       <div class="result-group">
         <label>Canone Mensile</label>
         <span id="default-monthly-price">0 €</span>
       </div>
-
       <div class="result-group">
-        <label>Setup Fee(UNA TANTUM)</label>
+        <label>Setup Fee (UNA TANTUM)</label>
         <span id="setup-fee">0 €</span>
       </div>
-
       <div class="result-group">
         <span id="discount-message" class="blinking" style="display: none; cursor: pointer;"></span>
       </div>
     </div>
 
-    <!-- Sconto -->
     <div id="discount-panel" class="discount-panel" style="display: none;">
-      <div class="result-group">
-        <label>Canone Mensile Promozionale</label>
-        <span id="monthly-price">0 €</span>
-        <span id="discount-date" class="blinking-date"></span>
+      <div class="result-group" style="display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap;">
+        <div>
+          <label>Canone mensile promozionale</label>
+          <span id="monthly-price">0 €</span>
+          <span id="discount-date" class="blinking-date"></span>
+        </div>
+        <a href="https://apps.docusign.com/send/templates?view=shared&folder=d71d9886-1424-4799-9155-4de52c347f6b"
+           class="lock-price-btn" target="_blank">Blocca il prezzo</a>
       </div>
     </div>
 
-    <!-- Calcolatrice CTR -->
     <div id="calculator-icon" class="calculator-icon" style="display: none;">🧮</div>
 
     <div id="ctr-panel" class="ctr-panel" style="display: none;">
