@@ -69,4 +69,4 @@ document.addEventListener("DOMContentLoaded", () => {
         calculatorIcon.style.display = "none";
         ctrPanel.style.display = "none";
     });
-});
+
