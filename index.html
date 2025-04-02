@@ -1,81 +1,82 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Calcolatore CRM</title>
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calcolatore CRM</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="container">
-    <h1>Calcolatore CRM</h1>
-    <form id="calculator-form">
-      <div class="form-group">
-        <label for="rooms">N° Stanze:</label>
-        <input type="number" id="rooms" min="1" required>
-      </div>
-      <div class="form-group">
-        <label for="doctors">N° Dottori:</label>
-        <input type="number" id="doctors" min="0" required>
-      </div>
-      <div class="form-group">
-        <label for="cpl">CPL per ogni nuovo paziente:</label>
-        <select id="cpl" required>
-          <option value="17">Capoluogo (17 euro)</option>
-          <option value="13">No Capoluogo (13 euro)</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label for="additional-locations">Sedi aggiuntive:</label>
-        <input type="number" id="additional-locations" min="0" required>
-      </div>
-      <div class="form-group">
-        <label for="noa">NOA:</label>
-        <input type="number" id="noa" min="0" required>
-      </div>
-      <div class="form-group">
-        <label for="noa-price">Prezzo di vendita NOA:</label>
-        <select id="noa-price" required>
-          <option value="29">29 euro</option>
-          <option value="39">39 euro</option>
-        </select>
-      </div>
-      <button type="button" id="calculate-btn">Calcola</button>
-    </form>
+    <div class="container">
+        <h1>Calcolatore CRM</h1>
+        <form id="calculator-form">
+            <div class="form-group">
+                <label for="rooms">N° Stanze:</label>
+                <input type="number" id="rooms" min="1" required>
+            </div>
+            <div class="form-group">
+                <label for="doctors">N° Dottori:</label>
+                <input type="number" id="doctors" min="0" required>
+            </div>
+            <div class="form-group">
+                <label for="cpl">CPL per ogni nuovo paziente:</label>
+                <select id="cpl" required>
+                    <option value="17">Capoluogo (17 euro)</option>
+                    <option value="13">No Capoluogo (13 euro)</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="additional-locations">Sedi aggiuntive:</label>
+                <input type="number" id="additional-locations" min="0" required>
+            </div>
+            <div class="form-group">
+                <label for="noa">NOA:</label>
+                <input type="number" id="noa" min="0" required>
+            </div>
+            <div class="form-group">
+                <label for="noa-price">Prezzo di vendita NOA:</label>
+                <select id="noa-price" required>
+                    <option value="29">29 euro</option>
+                    <option value="39">39 euro</option>
+                </select>
+            </div>
+            <button type="button" id="calculate-btn">Calcola</button>
+        </form>
 
-    <div id="results" class="hidden">
-      <div class="result-group">
-        <label>Canone Mensile Predefinito:</label>
-        <span id="default-monthly-price">0 €</span>
-      </div>
-      <div class="result-group">
-        <label>Setup Fee (UNA TANTUM):</label>
-        <span id="setup-fee">0 €</span>
-      </div>
-      <div class="result-group">
-        <span id="discount-message" class="blinking hidden">Sono presenti sconti</span>
-      </div>
+        <div id="results" class="results" style="display: none;">
+            <div class="result-group">
+                <label>Canone Mensile Predefinito:</label>
+                <span id="default-monthly-price">0 €</span>
+            </div>
+            <div class="result-group">
+                <label>Setup Fee (UNA TANTUM):</label>
+                <span id="setup-fee">0 €</span>
+            </div>
+            <div class="result-group">
+                <span id="discount-message" class="blinking" style="display: none;"></span>
+            </div>
+        </div>
+
+        <div id="discount-panel" class="discount-panel" style="display: none;">
+            <div class="result-group">
+                <label>Prezzo totale mese:</label>
+                <span id="monthly-price">0 €</span>
+                <span id="discount-date" class="blinking-date">Valido fino al: --/--/----</span>
+            </div>
+        </div>
+
+        <div id="ctr-panel" class="ctr-panel" style="display: none;">
+            <div class="result-group">
+                <label>Total CTR Value:</label>
+                <span id="sales-commissions">0 €</span>
+            </div>
+        </div>
+
+        <div id="calculator-icon" class="calculator-icon" style="display: none;">
+            🧮
+        </div>
     </div>
 
-    <div id="discount-panel" class="hidden">
-      <div class="result-group">
-        <label>Prezzo totale mese:</label>
-        <span id="monthly-price">0 €</span>
-        <span id="discount-date" class="blinking-date">Valido fino al: --/--/----</span>
-      </div>
-    </div>
-
-    <div id="calculator-icon" class="calculator-icon hidden">
-      🧱
-    </div>
-
-    <div id="ctr-panel" class="ctr-panel hidden">
-      <div class="result-group">
-        <label>Total CTR Value:</label>
-        <span id="sales-commissions">0 €</span>
-      </div>
-    </div>
-  </div>
-  <script src="script.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
