@@ -71,4 +71,4 @@ document.addEventListener("DOMContentLoaded", () => {
 
         resultsBox.style.display = "block";
     });
-});
+
