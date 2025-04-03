@@ -25,7 +25,7 @@ document.addEventListener("DOMContentLoaded", () => {
             viewerCountSpan.textContent = randomViewers;
         }, 5000);
 
-    }, 15000);
+    }, 10000);
 });
 
 
