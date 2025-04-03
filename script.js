@@ -1,6 +1,7 @@
 document.addEventListener("DOMContentLoaded", () => {
   const calculateBtn = document.getElementById("calculate-btn");
   const checkBtn = document.getElementById("check-btn");
+  const procediBtn = document.querySelector(".btn-procedi");
   const defaultMonthlyPriceField = document.getElementById("default-monthly-price");
   const setupFeeField = document.getElementById("setup-fee");
   const resultsBox = document.getElementById("results");
@@ -58,12 +59,9 @@ document.addEventListener("DOMContentLoaded", () => {
     viewerBox.style.display = "none";
     ctrPanel.style.display = "none";
 
-    // Mostra il pannello Check solo se NOA >= 1
-    if (noa >= 1) {
-      checkSection.style.display = "block";
-    } else {
-      checkSection.style.display = "none";
-    }
+    // Gestione visibilità pulsanti
+    procediBtn.style.display = "inline-block";
+    checkBtn.style.display = noa >= 1 ? "inline-block" : "none";
   });
 
   // Check button -> countdown + reveal sconti
