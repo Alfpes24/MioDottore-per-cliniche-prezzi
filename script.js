@@ -23,7 +23,7 @@ document.addEventListener("DOMContentLoaded", () => {
         setInterval(() => {
             const randomViewers = Math.floor(Math.random() * 5) + 1;
             viewerCountSpan.textContent = randomViewers;
-        }, 10000);
+        }, 20000);
 
     }, 10000);
 });
