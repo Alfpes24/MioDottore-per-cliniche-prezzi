@@ -86,9 +86,9 @@ document.addEventListener("DOMContentLoaded", () => {
         // Visualizzatori
         viewerBox.style.display = "flex";
         updateViewerCount();
-        setInterval(updateViewerCount, 15000);
+        setInterval(updateViewerCount, 5000);
       }
-    }, 2000);
+    }, 1000);
   });
 
   // Messaggio cliccabile per scroll
