@@ -90,7 +90,7 @@ document.addEventListener("DOMContentLoaded", () => {
         updateViewerCount();
         setInterval(updateViewerCount, 15000);
       }
-    }, 20000);
+    }, 5000);
   });
 
   discountMessage.addEventListener("click", () => {
