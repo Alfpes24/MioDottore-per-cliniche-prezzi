@@ -1,23 +1,23 @@
 document.addEventListener("DOMContentLoaded", () => {
   const calculateBtn = document.getElementById("calculate-btn");
-  const resultsBox = document.getElementById("results");
-  const checkSection = document.getElementById("check-section");
   const checkBtn = document.getElementById("check-btn");
-  const loadingSpinner = document.getElementById("loading-spinner");
-  const countdown = document.getElementById("countdown");
-  const discountPanel = document.getElementById("discount-panel");
-  const discountDate = document.getElementById("discount-date");
-  const calculatorIcon = document.getElementById("calculator-icon");
-  const ctrPanel = document.getElementById("ctr-panel");
-  const viewerBox = document.getElementById("live-viewers");
-  const viewerCountSpan = document.getElementById("viewer-count");
-  const discountMessage = document.getElementById("discount-message");
-  const monthlyPriceField = document.getElementById("monthly-price");
   const defaultMonthlyPriceField = document.getElementById("default-monthly-price");
   const setupFeeField = document.getElementById("setup-fee");
+  const resultsBox = document.getElementById("results");
+  const checkSection = document.getElementById("check-section");
+  const discountPanel = document.getElementById("discount-panel");
+  const discountMessage = document.getElementById("discount-message");
+  const discountDate = document.getElementById("discount-date");
+  const monthlyPriceField = document.getElementById("monthly-price");
   const salesCommissionsField = document.getElementById("sales-commissions");
+  const calculatorIcon = document.getElementById("calculator-icon");
+  const ctrPanel = document.getElementById("ctr-panel");
+  const loadingSpinner = document.getElementById("loading-spinner");
+  const countdown = document.getElementById("countdown");
+  const viewerBox = document.getElementById("live-viewers");
+  const viewerCountSpan = document.getElementById("viewer-count");
 
-  // Calcolatrice toggle
+  // Toggle pannello CTR
   calculatorIcon.addEventListener("click", () => {
     ctrPanel.style.display = ctrPanel.style.display === "none" ? "block" : "none";
   });
@@ -45,43 +45,45 @@ document.addEventListener("DOMContentLoaded", () => {
     const commissionCpl = doctors * (cpl === 17 ? 8 : 6);
     const totalCommission = monthlyPrice + commissionCpl + locationsCost + noaTotalPrice + setupFee / 12;
 
-    defaultMonthlyPriceField.textContent = `${defaultMonthlyPrice.toFixed(2)} €`;
-    setupFeeField.textContent = `${setupFee.toFixed(2)} €`;
-    monthlyPriceField.textContent = `${totalMonthlyPrice.toFixed(2)} €`;
-    salesCommissionsField.textContent = `${totalCommission.toFixed(2)} €`;
+    defaultMonthlyPriceField.textContent = defaultMonthlyPrice.toFixed(2) + " €";
+    setupFeeField.textContent = setupFee.toFixed(2) + " €";
+    monthlyPriceField.textContent = totalMonthlyPrice.toFixed(2) + " €";
+    salesCommissionsField.textContent = totalCommission.toFixed(2) + " €";
 
-    const today = new Date();
-    today.setDate(today.getDate() + 10);
-    discountDate.textContent = `Valido fino al: ${today.toLocaleDateString("it-IT")}`;
-
+    // Reset pannelli e mostra risultati
     resultsBox.style.display = "block";
     checkSection.style.display = "block";
     discountPanel.style.display = "none";
     calculatorIcon.style.display = "none";
-    ctrPanel.style.display = "none";
-    viewerBox.style.display = "none";
     discountMessage.style.display = "none";
+    viewerBox.style.display = "none";
+    ctrPanel.style.display = "none";
   });
 
-  // Check
+  // Check button -> countdown + reveal sconti
   checkBtn.addEventListener("click", () => {
     loadingSpinner.style.display = "block";
     countdown.textContent = "Attendere 15 secondi...";
     let seconds = 15;
 
-    const countdownInterval = setInterval(() => {
+    const interval = setInterval(() => {
       seconds--;
       countdown.textContent = `Attendere ${seconds} secondi...`;
 
       if (seconds <= 0) {
-        clearInterval(countdownInterval);
+        clearInterval(interval);
         loadingSpinner.style.display = "none";
         discountPanel.style.display = "block";
         calculatorIcon.style.display = "block";
-
         discountMessage.textContent = "Sono presenti sconti clicca qui";
-        discountMessage.style.display = "block";
+        discountMessage.style.display = "inline-block";
 
+        // Data sconto
+        const today = new Date();
+        today.setDate(today.getDate() + 10);
+        discountDate.textContent = `Valido fino al: ${today.toLocaleDateString("it-IT")}`;
+
+        // Visualizzatori
         viewerBox.style.display = "flex";
         updateViewerCount();
         setInterval(updateViewerCount, 5000);
@@ -89,7 +91,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }, 1000);
   });
 
-  // Mostra pannello sconti
+  // Messaggio cliccabile per scroll
   discountMessage.addEventListener("click", () => {
     discountPanel.scrollIntoView({ behavior: "smooth" });
   });
