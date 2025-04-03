@@ -88,9 +88,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
         viewerBox.style.display = "flex";
         updateViewerCount();
-        setInterval(updateViewerCount, 5000);
+        setInterval(updateViewerCount, 15000);
       }
-    }, 1000);
+    }, 20000);
   });
 
   discountMessage.addEventListener("click", () => {
