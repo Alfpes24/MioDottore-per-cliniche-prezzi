@@ -86,7 +86,7 @@ document.addEventListener("DOMContentLoaded", () => {
         // Visualizzatori
         viewerBox.style.display = "flex";
         updateViewerCount();
-        setInterval(updateViewerCount, 5000);
+        setInterval(updateViewerCount, 15000);
       }
     }, 1000);
   });
