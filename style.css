@@ -224,3 +224,35 @@ button:hover {
   color: var(--text-muted);
   margin-top: 10px;
 }
+.btn-secondary {
+  padding: 8px 14px;
+  font-size: 14px;
+  background-color: #e2e8f0;
+  color: #334155;
+  border: none;
+  border-radius: var(--radius);
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.btn-secondary:hover {
+  background-color: #cbd5e1;
+  color: #1e293b;
+}
+
+.btn-primary {
+  padding: 10px 16px;
+  font-size: 15px;
+  background-color: var(--secondary);
+  color: white;
+  border-radius: var(--radius);
+  font-weight: 600;
+  text-decoration: none;
+  display: inline-block;
+  transition: background-color 0.3s ease;
+}
+
+.btn-primary:hover {
+  background-color: #2563eb;
+  text-decoration: none;
+}
