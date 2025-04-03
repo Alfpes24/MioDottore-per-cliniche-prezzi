@@ -1,5 +1,3 @@
-# Salviamo il nuovo contenuto corretto di script.js che integra tutte le funzionalità richieste
-js_code = """
 document.addEventListener("DOMContentLoaded", () => {
   const calculateBtn = document.getElementById("calculate-btn");
   const resultsBox = document.getElementById("results");
@@ -24,7 +22,7 @@ document.addEventListener("DOMContentLoaded", () => {
     ctrPanel.style.display = ctrPanel.style.display === "none" ? "block" : "none";
   });
 
-  // Calcolo logica
+  // Calcolo
   calculateBtn.addEventListener("click", () => {
     const rooms = parseInt(document.getElementById("rooms").value) || 0;
     const doctors = parseInt(document.getElementById("doctors").value) || 0;
@@ -65,6 +63,7 @@ document.addEventListener("DOMContentLoaded", () => {
     discountMessage.style.display = "none";
   });
 
+  // Check
   checkBtn.addEventListener("click", () => {
     loadingSpinner.style.display = "block";
     countdown.textContent = "Attendere 15 secondi...";
@@ -90,6 +89,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }, 1000);
   });
 
+  // Mostra pannello sconti
   discountMessage.addEventListener("click", () => {
     discountPanel.scrollIntoView({ behavior: "smooth" });
   });
@@ -99,11 +99,3 @@ document.addEventListener("DOMContentLoaded", () => {
     viewerCountSpan.textContent = randomViewers;
   }
 });
-"""
-
-# Salviamo il file aggiornato
-script_path = "/mnt/data/script.js"
-with open(script_path, "w", encoding="utf-8") as file:
-    file.write(js_code)
-
-script_path
