@@ -11,7 +11,23 @@ document.addEventListener("DOMContentLoaded", () => {
   discountMessage.addEventListener("click", () => {
     discountPanel.style.display = "block";
     calculatorIcon.style.display = "block";
-  });
+
+    // Dopo 15 secondi, mostra il blocco "live-viewers"
+    setTimeout(() => {
+        const viewerBox = document.getElementById("live-viewers");
+        viewerBox.style.display = "flex";
+
+        const viewerCountSpan = document.getElementById("viewer-count");
+
+        // Cambia il numero tra 1 e 5 ogni 5 secondi
+        setInterval(() => {
+            const randomViewers = Math.floor(Math.random() * 5) + 1;
+            viewerCountSpan.textContent = randomViewers;
+        }, 5000);
+
+    }, 15000);
+});
+
 
   // Mostra/Nasconde pannello CTR al click sulla calcolatrice
   calculatorIcon.addEventListener("click", () => {
