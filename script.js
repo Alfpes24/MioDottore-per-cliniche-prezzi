@@ -1,39 +1,23 @@
 document.addEventListener("DOMContentLoaded", () => {
   const calculateBtn = document.getElementById("calculate-btn");
   const resultsBox = document.getElementById("results");
-  const discountMessage = document.getElementById("discount-message");
+  const checkSection = document.getElementById("check-section");
+  const checkBtn = document.getElementById("check-btn");
+  const loadingSpinner = document.getElementById("loading-spinner");
+  const countdown = document.getElementById("countdown");
   const discountPanel = document.getElementById("discount-panel");
   const discountDate = document.getElementById("discount-date");
   const calculatorIcon = document.getElementById("calculator-icon");
   const ctrPanel = document.getElementById("ctr-panel");
+  const viewerBox = document.getElementById("live-viewers");
+  const viewerCountSpan = document.getElementById("viewer-count");
 
-  // Mostra pannello sconti al click sulla scritta
-  discountMessage.addEventListener("click", () => {
-    discountPanel.style.display = "block";
-    calculatorIcon.style.display = "block";
-
-    // Dopo 15 secondi, mostra il blocco "live-viewers"
-    setTimeout(() => {
-        const viewerBox = document.getElementById("live-viewers");
-        viewerBox.style.display = "flex";
-
-        const viewerCountSpan = document.getElementById("viewer-count");
-
-        // Cambia il numero tra 1 e 5 ogni 5 secondi
-        setInterval(() => {
-            const randomViewers = Math.floor(Math.random() * 5) + 1;
-            viewerCountSpan.textContent = randomViewers;
-        }, 20000);
-
-    }, 10000);
-});
-
-
-  // Mostra/Nasconde pannello CTR al click sulla calcolatrice
+  // Mostra CTR Panel con calcolatrice
   calculatorIcon.addEventListener("click", () => {
     ctrPanel.style.display = ctrPanel.style.display === "none" ? "block" : "none";
   });
 
+  // CALCOLA: mostra canone mensile e check
   calculateBtn.addEventListener("click", () => {
     const rooms = parseInt(document.getElementById("rooms").value) || 0;
     const doctors = parseInt(document.getElementById("doctors").value) || 0;
@@ -61,13 +45,11 @@ document.addEventListener("DOMContentLoaded", () => {
     const commissionNoa = noa * noaPrice;
     const totalCommission = commissionBase + commissionCpl + commissionLocations + (setupFee / 12) + commissionNoa;
 
-    // Aggiorna i valori in pagina
     document.getElementById("default-monthly-price").textContent = `${defaultMonthlyPrice.toFixed(2)} €`;
     document.getElementById("setup-fee").textContent = `${setupFee.toFixed(2)} €`;
     document.getElementById("monthly-price").textContent = `${totalMonthlyPrice.toFixed(2)} €`;
     document.getElementById("sales-commissions").textContent = `${totalCommission.toFixed(2)} €`;
 
-    // Calcola data sconto +10 giorni
     const oggi = new Date();
     oggi.setDate(oggi.getDate() + 10);
     const giorno = String(oggi.getDate()).padStart(2, '0');
@@ -75,17 +57,38 @@ document.addEventListener("DOMContentLoaded", () => {
     const anno = oggi.getFullYear();
     discountDate.textContent = `Valido fino al: ${giorno}/${mese}/${anno}`;
 
-    // Probabilità 10% di mostrare la scritta "Sono presenti sconti clicca qui"
-    if (Math.random() < 0.1) {
-      discountMessage.textContent = "Sono presenti sconti clicca qui";
-      discountMessage.style.display = "block";
-    } else {
-      discountMessage.style.display = "none";
-      discountPanel.style.display = "none";
-      calculatorIcon.style.display = "none";
-      ctrPanel.style.display = "none";
-    }
-
+    // Mostra risultati base + tasto Check
     resultsBox.style.display = "block";
+    checkSection.style.display = "block";
+    discountPanel.style.display = "none";
+    calculatorIcon.style.display = "none";
+    ctrPanel.style.display = "none";
+    viewerBox.style.display = "none";
+  });
+
+  // CHECK: avvia countdown + spinner + mostra pannello sconto
+  checkBtn.addEventListener("click", () => {
+    loadingSpinner.style.display = "block";
+    countdown.textContent = "Attendere 15 secondi...";
+    let counter = 15;
+
+    const interval = setInterval(() => {
+      counter--;
+      countdown.textContent = `Attendere ${counter} secondi...`;
+      if (counter <= 0) {
+        clearInterval(interval);
+        countdown.textContent = "Offerta disponibile!";
+        loadingSpinner.style.display = "none";
+        discountPanel.style.display = "block";
+        calculatorIcon.style.display = "block";
+
+        // Avvia numeri random viewers
+        viewerBox.style.display = "flex";
+        setInterval(() => {
+          const randomViewers = Math.floor(Math.random() * 5) + 1;
+          viewerCountSpan.textContent = randomViewers;
+        }, 5000);
+      }
+    }, 1000);
   });
 });
