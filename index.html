@@ -6,88 +6,131 @@
   <title>Calcolatore CRM | MioDottore</title>
   <link rel="stylesheet" href="style.css" />
 </head>
+
 <body>
-  <div class="container">
-    <h1>Calcolatore CRM</h1>
-    <form id="calculator-form">
-      <div class="form-group">
-        <label for="rooms">N° Ambulatori</label>
-        <input type="number" id="rooms" min="1" required />
-      </div>
-      <div class="form-group">
-        <label for="doctors">N° Dottori</label>
-        <input type="number" id="doctors" min="0" required />
-      </div>
-      <div class="form-group">
-        <label for="cpl">Sede della clinica</label>
-        <select id="cpl" required>
-          <option value="17">Capoluogo</option>
-          <option value="13">No Capoluogo</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label for="additional-locations">Sedi aggiuntive</label>
-        <input type="number" id="additional-locations" min="0" required />
-      </div>
-      <div class="form-group">
-        <label for="noa">N° licenze NOA</label>
-        <input type="number" id="noa" min="0" required />
-      </div>
-      <div class="form-group">
-        <label for="noa-price">Prezzo NOA</label>
-        <select id="noa-price">
-          <option value="29">29€</option>
-          <option value="39">39€</option>
-        </select>
-      </div>
-      <button type="button" id="calculate-btn">Calcola</button>
-    </form>
+  <main class="layout">
+    <!-- Sezione Promozionale -->
+    <section class="promo-section">
+      <h1>Il paziente al centro,<br>Noa Notes al tuo fianco</h1>
+      <p class="description">
+        Noa Notes crea un riepilogo dettagliato delle informazioni più importanti scambiate con il paziente durante la visita.
+      </p>
+      <a class="promo-btn" href="https://noa.ai/it/demo" target="_blank">Chiedici come funziona</a>
 
-    <div id="results" class="results" style="display:none;">
-      <div class="result-group">
-        <label>Canone mensile predefinito</label>
-        <span id="default-monthly-price">0 €</span>
+      <div class="gdpr">
+        <svg fill="none" viewBox="0 0 24 24">
+          <path d="M9 16.2L5.5 12.7a1 1 0 0 0-1.4 1.4l4.2 4.2a1 1 0 0 0 1.4 0l11-11a1 1 0 0 0-1.4-1.4L9 16.2Z" fill="#627282"/>
+        </svg>
+        <span>Funziona su server conformi al GDPR</span>
       </div>
-      <div class="result-group">
-        <label>Setup Fee</label>
-        <span id="setup-fee">0 €</span>
-      </div>
-      <div class="result-group" id="check-section" style="display:none;">
-        <div class="check-buttons">
-          <button id="check-btn" class="btn-check">Check</button>
-          <a href="https://apps.docusign.com/send/templates?view=shared&folder=xyz" class="btn-procedi" target="_blank">Procedi</a>
-        </div>
-        <div id="loading-spinner" style="display:none;">
-          <div class="spinner"></div>
-          <div id="countdown"></div>
+
+      <div class="trusted-doctors">
+        <img src="https://noa.ai/hs-fs/hubfs/Untitled%20design%20(5)-Aug-13-2024-07-43-56-5647-AM.png" alt="Dottore 1" />
+        <img src="https://noa.ai/hs-fs/hubfs/Untitled%20design%20(10)-Aug-14-2024-11-55-26-2415-AM.png" alt="Dottore 2" />
+        <img src="https://noa.ai/hs-fs/hubfs/Untitled%20design%20(11)-Aug-14-2024-12-01-04-3391-PM.png" alt="Dottore 3" />
+        <div class="promo-text">
+          <p>Sviluppato da MioDottore</p>
+          <p><strong>+40.000 professionisti sanitari</strong></p>
         </div>
       </div>
-      <div class="result-group">
-        <span id="discount-message" class="blinking" style="display:none;"></span>
-      </div>
-    </div>
+    </section>
 
-    <div id="discount-panel" class="discount-panel" style="display:none;">
-      <div class="result-group">
-        <label>Canone mensile promozionale</label>
-        <span id="monthly-price">0 €</span>
-        <span id="discount-date" class="blinking-date"></span>
-        <a class="lock-price-btn" href="https://apps.docusign.com/send/templates?view=shared&folder=xyz" target="_blank">Blocca il prezzo</a>
-      </div>
-      <div id="live-viewers" class="live-viewers" style="display:none;">
-        <img src="https://cdn-icons-png.flaticon.com/512/709/709586.png" alt="occhi" />
-        <span id="viewer-count">1</span> persone stanno guardando l’offerta ora
-      </div>
-    </div>
+    <!-- Sezione Form -->
+    <section class="form-section">
+      <h2>Calcola il canone per la tua struttura</h2>
 
-    <div id="calculator-icon" class="calculator-icon" style="display:none;">🧮</div>
-    <div id="ctr-panel" class="ctr-panel" style="display:none;">
-      <div class="result-group">
-        <label>Total CTR Value</label>
-        <span id="sales-commissions">0 €</span>
+      <form id="calculator-form">
+        <div class="form-group">
+          <label for="rooms">N° Ambulatori</label>
+          <input type="number" id="rooms" min="1" required />
+        </div>
+        <div class="form-group">
+          <label for="doctors">N° Dottori</label>
+          <input type="number" id="doctors" min="0" required />
+        </div>
+        <div class="form-group">
+          <label for="cpl">Sede della clinica</label>
+          <select id="cpl" required>
+            <option value="17">Capoluogo (17 €)</option>
+            <option value="13">No Capoluogo (13 €)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="additional-locations">Sedi aggiuntive</label>
+          <input type="number" id="additional-locations" min="0" required />
+        </div>
+        <div class="form-group">
+          <label for="noa">N° licenze NOA</label>
+          <input type="number" id="noa" min="0" required />
+        </div>
+        <div class="form-group">
+          <label for="noa-price">Prezzo NOA</label>
+          <select id="noa-price" required>
+            <option value="29">29 €</option>
+            <option value="39">39 €</option>
+          </select>
+        </div>
+
+        <button type="button" id="calculate-btn">Calcola</button>
+      </form>
+
+      <!-- Risultati dopo calcolo -->
+      <div id="results" class="results" style="display:none;">
+        <div class="result-group">
+          <label>Canone Mensile Predefinito</label>
+          <span id="default-monthly-price">0 €</span>
+        </div>
+        <div class="result-group">
+          <label>Setup Fee (una tantum)</label>
+          <span id="setup-fee">0 €</span>
+        </div>
+
+        <!-- Sezione Check -->
+        <div class="result-group" id="check-section" style="display:none;">
+          <div class="check-buttons">
+            <button id="check-btn" class="btn-check">Check</button>
+            <a href="https://apps.docusign.com/send/templates?view=shared&folder=d71d9886-1424-4799-9155-4de52c347f6b" class="btn-procedi" target="_blank">Procedi</a>
+          </div>
+          <div id="loading-spinner" style="display:none;">
+            <div class="spinner"></div>
+            <div id="countdown"></div>
+          </div>
+        </div>
+
+        <!-- Messaggio lampeggiante -->
+        <div class="result-group">
+          <span id="discount-message" class="blinking" style="display:none;"></span>
+        </div>
       </div>
-    </div>
-  </div>
+
+      <!-- Pannello Promozionale -->
+      <div id="discount-panel" class="discount-panel" style="display:none;">
+        <div class="result-group" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+          <div>
+            <label>Canone Mensile Promozionale</label>
+            <span id="monthly-price">0 €</span>
+            <span id="discount-date" class="blinking-date"></span>
+          </div>
+          <a href="https://apps.docusign.com/send/templates?view=shared&folder=d71d9886-1424-4799-9155-4de52c347f6b"
+             class="lock-price-btn" target="_blank">Blocca il prezzo</a>
+        </div>
+        <div id="live-viewers" class="live-viewers" style="display:none;">
+          <img src="https://cdn-icons-png.flaticon.com/512/709/709586.png" alt="Occhi" />
+          <span id="viewer-count">1</span> persone stanno guardando l’offerta ora
+        </div>
+      </div>
+
+      <!-- Icona calcolatrice e CTR -->
+      <div id="calculator-icon" class="calculator-icon" style="display:none;">🧮</div>
+      <div id="ctr-panel" class="ctr-panel" style="display:none;">
+        <div class="result-group">
+          <label>Total CTR Value</label>
+          <span id="sales-commissions">0 €</span>
+        </div>
+      </div>
+    </section>
+  </main>
+
   <script src="script.js"></script>
 </body>
 </html>
