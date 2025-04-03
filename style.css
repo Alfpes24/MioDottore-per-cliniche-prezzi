@@ -16,62 +16,130 @@
   box-sizing: border-box;
   margin: 0;
   padding: 0;
-  transition: all 0.25s ease;
 }
 
 body {
   font-family: var(--font);
   background-color: #05c3a5;
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: start;
-  padding: 40px 20px;
   color: var(--text-main);
+  padding: 40px 20px;
 }
 
-.container {
+.layout {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 40px;
+  max-width: 1200px;
+  margin: 0 auto;
+  align-items: flex-start;
+}
+
+.promo-section,
+.form-section {
+  flex: 1 1 500px;
   background: var(--surface);
   padding: 40px;
   border-radius: var(--radius);
   box-shadow: var(--shadow);
-  width: 100%;
-  max-width: 560px;
-  animation: slideUp 0.5s ease-in-out;
 }
 
-@keyframes slideUp {
-  from { opacity: 0; transform: translateY(40px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-h1 {
+.promo-section h1 {
   font-size: 28px;
+  margin-bottom: 20px;
   color: var(--primary);
-  margin-bottom: 30px;
-  text-align: center;
+}
+
+.promo-section .description {
+  font-size: 16px;
+  color: var(--text-muted);
+  margin-bottom: 20px;
+}
+
+.promo-btn {
+  display: inline-block;
+  padding: 12px 20px;
+  background-color: var(--secondary);
+  color: white;
+  font-weight: bold;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: background-color 0.3s ease;
+}
+
+.promo-btn:hover {
+  background-color: #2563eb;
+}
+
+.gdpr {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 30px;
+  color: var(--text-muted);
+  font-size: 15px;
+}
+
+.gdpr svg {
+  width: 24px;
+  height: 24px;
+}
+
+.trusted-doctors {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 40px;
+}
+
+.trusted-doctors img {
+  border-radius: 50%;
+  width: 55px;
+  height: 55px;
+  object-fit: cover;
+}
+
+.promo-text {
+  margin-left: 10px;
+}
+
+.promo-text p {
+  margin: 0;
+  font-size: 14px;
+  color: var(--text-main);
+}
+
+.promo-text p strong {
+  font-weight: 700;
+}
+
+.form-section h2 {
+  font-size: 24px;
+  margin-bottom: 20px;
+  color: var(--primary);
 }
 
 .form-group {
   margin-bottom: 20px;
 }
 
-label {
+.form-group label {
   display: block;
   font-weight: 600;
   margin-bottom: 6px;
 }
 
-input, select {
+input,
+select {
   width: 100%;
   padding: 12px;
   border: 2px solid #e2e8f0;
-  border-radius: var(--radius);
-  background: var(--background);
+  border-radius: 10px;
+  background-color: var(--background);
   font-size: 16px;
 }
 
-input:focus, select:focus {
+input:focus,
+select:focus {
   border-color: var(--primary);
   outline: none;
   background: #ecfeff;
@@ -94,18 +162,14 @@ button:hover {
   background: #0d5f58;
 }
 
-.results, .discount-panel, .ctr-panel {
+.results,
+.discount-panel,
+.ctr-panel {
   margin-top: 25px;
   padding: 20px;
   background: #f1f5f9;
   border: 1px solid #cbd5e1;
   border-radius: var(--radius);
-  animation: fadeIn 0.3s ease-in-out;
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
 }
 
 .result-group {
@@ -122,7 +186,6 @@ button:hover {
   display: block;
   font-size: 18px;
   font-weight: 700;
-  color: var(--text-main);
   margin-top: 4px;
 }
 
@@ -140,71 +203,6 @@ button:hover {
   50% { opacity: 0; }
 }
 
-.blinking-date {
-  color: var(--danger);
-  font-weight: bold;
-  animation: blink 1.4s infinite;
-  display: block;
-  margin-top: 6px;
-  font-size: 15px;
-}
-
-.calculator-icon {
-  font-size: 26px;
-  cursor: pointer;
-  text-align: center;
-  color: var(--secondary);
-  margin-top: 18px;
-  animation: pulse 1.8s infinite;
-}
-
-.calculator-icon:hover {
-  color: var(--accent);
-  transform: scale(1.15);
-}
-
-@keyframes pulse {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.05); }
-}
-
-.lock-price-btn {
-  background-color: var(--secondary);
-  color: white;
-  text-decoration: none;
-  padding: 12px 20px;
-  border-radius: var(--radius);
-  font-weight: 600;
-  font-size: 15px;
-  white-space: nowrap;
-  display: inline-block;
-  transition: background-color 0.3s ease;
-}
-
-.lock-price-btn:hover {
-  background-color: #2563eb;
-  text-decoration: none;
-}
-
-/* 👁️ Visualizzatori dinamici */
-.live-viewers {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-weight: 600;
-  margin-top: 16px;
-  color: #1e293b;
-  font-size: 15px;
-  animation: fadeIn 0.5s ease-in;
-}
-
-.live-viewers img {
-  width: 24px;
-  height: 24px;
-  animation: pulse 2s infinite;
-}
-
-/* 🔁 Spinner */
 .spinner {
   width: 30px;
   height: 30px;
@@ -219,7 +217,6 @@ button:hover {
   to { transform: rotate(360deg); }
 }
 
-/* 🔢 Countdown */
 #countdown {
   text-align: center;
   font-size: 16px;
@@ -227,45 +224,18 @@ button:hover {
   margin-top: 10px;
 }
 
-/* ✅ Sezione Check + Procedi */
-.check-buttons {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 12px;
-  margin-top: 20px;
-  flex-wrap: wrap;
-}
+@media (max-width: 768px) {
+  .layout {
+    flex-direction: column;
+  }
 
-.btn-check {
-  padding: 6px 12px;
-  font-size: 13px;
-  background-color: #e2e8f0;
-  color: #334155;
-  border: 1px solid #cbd5e1;
-  border-radius: 8px;
-  cursor: pointer;
-  font-weight: 500;
-}
+  .promo-section,
+  .form-section {
+    width: 100%;
+    padding: 30px 20px;
+  }
 
-.btn-check:hover {
-  background-color: #cbd5e1;
-  color: #1e293b;
-}
-
-.btn-procedi {
-  padding: 10px 16px;
-  font-size: 15px;
-  background-color: var(--secondary);
-  color: white;
-  border-radius: 8px;
-  font-weight: 600;
-  text-decoration: none;
-  display: inline-block;
-  transition: background-color 0.3s ease;
-}
-
-.btn-procedi:hover {
-  background-color: #2563eb;
-  text-decoration: none;
+  .trusted-doctors {
+    flex-wrap: wrap;
+  }
 }
