@@ -1,122 +1,134 @@
 :root {
   --primary: #05c3a5;
-  --primary-dark: #04947e;
+  --primary-hover: #049e87;
   --secondary: #3b82f6;
-  --danger: #ef4444;
-  --muted: #64748b;
-  --text: #1e293b;
-  --bg: #f8fafc;
-  --white: #ffffff;
-  --radius: 16px;
-  --shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-  --font: 'Inter', 'Segoe UI', sans-serif;
+  --secondary-hover: #2563eb;
+  --background: #f9fafa;
+  --surface: #ffffff;
+  --text: #1f2937;
+  --muted: #6b7280;
+  --danger: #dc2626;
+  --radius: 12px;
+  --shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
+  --font: 'Segoe UI', 'Inter', sans-serif;
 }
 
 * {
   box-sizing: border-box;
-  margin: 0;
-  padding: 0;
 }
 
 body {
+  margin: 0;
   font-family: var(--font);
-  background-color: var(--bg);
+  background-color: var(--background);
   color: var(--text);
-  padding: 40px 20px;
   line-height: 1.6;
 }
 
 .layout {
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
   gap: 40px;
   max-width: 1200px;
   margin: 0 auto;
+  padding: 40px 20px;
 }
 
-.promo-section,
-.form-section {
-  flex: 1 1 500px;
-  background: var(--white);
-  padding: 40px;
+/* PROMO SECTION */
+.promo-section {
+  flex: 1 1 480px;
+  background: var(--surface);
   border-radius: var(--radius);
+  padding: 40px;
   box-shadow: var(--shadow);
 }
 
-h1, h2 {
-  margin-bottom: 20px;
-  color: var(--primary-dark);
+.promo-section h1 {
+  font-size: 28px;
+  margin-bottom: 16px;
+  color: var(--primary);
 }
 
-.description {
+.promo-section .description {
   font-size: 16px;
   color: var(--muted);
-  margin-bottom: 20px;
+  margin-bottom: 24px;
 }
 
 .promo-btn {
   display: inline-block;
   padding: 12px 20px;
-  background-color: var(--secondary);
-  color: var(--white);
-  font-weight: bold;
-  border-radius: 10px;
+  font-weight: 600;
+  background: var(--secondary);
+  color: white;
+  border-radius: var(--radius);
   text-decoration: none;
-  margin-top: 10px;
-  transition: background 0.3s;
+  transition: background 0.3s ease;
 }
 
 .promo-btn:hover {
-  background-color: #2563eb;
+  background: var(--secondary-hover);
 }
 
 .gdpr {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
+  margin-top: 24px;
   font-size: 14px;
   color: var(--muted);
-  margin-top: 30px;
 }
 
 .trusted-doctors {
   display: flex;
   align-items: center;
   gap: 10px;
-  margin-top: 20px;
+  margin-top: 30px;
 }
 
 .trusted-doctors img {
+  width: 50px;
+  height: 50px;
   border-radius: 50%;
-  width: 55px;
-  height: 55px;
   object-fit: cover;
   box-shadow: var(--shadow);
 }
 
-.promo-text p {
-  font-size: 14px;
-  color: var(--text);
-  margin: 0;
+/* FORM SECTION */
+.form-section {
+  flex: 1 1 480px;
+  background: var(--surface);
+  border-radius: var(--radius);
+  padding: 40px;
+  box-shadow: var(--shadow);
+}
+
+.form-section h2 {
+  font-size: 24px;
+  margin-bottom: 24px;
+  color: var(--primary);
 }
 
 .form-group {
   margin-bottom: 20px;
 }
 
-label {
+.form-group label {
+  display: block;
   font-weight: 600;
   margin-bottom: 6px;
-  display: block;
+  font-size: 15px;
 }
 
 input, select {
   width: 100%;
-  padding: 10px 12px;
-  border: 1px solid #cbd5e1;
-  border-radius: 10px;
-  background: #f9fafb;
+  padding: 12px 14px;
   font-size: 15px;
+  border: 1px solid #d1d5db;
+  border-radius: var(--radius);
+  background-color: #f8fafc;
+  transition: border 0.3s ease;
 }
 
 input:focus, select:focus {
@@ -128,28 +140,26 @@ input:focus, select:focus {
 button {
   width: 100%;
   padding: 14px;
-  background: var(--primary);
+  font-weight: 600;
+  font-size: 16px;
+  background-color: var(--primary);
+  color: white;
   border: none;
   border-radius: var(--radius);
-  color: white;
-  font-weight: bold;
-  font-size: 16px;
   cursor: pointer;
-  margin-top: 10px;
-  transition: background 0.3s ease;
+  transition: background-color 0.3s ease;
 }
 
 button:hover {
-  background: var(--primary-dark);
+  background-color: var(--primary-hover);
 }
 
-.results,
-.discount-panel,
-.ctr-panel {
+/* RISULTATI E PANNELLI */
+.results, .discount-panel, .ctr-panel {
   margin-top: 30px;
   padding: 24px;
-  background: #f9fafb;
-  border: 1px solid #e2e8f0;
+  background-color: #f0fdf4;
+  border: 1px solid #ccfbf1;
   border-radius: var(--radius);
 }
 
@@ -163,19 +173,17 @@ button:hover {
 }
 
 .result-group span {
+  display: block;
   font-size: 18px;
-  font-weight: bold;
-  display: inline-block;
-  margin-top: 4px;
+  font-weight: 600;
+  color: var(--text);
 }
 
 .blinking {
   color: var(--danger);
-  animation: blink 1.2s infinite;
   font-weight: bold;
-  display: inline-block;
+  animation: blink 1.2s infinite;
   cursor: pointer;
-  margin-top: 10px;
 }
 
 @keyframes blink {
@@ -183,22 +191,30 @@ button:hover {
   50% { opacity: 0; }
 }
 
+.blinking-date {
+  display: block;
+  font-size: 14px;
+  color: var(--danger);
+  animation: blink 1.5s infinite;
+  margin-top: 5px;
+}
+
+/* CHECK & BUTTONS */
 .check-buttons {
   display: flex;
   gap: 12px;
+  margin-top: 10px;
   flex-wrap: wrap;
   align-items: center;
-  justify-content: start;
-  margin-top: 10px;
 }
 
 .btn-check {
-  padding: 8px 16px;
+  padding: 10px 18px;
   font-size: 14px;
   background-color: #e2e8f0;
+  color: #374151;
   border: none;
   border-radius: 8px;
-  color: var(--text);
   cursor: pointer;
 }
 
@@ -208,23 +224,23 @@ button:hover {
 
 .btn-procedi {
   padding: 10px 18px;
-  font-size: 14px;
   background-color: var(--secondary);
   color: white;
+  font-weight: 600;
   text-decoration: none;
   border-radius: 8px;
-  font-weight: 600;
+  transition: background-color 0.3s ease;
 }
 
 .btn-procedi:hover {
-  background-color: #2563eb;
+  background-color: var(--secondary-hover);
 }
 
 .spinner {
   width: 30px;
   height: 30px;
-  border: 4px solid #e2e8f0;
-  border-top-color: var(--primary);
+  border: 4px solid #e5e7eb;
+  border-top: 4px solid var(--primary);
   border-radius: 50%;
   animation: spin 1s linear infinite;
   margin: 10px auto;
@@ -238,21 +254,21 @@ button:hover {
   text-align: center;
   font-size: 14px;
   color: var(--muted);
-  margin-top: 5px;
+  margin-top: 8px;
 }
 
 .lock-price-btn {
-  padding: 10px 20px;
-  background: var(--secondary);
+  background-color: var(--secondary);
   color: white;
-  text-decoration: none;
+  padding: 10px 20px;
+  font-weight: 600;
   border-radius: 8px;
-  font-weight: bold;
+  text-decoration: none;
   transition: background 0.3s ease;
 }
 
 .lock-price-btn:hover {
-  background: #2563eb;
+  background-color: var(--secondary-hover);
 }
 
 .live-viewers {
@@ -273,24 +289,28 @@ button:hover {
   text-align: center;
   cursor: pointer;
   margin-top: 20px;
+  color: var(--secondary);
 }
 
 .calculator-icon:hover {
   transform: scale(1.1);
-  color: var(--primary-dark);
+  color: var(--secondary-hover);
 }
 
+/* RESPONSIVE */
 @media (max-width: 768px) {
   .layout {
     flex-direction: column;
+    gap: 20px;
   }
 
-  .promo-section, .form-section {
+  .promo-section,
+  .form-section {
     padding: 30px 20px;
   }
 
   .check-buttons {
     flex-direction: column;
-    gap: 8px;
+    align-items: stretch;
   }
 }
