@@ -1,14 +1,14 @@
 :root {
-  --primary: #0f766e;
+  --primary: #05c3a5;
+  --primary-dark: #039a84;
   --secondary: #3b82f6;
-  --accent: #f97316;
-  --danger: #ef4444;
-  --background: #f0f4f8;
-  --surface: #ffffff;
+  --secondary-dark: #2563eb;
   --text-main: #1e293b;
   --text-muted: #64748b;
+  --background: #f8fafc;
+  --surface: #ffffff;
   --radius: 16px;
-  --shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  --shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
   --font: 'Inter', 'Segoe UI', Roboto, sans-serif;
 }
 
@@ -20,9 +20,10 @@
 
 body {
   font-family: var(--font);
-  background-color: #05c3a5;
+  background-color: var(--background);
   color: var(--text-main);
   padding: 40px 20px;
+  line-height: 1.6;
 }
 
 .layout {
@@ -30,7 +31,7 @@ body {
   flex-wrap: wrap;
   gap: 40px;
   max-width: 1200px;
-  margin: 0 auto;
+  margin: auto;
   align-items: flex-start;
 }
 
@@ -43,37 +44,40 @@ body {
   box-shadow: var(--shadow);
 }
 
+/* --- PROMO --- */
 .promo-section h1 {
-  font-size: 28px;
+  font-size: 32px;
   margin-bottom: 20px;
-  color: var(--primary);
+  color: var(--primary-dark);
+  line-height: 1.2;
 }
 
 .promo-section .description {
-  font-size: 16px;
+  font-size: 18px;
   color: var(--text-muted);
-  margin-bottom: 20px;
+  margin-bottom: 30px;
 }
 
 .promo-btn {
   display: inline-block;
-  padding: 12px 20px;
+  padding: 12px 24px;
   background-color: var(--secondary);
   color: white;
-  font-weight: bold;
-  border-radius: 8px;
+  font-weight: 600;
+  border-radius: 10px;
   text-decoration: none;
-  transition: background-color 0.3s ease;
+  transition: all 0.3s ease;
+  font-size: 16px;
 }
 
 .promo-btn:hover {
-  background-color: #2563eb;
+  background-color: var(--secondary-dark);
 }
 
 .gdpr {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
   margin-top: 30px;
   color: var(--text-muted);
   font-size: 15px;
@@ -82,12 +86,13 @@ body {
 .gdpr svg {
   width: 24px;
   height: 24px;
+  flex-shrink: 0;
 }
 
 .trusted-doctors {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 16px;
   margin-top: 40px;
 }
 
@@ -96,6 +101,7 @@ body {
   width: 55px;
   height: 55px;
   object-fit: cover;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
 }
 
 .promo-text {
@@ -104,18 +110,18 @@ body {
 
 .promo-text p {
   margin: 0;
-  font-size: 14px;
-  color: var(--text-main);
+  font-size: 15px;
 }
 
 .promo-text p strong {
-  font-weight: 700;
+  color: var(--primary-dark);
 }
 
+/* --- FORM --- */
 .form-section h2 {
-  font-size: 24px;
-  margin-bottom: 20px;
-  color: var(--primary);
+  font-size: 26px;
+  color: var(--primary-dark);
+  margin-bottom: 25px;
 }
 
 .form-group {
@@ -126,23 +132,22 @@ body {
   display: block;
   font-weight: 600;
   margin-bottom: 6px;
+  font-size: 15px;
 }
 
-input,
-select {
+input, select {
   width: 100%;
-  padding: 12px;
+  padding: 12px 14px;
   border: 2px solid #e2e8f0;
   border-radius: 10px;
-  background-color: var(--background);
   font-size: 16px;
+  background: #f9fafb;
 }
 
-input:focus,
-select:focus {
+input:focus, select:focus {
   border-color: var(--primary);
+  background-color: #ecfdf5;
   outline: none;
-  background: #ecfeff;
 }
 
 button {
@@ -150,51 +155,51 @@ button {
   padding: 14px;
   background: var(--primary);
   border: none;
-  border-radius: var(--radius);
-  font-weight: bold;
+  border-radius: 10px;
+  font-weight: 600;
   font-size: 16px;
   color: white;
   cursor: pointer;
-  margin-top: 10px;
+  margin-top: 15px;
+  transition: background 0.3s;
 }
 
 button:hover {
-  background: #0d5f58;
+  background: var(--primary-dark);
 }
 
-.results,
-.discount-panel,
-.ctr-panel {
-  margin-top: 25px;
-  padding: 20px;
-  background: #f1f5f9;
-  border: 1px solid #cbd5e1;
-  border-radius: var(--radius);
+/* --- RISULTATI --- */
+.results, .discount-panel, .ctr-panel {
+  margin-top: 30px;
+  padding: 24px;
+  background: #f9fafb;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
 }
 
 .result-group {
-  margin-bottom: 16px;
+  margin-bottom: 20px;
 }
 
 .result-group label {
-  color: var(--secondary);
   font-size: 14px;
   font-weight: 600;
+  color: var(--text-muted);
 }
 
 .result-group span {
-  display: block;
   font-size: 18px;
   font-weight: 700;
-  margin-top: 4px;
+  color: var(--text-main);
+  margin-top: 5px;
+  display: inline-block;
 }
 
 .blinking {
   color: var(--danger);
-  font-weight: bold;
-  animation: blink 1.2s infinite;
+  font-weight: 600;
+  animation: blink 1s infinite;
   cursor: pointer;
-  display: inline-block;
   margin-top: 10px;
 }
 
@@ -203,10 +208,109 @@ button:hover {
   50% { opacity: 0; }
 }
 
+.blinking-date {
+  color: var(--danger);
+  font-weight: 500;
+  font-size: 14px;
+  margin-top: 6px;
+  animation: blink 1.5s infinite;
+}
+
+.calculator-icon {
+  font-size: 26px;
+  text-align: center;
+  margin-top: 20px;
+  color: var(--secondary);
+  cursor: pointer;
+  transition: transform 0.3s;
+  display: block;
+}
+
+.calculator-icon:hover {
+  transform: scale(1.2);
+  color: var(--accent);
+}
+
+.lock-price-btn {
+  background: var(--secondary);
+  color: white;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background 0.3s;
+  display: inline-block;
+}
+
+.lock-price-btn:hover {
+  background-color: var(--secondary-dark);
+}
+
+.live-viewers {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--text-main);
+  margin-top: 20px;
+}
+
+.live-viewers img {
+  width: 24px;
+  height: 24px;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+}
+
+/* --- CHECK SECTION --- */
+.check-buttons {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.btn-check {
+  padding: 8px 14px;
+  font-size: 14px;
+  background-color: #e2e8f0;
+  color: #334155;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.btn-check:hover {
+  background-color: #cbd5e1;
+  color: #1e293b;
+}
+
+.btn-procedi {
+  padding: 10px 16px;
+  font-size: 15px;
+  background-color: var(--secondary);
+  color: white;
+  border-radius: 8px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background-color 0.3s;
+}
+
+.btn-procedi:hover {
+  background-color: var(--secondary-dark);
+}
+
 .spinner {
   width: 30px;
   height: 30px;
-  border: 4px solid #cbd5e1;
+  border: 4px solid #e5e7eb;
   border-top-color: var(--primary);
   border-radius: 50%;
   animation: spin 1s linear infinite;
@@ -219,23 +323,24 @@ button:hover {
 
 #countdown {
   text-align: center;
-  font-size: 16px;
+  font-size: 15px;
   color: var(--text-muted);
   margin-top: 10px;
 }
 
+/* --- RESPONSIVE --- */
 @media (max-width: 768px) {
   .layout {
     flex-direction: column;
+    padding: 20px;
   }
 
-  .promo-section,
-  .form-section {
+  .promo-section, .form-section {
     width: 100%;
     padding: 30px 20px;
   }
 
-  .trusted-doctors {
-    flex-wrap: wrap;
+  .check-buttons {
+    flex-direction: column;
   }
 }
