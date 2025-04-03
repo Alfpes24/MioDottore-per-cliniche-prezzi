@@ -19,12 +19,10 @@ document.addEventListener("DOMContentLoaded", () => {
   const viewerCountSpan = document.getElementById("viewer-count");
   const noaInput = document.getElementById("noa");
 
-  // Toggle pannello CTR
   calculatorIcon.addEventListener("click", () => {
     ctrPanel.style.display = ctrPanel.style.display === "none" ? "block" : "none";
   });
 
-  // Calcolo
   calculateBtn.addEventListener("click", () => {
     const rooms = parseInt(document.getElementById("rooms").value) || 0;
     const doctors = parseInt(document.getElementById("doctors").value) || 0;
@@ -41,7 +39,9 @@ document.addEventListener("DOMContentLoaded", () => {
     const monthlyPrice = pricePerRoomTable[index] * rooms;
     const locationsCost = additionalLocations * 99;
     const noaTotalPrice = noa * noaPrice;
-    const totalMonthlyPrice = monthlyPrice + locationsCost + noaTotalPrice;
+
+    // NUOVA FORMULA: incluso setupFee / 12
+    const totalMonthlyPrice = monthlyPrice + (setupFee / 12) + locationsCost + noaTotalPrice;
     const defaultMonthlyPrice = totalMonthlyPrice * 1.25;
 
     const commissionCpl = doctors * (cpl === 17 ? 8 : 6);
@@ -59,12 +59,10 @@ document.addEventListener("DOMContentLoaded", () => {
     viewerBox.style.display = "none";
     ctrPanel.style.display = "none";
 
-    // Gestione visibilità pulsanti
     procediBtn.style.display = "inline-block";
     checkBtn.style.display = noa >= 1 ? "inline-block" : "none";
   });
 
-  // Check button -> countdown + reveal sconti
   checkBtn.addEventListener("click", () => {
     loadingSpinner.style.display = "block";
     countdown.textContent = "Attendere 15 secondi...";
