@@ -1,3 +1,5 @@
+# Salviamo il nuovo contenuto corretto di script.js che integra tutte le funzionalità richieste
+js_code = """
 document.addEventListener("DOMContentLoaded", () => {
   const calculateBtn = document.getElementById("calculate-btn");
   const resultsBox = document.getElementById("results");
@@ -12,15 +14,18 @@ document.addEventListener("DOMContentLoaded", () => {
   const viewerBox = document.getElementById("live-viewers");
   const viewerCountSpan = document.getElementById("viewer-count");
   const discountMessage = document.getElementById("discount-message");
+  const monthlyPriceField = document.getElementById("monthly-price");
+  const defaultMonthlyPriceField = document.getElementById("default-monthly-price");
+  const setupFeeField = document.getElementById("setup-fee");
+  const salesCommissionsField = document.getElementById("sales-commissions");
 
   // Calcolatrice toggle
   calculatorIcon.addEventListener("click", () => {
     ctrPanel.style.display = ctrPanel.style.display === "none" ? "block" : "none";
   });
 
-  // Click su "Calcola"
+  // Calcolo logica
   calculateBtn.addEventListener("click", () => {
-    // Recupera valori input
     const rooms = parseInt(document.getElementById("rooms").value) || 0;
     const doctors = parseInt(document.getElementById("doctors").value) || 0;
     const cpl = parseInt(document.getElementById("cpl").value) || 0;
@@ -28,7 +33,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const noa = parseInt(document.getElementById("noa").value) || 0;
     const noaPrice = parseInt(document.getElementById("noa-price").value) || 0;
 
-    // Tabelle di prezzo
     const setupFeeTable = [99, 129, 129, 159, 159, 199, 199, 299, 299, 499, 599];
     const pricePerRoomTable = [270, 180, 160, 130, 110, 105, 95, 90, 85, 75, 70];
     const index = rooms >= 11 ? 10 : Math.max(rooms - 1, 0);
@@ -40,24 +44,18 @@ document.addEventListener("DOMContentLoaded", () => {
     const totalMonthlyPrice = monthlyPrice + locationsCost + noaTotalPrice;
     const defaultMonthlyPrice = totalMonthlyPrice * 1.25;
 
-    // Commissioni
-    const commissionBase = monthlyPrice;
     const commissionCpl = doctors * (cpl === 17 ? 8 : 6);
-    const totalCommission = commissionBase + commissionCpl + locationsCost + noaTotalPrice + setupFee / 12;
+    const totalCommission = monthlyPrice + commissionCpl + locationsCost + noaTotalPrice + setupFee / 12;
 
-    // Popola risultati
-    document.getElementById("default-monthly-price").textContent = `${defaultMonthlyPrice.toFixed(2)} €`;
-    document.getElementById("setup-fee").textContent = `${setupFee.toFixed(2)} €`;
-    document.getElementById("monthly-price").textContent = `${totalMonthlyPrice.toFixed(2)} €`;
-    document.getElementById("sales-commissions").textContent = `${totalCommission.toFixed(2)} €`;
+    defaultMonthlyPriceField.textContent = `${defaultMonthlyPrice.toFixed(2)} €`;
+    setupFeeField.textContent = `${setupFee.toFixed(2)} €`;
+    monthlyPriceField.textContent = `${totalMonthlyPrice.toFixed(2)} €`;
+    salesCommissionsField.textContent = `${totalCommission.toFixed(2)} €`;
 
-    // Calcola data scadenza (10 giorni dopo)
     const today = new Date();
     today.setDate(today.getDate() + 10);
-    const formattedDate = today.toLocaleDateString("it-IT");
-    discountDate.textContent = `Valido fino al: ${formattedDate}`;
+    discountDate.textContent = `Valido fino al: ${today.toLocaleDateString("it-IT")}`;
 
-    // Mostra sezione risultati e pulsanti
     resultsBox.style.display = "block";
     checkSection.style.display = "block";
     discountPanel.style.display = "none";
@@ -67,39 +65,45 @@ document.addEventListener("DOMContentLoaded", () => {
     discountMessage.style.display = "none";
   });
 
-  // Click su "Check"
   checkBtn.addEventListener("click", () => {
     loadingSpinner.style.display = "block";
     countdown.textContent = "Attendere 15 secondi...";
     let seconds = 15;
 
-    const interval = setInterval(() => {
+    const countdownInterval = setInterval(() => {
       seconds--;
       countdown.textContent = `Attendere ${seconds} secondi...`;
 
       if (seconds <= 0) {
-        clearInterval(interval);
-        countdown.textContent = "Offerta disponibile!";
+        clearInterval(countdownInterval);
         loadingSpinner.style.display = "none";
         discountPanel.style.display = "block";
         calculatorIcon.style.display = "block";
 
-        // Mostra sconti
-        discountMessage.style.display = "block";
         discountMessage.textContent = "Sono presenti sconti clicca qui";
+        discountMessage.style.display = "block";
 
-        // Visualizzatori casuali
         viewerBox.style.display = "flex";
-        setInterval(() => {
-          const viewers = Math.floor(Math.random() * 5) + 1;
-          viewerCountSpan.textContent = viewers;
-        }, 5000);
+        updateViewerCount();
+        setInterval(updateViewerCount, 5000);
       }
     }, 1000);
   });
 
-  // Click su messaggio sconto = mostra pannello
   discountMessage.addEventListener("click", () => {
     discountPanel.scrollIntoView({ behavior: "smooth" });
   });
+
+  function updateViewerCount() {
+    const randomViewers = Math.floor(Math.random() * 5) + 1;
+    viewerCountSpan.textContent = randomViewers;
+  }
 });
+"""
+
+# Salviamo il file aggiornato
+script_path = "/mnt/data/script.js"
+with open(script_path, "w", encoding="utf-8") as file:
+    file.write(js_code)
+
+script_path
