@@ -16,6 +16,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const countdown = document.getElementById("countdown");
   const viewerBox = document.getElementById("live-viewers");
   const viewerCountSpan = document.getElementById("viewer-count");
+  const noaInput = document.getElementById("noa");
 
   // Toggle pannello CTR
   calculatorIcon.addEventListener("click", () => {
@@ -28,7 +29,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const doctors = parseInt(document.getElementById("doctors").value) || 0;
     const cpl = parseInt(document.getElementById("cpl").value) || 0;
     const additionalLocations = parseInt(document.getElementById("additional-locations").value) || 0;
-    const noa = parseInt(document.getElementById("noa").value) || 0;
+    const noa = parseInt(noaInput.value) || 0;
     const noaPrice = parseInt(document.getElementById("noa-price").value) || 0;
 
     const setupFeeTable = [99, 129, 129, 159, 159, 199, 199, 299, 299, 499, 599];
@@ -50,14 +51,19 @@ document.addEventListener("DOMContentLoaded", () => {
     monthlyPriceField.textContent = totalMonthlyPrice.toFixed(2) + " €";
     salesCommissionsField.textContent = totalCommission.toFixed(2) + " €";
 
-    // Reset pannelli e mostra risultati
     resultsBox.style.display = "block";
-    checkSection.style.display = "block";
     discountPanel.style.display = "none";
     calculatorIcon.style.display = "none";
     discountMessage.style.display = "none";
     viewerBox.style.display = "none";
     ctrPanel.style.display = "none";
+
+    // Mostra il pannello Check solo se NOA >= 1
+    if (noa >= 1) {
+      checkSection.style.display = "block";
+    } else {
+      checkSection.style.display = "none";
+    }
   });
 
   // Check button -> countdown + reveal sconti
@@ -78,20 +84,17 @@ document.addEventListener("DOMContentLoaded", () => {
         discountMessage.textContent = "Sono presenti sconti clicca qui";
         discountMessage.style.display = "inline-block";
 
-        // Data sconto
         const today = new Date();
         today.setDate(today.getDate() + 10);
         discountDate.textContent = `Valido fino al: ${today.toLocaleDateString("it-IT")}`;
 
-        // Visualizzatori
         viewerBox.style.display = "flex";
         updateViewerCount();
-        setInterval(updateViewerCount, 15000);
+        setInterval(updateViewerCount, 5000);
       }
-    }, 20000);
+    }, 1000);
   });
 
-  // Messaggio cliccabile per scroll
   discountMessage.addEventListener("click", () => {
     discountPanel.scrollIntoView({ behavior: "smooth" });
   });
