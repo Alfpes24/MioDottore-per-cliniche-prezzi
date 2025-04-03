@@ -21,7 +21,7 @@
 
 body {
   font-family: var(--font);
-  background: linear-gradient(145deg, #e0f2fe, #ffffff);
+  background-color: #05c3a5;
   min-height: 100vh;
   display: flex;
   justify-content: center;
@@ -186,6 +186,7 @@ button:hover {
   text-decoration: none;
 }
 
+/* 👁️ Visualizzatori dinamici */
 .live-viewers {
   display: flex;
   align-items: center;
@@ -203,7 +204,7 @@ button:hover {
   animation: pulse 2s infinite;
 }
 
-/* ✅ Spinner per countdown "Check" */
+/* 🔁 Spinner */
 .spinner {
   width: 30px;
   height: 30px;
@@ -218,41 +219,53 @@ button:hover {
   to { transform: rotate(360deg); }
 }
 
+/* 🔢 Countdown */
 #countdown {
   text-align: center;
   font-size: 16px;
   color: var(--text-muted);
   margin-top: 10px;
 }
-.btn-secondary {
-  padding: 8px 14px;
-  font-size: 14px;
+
+/* ✅ Sezione Check + Procedi */
+.check-buttons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  margin-top: 20px;
+  flex-wrap: wrap;
+}
+
+.btn-check {
+  padding: 6px 12px;
+  font-size: 13px;
   background-color: #e2e8f0;
   color: #334155;
-  border: none;
-  border-radius: var(--radius);
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
   cursor: pointer;
   font-weight: 500;
 }
 
-.btn-secondary:hover {
+.btn-check:hover {
   background-color: #cbd5e1;
   color: #1e293b;
 }
 
-.btn-primary {
+.btn-procedi {
   padding: 10px 16px;
   font-size: 15px;
   background-color: var(--secondary);
   color: white;
-  border-radius: var(--radius);
+  border-radius: 8px;
   font-weight: 600;
   text-decoration: none;
   display: inline-block;
   transition: background-color 0.3s ease;
 }
 
-.btn-primary:hover {
+.btn-procedi:hover {
   background-color: #2563eb;
   text-decoration: none;
 }
