@@ -58,13 +58,18 @@
         <label>Setup Fee (UNA TANTUM)</label>
         <span id="setup-fee">0 €</span>
       </div>
-      <div class="result-group" id="check-section" style="display: none; text-align: center;">
-        <button id="check-btn" type="button">Check</button>
-        <div id="loading-spinner" style="margin-top: 10px; display: none;">
-          <div class="spinner"></div>
-          <div id="countdown" style="margin-top: 8px; font-weight: bold;"></div>
-        </div>
-      </div>
+     <div class="result-group" id="check-section" style="display: none; text-align: center;">
+  <div class="check-buttons" style="display: flex; justify-content: center; gap: 10px; flex-wrap: wrap;">
+    <button id="check-btn" type="button" class="btn-secondary">Check</button>
+    <a href="https://apps.docusign.com/send/templates?view=shared&folder=d71d9886-1424-4799-9155-4de52c347f6b"
+       class="btn-primary" target="_blank">Procedi</a>
+  </div>
+  <div id="loading-spinner" style="margin-top: 10px; display: none;">
+    <div class="spinner"></div>
+    <div id="countdown" style="margin-top: 8px; font-weight: bold;"></div>
+  </div>
+</div>
+
       <div class="result-group">
         <span id="discount-message" class="blinking" style="display: none; cursor: pointer;"></span>
       </div>
