@@ -88,7 +88,7 @@ document.addEventListener("DOMContentLoaded", () => {
         updateViewerCount();
         setInterval(updateViewerCount, 15000);
       }
-    }, 25000);
+    }, 2000);
   });
 
   // Messaggio cliccabile per scroll
