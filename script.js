@@ -41,7 +41,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const noaTotalPrice = noa * noaPrice;
 
     // NUOVA FORMULA: incluso setupFee / 12
-    const totalMonthlyPrice = monthlyPrice + (setupFee / 12) + locationsCost + noaTotalPrice;
+    const totalMonthlyPrice = monthlyPrice + locationsCost + noaTotalPrice;
     const defaultMonthlyPrice = totalMonthlyPrice * 1.25;
 
     const commissionCpl = doctors * (cpl === 17 ? 8 : 6);
