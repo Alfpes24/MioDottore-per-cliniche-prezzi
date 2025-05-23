@@ -32,7 +32,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const noaPrice = parseInt(document.getElementById("noa-price").value) || 0;
 
     const setupFeeTable = [99, 129, 129, 159, 159, 199, 199, 299, 299, 499, 599];
-    const pricePerRoomTable = [270, 180, 160, 130, 110, 105, 95, 90, 85, 75, 70];
+    const pricePerRoomTable = [269, 170, 153, 117, 96, 88, 80, 75, 72, 67, 62];
     const index = rooms >= 11 ? 10 : Math.max(rooms - 1, 0);
 
     const setupFee = setupFeeTable[index];
