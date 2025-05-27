@@ -63,32 +63,48 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   checkBtn.addEventListener("click", () => {
-    loadingSpinner.style.display = "block";
-    countdown.textContent = "Attendere 15 secondi...";
-    let seconds = 15;
+  loadingSpinner.style.display = "block";
+  countdown.textContent = "Attendere 15 secondi...";
+  let seconds = 15;
 
-    const interval = setInterval(() => {
-      seconds--;
-      countdown.textContent = `Attendere ${seconds} secondi...`;
+  const interval = setInterval(() => {
+    seconds--;
+    countdown.textContent = `Attendere ${seconds} secondi...`;
 
-      if (seconds <= 0) {
-        clearInterval(interval);
-        loadingSpinner.style.display = "none";
-        discountPanel.style.display = "block";
-        calculatorIcon.style.display = "block";
-        discountMessage.textContent = "Sono presenti sconti clicca qui";
-        discountMessage.style.display = "inline-block";
+    if (seconds <= 0) {
+      clearInterval(interval);
+      loadingSpinner.style.display = "none";
 
-        const today = new Date();
-        today.setDate(today.getDate() + 10);
-        discountDate.textContent = `Valido fino al: ${today.toLocaleDateString("it-IT")}`;
+      // MOSTRA PANNELLO SCONTO
+      discountPanel.style.display = "block";
+      calculatorIcon.style.display = "block";
+      discountMessage.textContent = "Sono presenti sconti clicca qui";
+      discountMessage.style.display = "inline-block";
 
-        viewerBox.style.display = "flex";
-        updateViewerCount();
-        setInterval(updateViewerCount, 20000);
-      }
-    }, 1000);
-  });
+      const today = new Date();
+      today.setDate(today.getDate() + 10);
+      discountDate.textContent = `Valido fino al: ${today.toLocaleDateString("it-IT")}`;
+
+      viewerBox.style.display = "flex";
+      updateViewerCount();
+      setInterval(updateViewerCount, 20000);
+
+      // AGGIORNA PREZZI SCONTO
+      const originalMonthly = parseFloat(defaultMonthlyPriceField.textContent.replace(" €", ""));
+      const promoMonthly = parseFloat(monthlyPriceField.textContent.replace(" €", ""));
+      const originalSetup = parseFloat(setupFeeField.textContent.replace(" €", ""));
+      const promoSetup = originalSetup / 1.5;
+
+      document.getElementById("original-monthly-price").textContent = originalMonthly.toFixed(2) + " €";
+      document.getElementById("promo-monthly-price").textContent = promoMonthly.toFixed(2) + " €";
+      document.getElementById("original-setup-fee").textContent = originalSetup.toFixed(2) + " €";
+      document.getElementById("promo-setup-fee").textContent = promoSetup.toFixed(2) + " €";
+
+      // TRANSIZIONE AUTOMATICA SCROLL
+      discountPanel.scrollIntoView({ behavior: "smooth" });
+    }
+  }, 1000);
+});
 
   discountMessage.addEventListener("click", () => {
     discountPanel.scrollIntoView({ behavior: "smooth" });
