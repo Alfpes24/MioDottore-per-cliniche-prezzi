@@ -8,21 +8,14 @@
 </head>
 <body>
   <script>
-    // Questo script gestisce il controllo degli accessi e il caricamento di script.js
     const refOk = document.referrer.includes("alfpes24.github.io") || window.opener;
     const accesso = localStorage.getItem("accessoMioDottore") === "ok";
 
     if (!accesso || !refOk) {
       document.write("<h2 style='color:red;text-align:center;'>Accesso non autorizzato</h2>");
       setTimeout(() => location.replace("https://alfpes24.github.io/"), 1500);
-    } else {
-      // Carica script.js solo se accesso è valido e il DOM è pronto
-      window.addEventListener("DOMContentLoaded", () => {
-        const script = document.createElement("script");
-        script.src = "script.js";
-        document.body.appendChild(script);
-      });
     }
+    // Se l'accesso è valido, non facciamo nulla qui, script.js sarà caricato alla fine del body.
   </script>
 
   <main class="layout">
@@ -112,5 +105,7 @@
       </div>
     </section>
   </main>
+
+  <script src="script.js"></script>
 </body>
 </html>
