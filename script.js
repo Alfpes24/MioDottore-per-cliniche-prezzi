@@ -10,6 +10,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const discountMessage = document.getElementById("discount-message");
   const discountDate = document.getElementById("discount-date");
 
+  // Questi campi sono presenti nell'HTML per mostrare i prezzi nel pannello sconti
   const originalMonthlyPriceField = document.getElementById("original-monthly-price");
   const promoMonthlyPriceField = document.getElementById("promo-monthly-price");
   const originalSetupFeeField = document.getElementById("original-setup-fee");
@@ -29,7 +30,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   calculateBtn.addEventListener("click", () => {
-    // console.log("Pulsante Calcola cliccato!"); // Aggiunto per debug
+    // console.log("Pulsante Calcola cliccato!"); // Utile per debug, puoi rimuoverlo
     const rooms = parseInt(document.getElementById("rooms").value) || 0;
     const doctors = parseInt(document.getElementById("doctors").value) || 0;
     const cpl = parseInt(document.getElementById("cpl").value) || 0;
@@ -46,6 +47,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const locationsCost = additionalLocations * 99;
     const noaTotalPrice = noa * noaPrice;
 
+    // NUOVA FORMULA: incluso setupFee / 12
     const totalMonthlyPrice = monthlyPrice + locationsCost + noaTotalPrice;
     const defaultMonthlyPrice = totalMonthlyPrice * 1.25;
 
@@ -54,13 +56,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
     defaultMonthlyPriceField.textContent = defaultMonthlyPrice.toFixed(2) + " €";
     setupFeeField.textContent = setupFee.toFixed(2) + " €";
-    salesCommissionsField.textContent = totalCommission.toFixed(2) + " €";
 
+    // Ora assegniamo i valori ai campi corretti nel pannello di sconto
     originalMonthlyPriceField.textContent = defaultMonthlyPrice.toFixed(2) + " €";
-    promoMonthlyPriceField.textContent = totalMonthlyPrice.toFixed(2) + " €";
+    promoMonthlyPriceField.textContent = totalMonthlyPrice.toFixed(2) + " €"; // totalMonthlyPrice è il prezzo "promozionale" senza il markup del 25%
     originalSetupFeeField.textContent = setupFee.toFixed(2) + " €";
-    promoSetupFeeField.textContent = setupFee.toFixed(2) + " €";
+    promoSetupFeeField.textContent = setupFee.toFixed(2) + " €"; // Se la setup fee promozionale è la stessa, altrimenti calcola una nuova
 
+    salesCommissionsField.textContent = totalCommission.toFixed(2) + " €";
 
     resultsBox.style.display = "block";
     discountPanel.style.display = "none";
