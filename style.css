@@ -183,7 +183,6 @@ button:hover {
 
 /* ===== Risultati & Pannelli ===== */
 .results,
-.discount-panel,
 .ctr-panel {
   margin-top: 30px;
   padding: 24px;
@@ -208,15 +207,73 @@ button:hover {
   color: var(--text);
 }
 
+/* ===== Pannello Promozionale ===== */
+.discount-panel {
+  margin-top: 30px;
+  padding: 30px;
+  background-color: #fff; /* Sfondo bianco per risaltare */
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1); /* Ombra più pronunciata */
+  text-align: center;
+}
+
+.discount-header {
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--primary);
+  margin-bottom: 20px;
+}
+
+.discount-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+}
+
+.original-prices,
+.promo-prices {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start; /* Allinea a sinistra */
+}
+
+.original-price-label,
+.promo-price-label {
+  font-size: 16px;
+  color: var(--muted);
+  margin-bottom: 5px;
+}
+
 .original-price del {
   color: var(--muted);
+  font-size: 18px; /* Aumenta la dimensione */
   margin-right: 8px;
 }
 
-.highlight-price {
-  font-size: 20px;
+.promo-price {
+  font-size: 28px; /* Aumenta la dimensione e il peso */
   color: var(--primary);
-  font-weight: 700;
+  font-weight: 800;
+  animation: pulse 1.5s infinite; /* Aggiunge un'animazione */
+}
+
+.promo-setup-fee {
+  font-size: 18px; /* Aumenta la dimensione e il peso */
+  color: var(--primary);
+  font-weight: 600;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
 }
 
 /* ===== Countdown & Spinner ===== */
@@ -252,7 +309,8 @@ button:hover {
 }
 
 @keyframes blink {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 1;
   }
   50% {
