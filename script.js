@@ -9,7 +9,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const discountPanel = document.getElementById("discount-panel");
   const discountMessage = document.getElementById("discount-message");
   const discountDate = document.getElementById("discount-date");
-  const monthlyPriceField = document.getElementById("monthly-price");
+  const monthlyPriceField = document.getElementById("monthly-price"); // This element does not exist in the HTML provided, but it's referenced in the JS. It likely refers to 'promo-monthly-price' or 'original-monthly-price' if a discount is applied.
   const salesCommissionsField = document.getElementById("sales-commissions");
   const calculatorIcon = document.getElementById("calculator-icon");
   const ctrPanel = document.getElementById("ctr-panel");
@@ -18,6 +18,13 @@ document.addEventListener("DOMContentLoaded", () => {
   const viewerBox = document.getElementById("live-viewers");
   const viewerCountSpan = document.getElementById("viewer-count");
   const noaInput = document.getElementById("noa");
+
+  // Elements for discount panel prices (added based on HTML structure)
+  const originalMonthlyPriceField = document.getElementById("original-monthly-price");
+  const promoMonthlyPriceField = document.getElementById("promo-monthly-price");
+  const originalSetupFeeField = document.getElementById("original-setup-fee");
+  const promoSetupFeeField = document.getElementById("promo-setup-fee");
+
 
   calculatorIcon.addEventListener("click", () => {
     ctrPanel.style.display = ctrPanel.style.display === "none" ? "block" : "none";
@@ -49,8 +56,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
     defaultMonthlyPriceField.textContent = defaultMonthlyPrice.toFixed(2) + " €";
     setupFeeField.textContent = setupFee.toFixed(2) + " €";
-    monthlyPriceField.textContent = totalMonthlyPrice.toFixed(2) + " €";
+    // monthlyPriceField.textContent = totalMonthlyPrice.toFixed(2) + " €"; // This line is for a non-existent element.
     salesCommissionsField.textContent = totalCommission.toFixed(2) + " €";
+
+    // Update discount panel fields
+    originalMonthlyPriceField.textContent = defaultMonthlyPrice.toFixed(2) + " €";
+    promoMonthlyPriceField.textContent = totalMonthlyPrice.toFixed(2) + " €"; // Assuming totalMonthlyPrice is the promo price
+    originalSetupFeeField.textContent = setupFee.toFixed(2) + " €";
+    // For promo setup fee, you might want to apply a discount, otherwise it's the same
+    promoSetupFeeField.textContent = setupFee.toFixed(2) + " €";
+
 
     resultsBox.style.display = "block";
     discountPanel.style.display = "none";
