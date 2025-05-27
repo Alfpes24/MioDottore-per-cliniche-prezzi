@@ -3,14 +3,13 @@ document.addEventListener("DOMContentLoaded", () => {
   const checkBtn = document.getElementById("check-btn");
   const procediBtn = document.querySelector(".btn-procedi");
   const defaultMonthlyPriceField = document.getElementById("default-monthly-price");
-  const setupFeeField = document.getElementById("setup-fee");
+  const setupFeeField = document.getElementById("setup-fee"); // Questo è il campo della Setup Fee iniziale
   const resultsBox = document.getElementById("results");
   const checkSection = document.getElementById("check-section");
   const discountPanel = document.getElementById("discount-panel");
   const discountMessage = document.getElementById("discount-message");
   const discountDate = document.getElementById("discount-date");
 
-  // Questi campi sono presenti nell'HTML per mostrare i prezzi nel pannello sconti
   const originalMonthlyPriceField = document.getElementById("original-monthly-price");
   const promoMonthlyPriceField = document.getElementById("promo-monthly-price");
   const originalSetupFeeField = document.getElementById("original-setup-fee");
@@ -30,7 +29,6 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   calculateBtn.addEventListener("click", () => {
-    // console.log("Pulsante Calcola cliccato!"); // Utile per debug, puoi rimuoverlo
     const rooms = parseInt(document.getElementById("rooms").value) || 0;
     const doctors = parseInt(document.getElementById("doctors").value) || 0;
     const cpl = parseInt(document.getElementById("cpl").value) || 0;
@@ -42,28 +40,31 @@ document.addEventListener("DOMContentLoaded", () => {
     const pricePerRoomTable = [269, 170, 153, 117, 96, 88, 80, 75, 72, 67, 62];
     const index = rooms >= 11 ? 10 : Math.max(rooms - 1, 0);
 
-    const setupFee = setupFeeTable[index];
+    const setupFeeDefault = setupFeeTable[index]; // Questa è la setup fee di default
+    const setupFeeDisplayed = setupFeeDefault * 2; // Questa è la setup fee raddoppiata per la visualizzazione iniziale
+
     const monthlyPrice = pricePerRoomTable[index] * rooms;
     const locationsCost = additionalLocations * 99;
     const noaTotalPrice = noa * noaPrice;
 
-    // NUOVA FORMULA: incluso setupFee / 12
     const totalMonthlyPrice = monthlyPrice + locationsCost + noaTotalPrice;
     const defaultMonthlyPrice = totalMonthlyPrice * 1.25;
 
     const commissionCpl = doctors * (cpl === 17 ? 8 : 6);
-    const totalCommission = monthlyPrice + commissionCpl + locationsCost + noaTotalPrice + setupFee / 12;
+    // Nella commissione CTR si usa la setupFee di default (non raddoppiata) divisa per 12
+    const totalCommission = monthlyPrice + commissionCpl + locationsCost + noaTotalPrice + setupFeeDefault / 12;
+
+    // Aggiorna il campo della Setup Fee iniziale con il valore raddoppiato
+    setupFeeField.textContent = setupFeeDisplayed.toFixed(2) + " €";
 
     defaultMonthlyPriceField.textContent = defaultMonthlyPrice.toFixed(2) + " €";
-    setupFeeField.textContent = setupFee.toFixed(2) + " €";
-
-    // Ora assegniamo i valori ai campi corretti nel pannello di sconto
-    originalMonthlyPriceField.textContent = defaultMonthlyPrice.toFixed(2) + " €";
-    promoMonthlyPriceField.textContent = totalMonthlyPrice.toFixed(2) + " €"; // totalMonthlyPrice è il prezzo "promozionale" senza il markup del 25%
-    originalSetupFeeField.textContent = setupFee.toFixed(2) + " €";
-    promoSetupFeeField.textContent = setupFee.toFixed(2) + " €"; // Se la setup fee promozionale è la stessa, altrimenti calcola una nuova
-
     salesCommissionsField.textContent = totalCommission.toFixed(2) + " €";
+
+    // I campi del pannello sconti dovrebbero riflettere la setup fee originale o promozionale (non raddoppiata)
+    originalMonthlyPriceField.textContent = defaultMonthlyPrice.toFixed(2) + " €";
+    promoMonthlyPriceField.textContent = totalMonthlyPrice.toFixed(2) + " €";
+    originalSetupFeeField.textContent = setupFeeDefault.toFixed(2) + " €";
+    promoSetupFeeField.textContent = setupFeeDefault.toFixed(2) + " €"; // Se vuoi che anche qui sia raddoppiata, cambia setupFeeDefault in setupFeeDisplayed
 
     resultsBox.style.display = "block";
     discountPanel.style.display = "none";
