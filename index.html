@@ -66,7 +66,7 @@
 
         <div class="result-group" id="check-section">
           <div class="check-buttons">
-            <button id="check-btn" class="btn-check" style="display:none;">Check</button>
+            <button id="check-btn" class="btn-check" style="display:none;">Check Sconti</button>
             <a href="https://apps.docusign.com/send/templates?view=shared&folder=d71d9886-1424-4799-9155-4de52c347f6b" class="btn-procedi" target="_blank" style="display:none;">Procedi</a>
           </div>
           <div id="loading-spinner" style="display:none;">
@@ -74,22 +74,22 @@
             <div id="countdown"></div>
           </div>
         </div>
-
-        <div class="result-group"><span id="discount-message" class="blinking" style="display:none;"></span></div>
       </div>
 
       <div id="discount-panel" class="discount-panel" style="display:none;">
-        <div class="result-group" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
-          <div>
-            <label>Canone Mensile Promozionale</label>
-            <span class="original-price"><del id="original-monthly-price">0 €</del></span>
-            <span id="promo-monthly-price" class="highlight-price">0 €</span>
-            <div>
-              Setup fee: <span class="original-price"><del id="original-setup-fee">0 €</del></span>
-              <span id="promo-setup-fee">0 €</span>
-            </div>
-            <span id="discount-date" class="blinking-date"></span>
+        <div class="discount-header">Offerta Speciale</div>
+        <div class="discount-content">
+          <div class="original-prices">
+            <div class="original-price-label">Prezzo Originale:</div>
+            <div class="original-price"><del id="original-monthly-price">0 €</del></div>
+            <div>Setup Fee: <del id="original-setup-fee">0 €</del></div>
           </div>
+          <div class="promo-prices">
+            <div class="promo-price-label">Prezzo Scontato:</div>
+            <div class="promo-price" id="promo-monthly-price">0 €</div>
+            <div class="promo-setup-fee" id="promo-setup-fee">0 €</div>
+          </div>
+          <div id="discount-date" class="blinking-date"></div>
           <a href="https://apps.docusign.com/send/templates?view=shared&folder=d71d9886-1424-4799-9155-4de52c347f6b"
              class="lock-price-btn" target="_blank">Blocca il prezzo</a>
         </div>
