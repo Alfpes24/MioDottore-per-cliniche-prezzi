@@ -35,12 +35,11 @@ document.addEventListener("DOMContentLoaded", () => {
     const pricePerRoomTable = [269, 170, 153, 117, 96, 88, 80, 75, 72, 67, 62];
     const index = rooms >= 11 ? 10 : Math.max(rooms - 1, 0);
 
-    const setupFee = setupFeeTable[index];
+    const setupFee = setupFeeTable[index] * 1.5; // aumento del 50%
     const monthlyPrice = pricePerRoomTable[index] * rooms;
     const locationsCost = additionalLocations * 99;
     const noaTotalPrice = noa * noaPrice;
 
-    // NUOVA FORMULA: incluso setupFee / 12
     const totalMonthlyPrice = monthlyPrice + locationsCost + noaTotalPrice;
     const defaultMonthlyPrice = totalMonthlyPrice * 1.25;
 
