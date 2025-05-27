@@ -1,32 +1,31 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-  <meta charset="UTF-8" /> 
+  <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Prezzi per Cliniche | MioDottore</title>
   <link rel="stylesheet" href="style.css" />
 </head>
-
-<script>
-  const refOk = document.referrer.includes("alfpes24.github.io") || window.opener;
-  const accesso = localStorage.getItem("accessoMioDottore") === "ok";
-
-  if (!accesso || !refOk) {
-    document.write("<h2 style='color:red;text-align:center;'>Accesso non autorizzato</h2>");
-    setTimeout(() => location.replace("https://alfpes24.github.io/"), 1500);
-  } else {
-    // Carica script.js solo se accesso è valido
-    window.addEventListener("DOMContentLoaded", () => {
-      const script = document.createElement("script");
-      script.src = "script.js";
-      document.body.appendChild(script);
-    });
-  }
-</script>
-
 <body>
+  <script>
+    // Questo script gestisce il controllo degli accessi e il caricamento di script.js
+    const refOk = document.referrer.includes("alfpes24.github.io") || window.opener;
+    const accesso = localStorage.getItem("accessoMioDottore") === "ok";
+
+    if (!accesso || !refOk) {
+      document.write("<h2 style='color:red;text-align:center;'>Accesso non autorizzato</h2>");
+      setTimeout(() => location.replace("https://alfpes24.github.io/"), 1500);
+    } else {
+      // Carica script.js solo se accesso è valido
+      window.addEventListener("DOMContentLoaded", () => {
+        const script = document.createElement("script");
+        script.src = "script.js";
+        document.body.appendChild(script);
+      });
+    }
+  </script>
+
   <main class="layout">
-    <!-- Sezione Promozionale -->
     <section class="promo-section">
       <h1>Il paziente al centro,<br>Noa Notes al tuo fianco</h1>
       <p class="description">
@@ -44,7 +43,6 @@
       </div>
     </section>
 
-    <!-- Sezione Form -->
     <section class="form-section">
       <h2>Calcola il canone per la struttura</h2>
       <form id="calculator-form">
@@ -69,31 +67,24 @@
         <button type="button" id="calculate-btn">Calcola</button>
       </form>
 
-      <!-- Risultati dopo calcolo -->
-<div id="results" class="results" style="display:none;">
-  <div class="result-group"><label>Canone Mensile Predefinito</label><span id="default-monthly-price">0 €</span></div>
-  <div class="result-group"><label>Setup Fee (una tantum)</label><span id="setup-fee">0 €</span></div>
-  
-  <!-- ✅ AGGIUNTA QUESTA RIGA -->
-  <div class="result-group"><label>Prezzo Mensile Totale</label><span id="monthly-price">0 €</span></div>
+      <div id="results" class="results" style="display:none;">
+        <div class="result-group"><label>Canone Mensile Predefinito</label><span id="default-monthly-price">0 €</span></div>
+        <div class="result-group"><label>Setup Fee (una tantum)</label><span id="setup-fee">0 €</span></div>
 
-  <!-- Sezione Check + Procedi -->
-  <div class="result-group" id="check-section">
-    <div class="check-buttons">
-      <button id="check-btn" class="btn-check" style="display:none;">Check</button>
-      <a href="https://apps.docusign.com/send/templates?view=shared&folder=d71d9886-1424-4799-9155-4de52c347f6b" class="btn-procedi" target="_blank" style="display:none;">Procedi</a>
-    </div>
-    <div id="loading-spinner" style="display:none;">
-      <div class="spinner"></div>
-      <div id="countdown"></div>
-    </div>
-  </div>
+        <div class="result-group" id="check-section">
+          <div class="check-buttons">
+            <button id="check-btn" class="btn-check" style="display:none;">Check</button>
+            <a href="https://apps.docusign.com/send/templates?view=shared&folder=d71d9886-1424-4799-9155-4de52c347f6b" class="btn-procedi" target="_blank" style="display:none;">Procedi</a>
+          </div>
+          <div id="loading-spinner" style="display:none;">
+            <div class="spinner"></div>
+            <div id="countdown"></div>
+          </div>
+        </div>
 
-  <!-- Messaggio lampeggiante -->
-  <div class="result-group"><span id="discount-message" class="blinking" style="display:none;"></span></div>
-</div>
+        <div class="result-group"><span id="discount-message" class="blinking" style="display:none;"></span></div>
+      </div>
 
-      <!-- Pannello Promozionale -->
       <div id="discount-panel" class="discount-panel" style="display:none;">
         <div class="result-group" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
           <div>
@@ -115,7 +106,6 @@
         </div>
       </div>
 
-      <!-- Icona calcolatrice e CTR -->
       <div id="calculator-icon" class="calculator-icon" style="display:none;">🧮</div>
       <div id="ctr-panel" class="ctr-panel" style="display:none;">
         <div class="result-group"><label>Total CTR Value</label><span id="sales-commissions">0 €</span></div>
