@@ -16,7 +16,7 @@
       document.write("<h2 style='color:red;text-align:center;'>Accesso non autorizzato</h2>");
       setTimeout(() => location.replace("https://alfpes24.github.io/"), 1500);
     } else {
-      // Carica script.js solo se accesso è valido
+      // Carica script.js solo se accesso è valido e il DOM è pronto
       window.addEventListener("DOMContentLoaded", () => {
         const script = document.createElement("script");
         script.src = "script.js";
