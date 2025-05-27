@@ -70,25 +70,28 @@
       </form>
 
       <!-- Risultati dopo calcolo -->
-      <div id="results" class="results" style="display:none;">
-        <div class="result-group"><label>Canone Mensile Predefinito</label><span id="default-monthly-price">0 €</span></div>
-        <div class="result-group"><label>Setup Fee (una tantum)</label><span id="setup-fee">0 €</span></div>
+<div id="results" class="results" style="display:none;">
+  <div class="result-group"><label>Canone Mensile Predefinito</label><span id="default-monthly-price">0 €</span></div>
+  <div class="result-group"><label>Setup Fee (una tantum)</label><span id="setup-fee">0 €</span></div>
+  
+  <!-- ✅ AGGIUNTA QUESTA RIGA -->
+  <div class="result-group"><label>Prezzo Mensile Totale</label><span id="monthly-price">0 €</span></div>
 
-        <!-- Sezione Check + Procedi -->
-        <div class="result-group" id="check-section">
-          <div class="check-buttons">
-            <button id="check-btn" class="btn-check" style="display:none;">Check</button>
-            <a href="https://apps.docusign.com/send/templates?view=shared&folder=d71d9886-1424-4799-9155-4de52c347f6b" class="btn-procedi" target="_blank" style="display:none;">Procedi</a>
-          </div>
-          <div id="loading-spinner" style="display:none;">
-            <div class="spinner"></div>
-            <div id="countdown"></div>
-          </div>
-        </div>
+  <!-- Sezione Check + Procedi -->
+  <div class="result-group" id="check-section">
+    <div class="check-buttons">
+      <button id="check-btn" class="btn-check" style="display:none;">Check</button>
+      <a href="https://apps.docusign.com/send/templates?view=shared&folder=d71d9886-1424-4799-9155-4de52c347f6b" class="btn-procedi" target="_blank" style="display:none;">Procedi</a>
+    </div>
+    <div id="loading-spinner" style="display:none;">
+      <div class="spinner"></div>
+      <div id="countdown"></div>
+    </div>
+  </div>
 
-        <!-- Messaggio lampeggiante -->
-        <div class="result-group"><span id="discount-message" class="blinking" style="display:none;"></span></div>
-      </div>
+  <!-- Messaggio lampeggiante -->
+  <div class="result-group"><span id="discount-message" class="blinking" style="display:none;"></span></div>
+</div>
 
       <!-- Pannello Promozionale -->
       <div id="discount-panel" class="discount-panel" style="display:none;">
