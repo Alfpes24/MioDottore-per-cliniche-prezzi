@@ -64,7 +64,7 @@ document.addEventListener("DOMContentLoaded", () => {
     originalMonthlyPriceField.textContent = defaultMonthlyPrice.toFixed(2) + " €";
     promoMonthlyPriceField.textContent = totalMonthlyPrice.toFixed(2) + " €";
     originalSetupFeeField.textContent = setupFeeDefault.toFixed(2) + " €";
-    promoSetupFeeField.textContent = setupFeeDefault.toFixed(2) + " €"; // Se vuoi che anche qui sia raddoppiata, cambia setupFeeDefault in setupFeeDisplayed
+    promoSetupFeeField.textContent = setupFeeDefault.toFixed(2) + " €";
 
     resultsBox.style.display = "block";
     discountPanel.style.display = "none";
