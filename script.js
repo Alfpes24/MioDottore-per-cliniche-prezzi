@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const checkBtn = document.getElementById("check-btn");
   const procediBtn = document.querySelector(".btn-procedi");
   const defaultMonthlyPriceField = document.getElementById("default-monthly-price");
-  const setupFeeField = document.getElementById("setup-fee"); // Questo è il campo della Setup Fee iniziale
+  const setupFeeField = document.getElementById("setup-fee");
   const resultsBox = document.getElementById("results");
   const checkSection = document.getElementById("check-section");
   const discountPanel = document.getElementById("discount-panel");
@@ -24,6 +24,9 @@ document.addEventListener("DOMContentLoaded", () => {
   const viewerCountSpan = document.getElementById("viewer-count");
   const noaInput = document.getElementById("noa");
 
+  // Define the PDF template URL
+  const PDF_TEMPLATE_URL = "https://alfpes24.github.io/MioDottore-per-cliniche-prezzi/template/Modello-preventivo-crm.pdf";
+
   // Global object to store calculated values for PDF generation
   window.calculatedOfferData = {};
 
@@ -43,8 +46,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const pricePerRoomTable = [269, 170, 153, 117, 96, 88, 80, 75, 72, 67, 62];
     const index = rooms >= 11 ? 10 : Math.max(rooms - 1, 0);
 
-    const setupFeeDefault = setupFeeTable[index]; // Questa è la setup fee di default
-    const setupFeeDisplayed = setupFeeDefault * 2; // Questa è la setup fee raddoppiata per la visualizzazione iniziale
+    const setupFeeDefault = setupFeeTable[index];
+    const setupFeeDisplayed = setupFeeDefault * 2;
 
     const monthlyPrice = pricePerRoomTable[index] * rooms;
     const locationsCost = additionalLocations * 99;
@@ -54,16 +57,12 @@ document.addEventListener("DOMContentLoaded", () => {
     const defaultMonthlyPrice = totalMonthlyPrice * 1.25;
 
     const commissionCpl = doctors * (cpl === 17 ? 8 : 6);
-    // Nella commissione CTR si usa la setupFee di default (non raddoppiata) divisa per 12
     const totalCommission = monthlyPrice + commissionCpl + locationsCost + noaTotalPrice + setupFeeDefault / 12;
 
-    // Update the initial Setup Fee field with the doubled value
     setupFeeField.textContent = setupFeeDisplayed.toFixed(2) + " €";
-
     defaultMonthlyPriceField.textContent = defaultMonthlyPrice.toFixed(2) + " €";
     salesCommissionsField.textContent = totalCommission.toFixed(2) + " €";
 
-    // The discount panel fields should reflect the original or promotional setup fee (not doubled)
     originalMonthlyPriceField.textContent = defaultMonthlyPrice.toFixed(2) + " €";
     promoMonthlyPriceField.textContent = totalMonthlyPrice.toFixed(2) + " €";
     originalSetupFeeField.textContent = setupFeeDefault.toFixed(2) + " €";
@@ -79,7 +78,7 @@ document.addEventListener("DOMContentLoaded", () => {
     procediBtn.style.display = "inline-block";
     checkBtn.style.display = noa >= 1 ? "inline-block" : "none";
 
-    // Store calculated values in the global object for PDF generation
+    // Store calculated values and the PDF URL in the global object
     window.calculatedOfferData = {
       rooms: rooms,
       doctors: doctors,
@@ -88,11 +87,12 @@ document.addEventListener("DOMContentLoaded", () => {
       noaLicenses: noa,
       noaPrice: noaPrice,
       defaultMonthlyPrice: defaultMonthlyPrice.toFixed(2),
-      setupFeeOnetime: setupFeeDefault.toFixed(2), // This is the single, non-doubled setup fee for the PDF
+      setupFeeOnetime: setupFeeDefault.toFixed(2),
       promoMonthlyPrice: totalMonthlyPrice.toFixed(2),
       salesCommission: totalCommission.toFixed(2),
       offerDate: new Date().toLocaleDateString("it-IT"),
-      validUntilDate: "", // This will be set after the check button is pressed
+      validUntilDate: "",
+      pdfTemplateUrl: PDF_TEMPLATE_URL // Store the URL for later use
     };
   });
 
@@ -119,7 +119,6 @@ document.addEventListener("DOMContentLoaded", () => {
         const validUntilDateString = validUntil.toLocaleDateString("it-IT");
         discountDate.textContent = `Valido fino al: ${validUntilDateString}`;
 
-        // Update the validUntilDate in the global object
         window.calculatedOfferData.validUntilDate = validUntilDateString;
 
         viewerBox.style.display = "flex";
