@@ -51,7 +51,7 @@ confirmPopup.addEventListener("click", async () => {
 });
 
 async function generaPDF(datiPopup) {
-  const formUrl = "/template/Modello-preventivo-crm.pdf";
+  const formUrl = "https://alfpes24.github.io/MioDottore-per-cliniche-prezzi/template/Modello-preventivo-crm.pdf";
   const formBytes = await fetch(formUrl).then(res => res.arrayBuffer());
 
   const pdfDoc = await PDFLib.PDFDocument.load(formBytes);
