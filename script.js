@@ -37,14 +37,13 @@ document.addEventListener("DOMContentLoaded", () => {
   const noaPriceSelect = document.getElementById("noa-price");
 
   // Input fields for PDF customization
-  const preparedForInput = document.getElementById("prepared-for");
-  const preparedByInput = document.getElementById("prepared-by");
+  const preparedForInput = document.getElementById("prepared-for"); // Corresponds to nome_struttura / nome_struttura1
+  const preparedByInput = document.getElementById("prepared-by"); // Corresponds to Nome_referente
 
   // Log to check if elements are found
   console.log({ calculateBtn, roomsInput, preparedForInput, generatePdfBtn });
   if (!calculateBtn) {
     console.error("Error: 'calculate-btn' not found in the DOM. Script may not function correctly.");
-    // No 'return' here, as other parts might still work, but it's a critical warning.
   }
 
   // Define the PDF template URL
@@ -112,8 +111,8 @@ document.addEventListener("DOMContentLoaded", () => {
     if (ctrPanel) ctrPanel.style.display = "none";
 
     if (procediBtn) procediBtn.style.display = "inline-block";
-    if (generatePdfBtn) generatePdfBtn.style.display = "inline-block"; // Make PDF button visible
-    if (checkBtn) checkBtn.style.display = noa >= 1 ? "inline-block" : "none"; // Only show check if NOA licenses > 0
+    if (generatePdfBtn) generatePdfBtn.style.display = "inline-block";
+    if (checkBtn) checkBtn.style.display = noa >= 1 ? "inline-block" : "none";
 
     // --- Store calculated data for PDF generation ---
     window.calculatedOfferData = {
@@ -124,11 +123,11 @@ document.addEventListener("DOMContentLoaded", () => {
       noaLicenses: noa,
       noaPrice: noaPrice,
       defaultMonthlyPrice: defaultMonthlyPrice.toFixed(2),
-      setupFeeOnetime: setupFeeDefault.toFixed(2), // Use the default, single setup fee for PDF
+      setupFeeOnetime: setupFeeDefault.toFixed(2),
       promoMonthlyPrice: totalMonthlyPrice.toFixed(2),
       salesCommission: totalCommission.toFixed(2),
       offerDate: new Date().toLocaleDateString("it-IT"),
-      validUntilDate: "", // Will be updated after checkBtn is pressed
+      validUntilDate: "",
       pdfTemplateUrl: PDF_TEMPLATE_URL,
       preparedFor: preparedForInput ? preparedForInput.value : "",
       preparedBy: preparedByInput ? preparedByInput.value : ""
@@ -158,7 +157,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const today = new Date();
         const validUntil = new Date();
-        validUntil.setDate(today.getDate() + 10); // Offer valid for 10 days
+        validUntil.setDate(today.getDate() + 10);
         const validUntilDateString = validUntil.toLocaleDateString("it-IT");
         if (discountDate) discountDate.textContent = `Valido fino al: ${validUntilDateString}`;
 
@@ -212,70 +211,84 @@ document.addEventListener("DOMContentLoaded", () => {
         const form = pdfDoc.getForm();
         console.log("PDF form obtained.");
 
-        // --- Populate PDF Fields based on your Modello-preventivo-crm.pdf ---
-        // I've used the identified field names from your PDF.
-        // If these still don't work, you might need to inspect the PDF yourself
-        // using a PDF editor's form field tools to get the exact names.
-
+        // --- Populate PDF Fields using the provided names ---
         // Page 1 fields
         try {
-          // This field appears to be for "Preparata per:"
-          form.getTextField('Text1').setText(window.calculatedOfferData.preparedFor || ''); [cite: 1]
-          console.log("Filled 'Text1' (Preparata per):", window.calculatedOfferData.preparedFor);
-        } catch (e) { console.warn("PDF Field 'Text1' (Preparata per) not found or error:", e); }
+          form.getTextField('nome_struttura').setText(window.calculatedOfferData.preparedFor || '');
+          console.log("Filled 'nome_struttura':", window.calculatedOfferData.preparedFor);
+        } catch (e) { console.warn("PDF Field 'nome_struttura' not found or error:", e); }
         try {
-          // This field appears to be for "Redatta da:"
-          form.getTextField('Text2').setText(window.calculatedOfferData.preparedBy || ''); [cite: 1]
-          console.log("Filled 'Text2' (Redatta da):", window.calculatedOfferData.preparedBy);
-        } catch (e) { console.warn("PDF Field 'Text2' (Redatta da) not found or error:", e); }
+          form.getTextField('nome_struttura1').setText(window.calculatedOfferData.preparedFor || '');
+          console.log("Filled 'nome_struttura1':", window.calculatedOfferData.preparedFor);
+        } catch (e) { console.warn("PDF Field 'nome_struttura1' not found or error:", e); }
+        try {
+          form.getTextField('Nome_referente').setText(window.calculatedOfferData.preparedBy || '');
+          console.log("Filled 'Nome_referente':", window.calculatedOfferData.preparedBy);
+        } catch (e) { console.warn("PDF Field 'Nome_referente' not found or error:", e); }
 
-        // Page 4 fields
+        // Fields from Page 5 (Proposta commerciale) which seem to correspond to form inputs
         try {
-          // Field for "Data Offerta"
-          form.getTextField('Data_Offerta').setText(window.calculatedOfferData.offerDate || ''); [cite: 12]
-          console.log("Filled 'Data_Offerta':", window.calculatedOfferData.offerDate);
-        } catch (e) { console.warn("PDF Field 'Data_Offerta' not found or error:", e); }
+          form.getTextField('Nome_sale').setText(String(window.calculatedOfferData.rooms || '0'));
+          console.log("Filled 'Nome_sale':", window.calculatedOfferData.rooms);
+        } catch (e) { console.warn("PDF Field 'Nome_sale' not found or error:", e); }
         try {
-          // Field for "Offerta valida fino a"
-          form.getTextField('Offerta_valida_fino_a').setText(window.calculatedOfferData.validUntilDate || ''); [cite: 12]
-          console.log("Filled 'Offerta_valida_fino_a':", window.calculatedOfferData.validUntilDate);
-        } catch (e) { console.warn("PDF Field 'Offerta_valida_fino_a' not found or error:", e); }
+          form.getTextField('Nome_sale1').setText(String(window.calculatedOfferData.rooms || '0'));
+          console.log("Filled 'Nome_sale1':", window.calculatedOfferData.rooms);
+        } catch (e) { console.warn("PDF Field 'Nome_sale1' not found or error:", e); }
         try {
-          // Field for "Spett.le" - assuming it's the same as "Preparata per"
-          form.getTextField('Spett_le').setText(window.calculatedOfferData.preparedFor || ''); [cite: 12]
-          console.log("Filled 'Spett_le':", window.calculatedOfferData.preparedFor);
-        } catch (e) { console.warn("PDF Field 'Spett_le' not found or error:", e); }
+          form.getTextField('numero_ambulatori').setText(String(window.calculatedOfferData.rooms || '0'));
+          console.log("Filled 'numero_ambulatori':", window.calculatedOfferData.rooms);
+        } catch (e) { console.warn("PDF Field 'numero_ambulatori' not found or error:", e); }
+        try {
+          // This field (Cpl) from the PDF might be for Capoluogo/No Capoluogo text.
+          // You might want to map cpl (17/13) to "Capoluogo" or "No Capoluogo" text.
+          const cplText = window.calculatedOfferData.cpl === 17 ? 'Capoluogo' : 'No Capoluogo';
+          form.getTextField('Cpl').setText(cplText);
+          console.log("Filled 'Cpl':", cplText);
+        } catch (e) { console.warn("PDF Field 'Cpl' not found or error:", e); }
 
-        // Page 5 fields
+        // Fields for prices and dates
         try {
-          // Field for "Numero Stanze/ambulatori"
-          form.getTextField('Numero_Stanze_ambulatori').setText(String(window.calculatedOfferData.rooms || '0')); [cite: 15]
-          console.log("Filled 'Numero_Stanze_ambulatori':", window.calculatedOfferData.rooms);
-        } catch (e) { console.warn("PDF Field 'Numero_Stanze_ambulatori' not found or error:", e); }
-
+          form.getTextField('Data_offerta').setText(window.calculatedOfferData.offerDate || '');
+          console.log("Filled 'Data_offerta':", window.calculatedOfferData.offerDate);
+        } catch (e) { console.warn("PDF Field 'Data_offerta' not found or error:", e); }
         try {
-          // Field for "Quota mensile per struttura" (MIODOTTORE CRM)
-          form.getTextField('Quota_mensile_per_struttura').setText(window.calculatedOfferData.promoMonthlyPrice + ' €' || '0 €'); [cite: 15]
-          console.log("Filled 'Quota_mensile_per_struttura':", window.calculatedOfferData.promoMonthlyPrice);
-        } catch (e) { console.warn("PDF Field 'Quota_mensile_per_struttura' not found or error:", e); }
-
-        try {
-          // Field for "TOTALE:" (MIODOTTORE CRM section)
-          form.getTextField('Totale').setText(window.calculatedOfferData.promoMonthlyPrice + ' €' || '0 €'); [cite: 15]
-          console.log("Filled 'Totale' (CRM):", window.calculatedOfferData.promoMonthlyPrice);
-        } catch (e) { console.warn("PDF Field 'Totale' (CRM) not found or error:", e); }
+          form.getTextField('Scadenza_offerta').setText(window.calculatedOfferData.validUntilDate || '');
+          console.log("Filled 'Scadenza_offerta':", window.calculatedOfferData.validUntilDate);
+        } catch (e) { console.warn("PDF Field 'Scadenza_offerta' not found or error:", e); }
 
         try {
-          // Field for "Commissione a prenotazione NUOVO PAZIENTE"
-          form.getTextField('Commissione_a_prenotazione_NUOVO_PAZIENTE').setText(window.calculatedOfferData.salesCommission + ' €' || '0 €'); [cite: 16]
-          console.log("Filled 'Commissione_a_prenotazione_NUOVO_PAZIENTE':", window.calculatedOfferData.salesCommission);
+          // This is for "Quota mensile per struttura" for MIODOTTORE CRM on page 5
+          form.getTextField('Quota_mensile_scontata').setText(window.calculatedOfferData.promoMonthlyPrice + ' €' || '0 €');
+          console.log("Filled 'Quota_mensile_scontata':", window.calculatedOfferData.promoMonthlyPrice);
+        } catch (e) { console.warn("PDF Field 'Quota_mensile_scontata' not found or error:", e); }
+
+        try {
+            // This could be the 'TOTALE:' field on page 5, which seems to display the same promo monthly price
+            form.getTextField('Quota_scontata').setText(window.calculatedOfferData.promoMonthlyPrice + ' €' || '0 €');
+            console.log("Filled 'Quota_scontata':", window.calculatedOfferData.promoMonthlyPrice);
+        } catch (e) { console.warn("PDF Field 'Quota_scontata' not found or error:", e); }
+
+        try {
+            // This is "Commissione a prenotazione NUOVO PAZIENTE" on page 5
+            form.getTextField('Commissione_a_prenotazione_NUOVO_PAZIENTE').setText(window.calculatedOfferData.salesCommission + ' €' || '0 €');
+            console.log("Filled 'Commissione_a_prenotazione_NUOVO_PAZIENTE':", window.calculatedOfferData.salesCommission);
         } catch (e) { console.warn("PDF Field 'Commissione_a_prenotazione_NUOVO_PAZIENTE' not found or error:", e); }
 
         try {
-          // Field for "Quota per struttura Una Tantum" (TRAINING)
-          form.getTextField('Quota_per_struttura_Una_Tantum').setText(window.calculatedOfferData.setupFeeOnetime + ' €' || '0 €'); [cite: 20]
-          console.log("Filled 'Quota_per_struttura_Una_Tantum':", window.calculatedOfferData.setupFeeOnetime);
+            // This is "Quota per struttura Una Tantum" (TRAINING) on page 5
+            form.getTextField('Quota_per_struttura_Una_Tantum').setText(window.calculatedOfferData.setupFeeOnetime + ' €' || '0 €');
+            console.log("Filled 'Quota_per_struttura_Una_Tantum':", window.calculatedOfferData.setupFeeOnetime);
         } catch (e) { console.warn("PDF Field 'Quota_per_struttura_Una_Tantum' not found or error:", e); }
+
+        try {
+            // This field "Quota_mensile_default" or "Quota_mensile_default_2" is likely the "Canone Mensile Predefinito" for display
+            // You mentioned 'Quota_mensile_default_2' for page 2/3 but your PDF is page 1-5.
+            // Let's assume 'Quota_mensile_default' is on page 5 or 4 as the default price.
+            form.getTextField('Quota_mensile_default').setText(window.calculatedOfferData.defaultMonthlyPrice + ' €' || '0 €');
+            console.log("Filled 'Quota_mensile_default':", window.calculatedOfferData.defaultMonthlyPrice);
+        } catch (e) { console.warn("PDF Field 'Quota_mensile_default' not found or error:", e); }
+        // If 'Quota_mensile_default_2' truly exists and needs filling, you'd add another try/catch for it.
 
 
         // Flatten the form fields to make them part of the document content
@@ -292,7 +305,9 @@ document.addEventListener("DOMContentLoaded", () => {
         const a = document.createElement('a');
         a.href = url;
         // Dynamically set download filename based on client name and date
-        a.download = `Preventivo_MioDottore_${(window.calculatedOfferData.preparedFor || 'Clinica').replace(/\s/g, '_')}_${new Date().toLocaleDateString('it-IT').replace(/\//g, '-')}.pdf`;
+        const clientNameForFilename = (window.calculatedOfferData.preparedFor || 'Clinica').replace(/\s/g, '_').replace(/[^\w-]/g, ''); // Sanitize filename
+        const dateForFilename = new Date().toLocaleDateString('it-IT').replace(/\//g, '-');
+        a.download = `Preventivo_MioDottore_${clientNameForFilename}_${dateForFilename}.pdf`;
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
