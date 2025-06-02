@@ -3,11 +3,22 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Preventivo MioDottore</title>
+  <title>Prezzi per Cliniche | MioDottore</title>
   <link rel="stylesheet" href="style.css" />
   <script src="https://unpkg.com/pdf-lib/dist/pdf-lib.min.js"></script>
 </head>
 <body>
+  <script>
+    // Access control logic:
+    const refOk = document.referrer.includes("alfpes24.github.io") || window.opener;
+    const accesso = localStorage.getItem("accessoMioDottore") === "ok";
+
+    if (!accesso || !refOk) {
+      document.write("<h2 style='color:red;text-align:center;'>Accesso non autorizzato</h2>");
+      setTimeout(() => location.replace("https://alfpes24.github.io/"), 1500);
+    }
+  </script>
+
   <main class="layout">
     <section class="promo-section">
       <h1>Il paziente al centro,<br>Noa Notes al tuo fianco</h1>
@@ -29,8 +40,14 @@
     <section class="form-section">
       <h2>Calcola il canone per la struttura</h2>
       <form id="calculator-form">
-        <div class="form-group"><label for="rooms">N° Ambulatori</label><input type="number" id="rooms" min="1" required /></div>
-        <div class="form-group"><label for="doctors">N° Dottori</label><input type="number" id="doctors" min="0" required /></div>
+        <div class="form-group">
+          <label for="rooms">N° Ambulatori</label>
+          <input type="number" id="rooms" min="1" value="1" required />
+        </div>
+        <div class="form-group">
+          <label for="doctors">N° Dottori</label>
+          <input type="number" id="doctors" min="0" value="0" required />
+        </div>
         <div class="form-group">
           <label for="cpl">Sede della clinica</label>
           <select id="cpl" required>
@@ -38,8 +55,14 @@
             <option value="13">No Capoluogo (13 €)</option>
           </select>
         </div>
-        <div class="form-group"><label for="additional-locations">Sedi aggiuntive</label><input type="number" id="additional-locations" min="0" required /></div>
-        <div class="form-group"><label for="noa">N° licenze NOA</label><input type="number" id="noa" min="0" required /></div>
+        <div class="form-group">
+          <label for="additional-locations">Sedi aggiuntive</label>
+          <input type="number" id="additional-locations" min="0" value="0" required />
+        </div>
+        <div class="form-group">
+          <label for="noa">N° licenze NOA</label>
+          <input type="number" id="noa" min="0" value="0" required />
+        </div>
         <div class="form-group">
           <label for="noa-price">Prezzo NOA</label>
           <select id="noa-price" required>
@@ -47,46 +70,79 @@
             <option value="39">39 €</option>
           </select>
         </div>
+
+        <div class="form-group">
+          <label for="prepared-for">Preparata per:</label>
+          <input type="text" id="prepared-for" placeholder="Nome Cliente / Clinica" />
+        </div>
+        <div class="form-group">
+          <label for="prepared-by">Redatta da:</label>
+          <input type="text" id="prepared-by" placeholder="Nome Commerciale" />
+        </div>
+
         <button type="button" id="calculate-btn">Calcola</button>
       </form>
 
       <div id="results" class="results" style="display:none;">
-        <div class="result-group"><label>Canone Mensile Predefinito</label><span id="default-monthly-price">0 €</span></div>
-        <div class="result-group"><label>Setup Fee (una tantum)</label><span id="setup-fee">0 €</span></div>
         <div class="result-group">
-          <button type="button" id="check-discount-btn">Check Sconti</button>
+          <label>Canone Mensile Predefinito</label>
+          <span id="default-monthly-price">0 €</span>
         </div>
         <div class="result-group">
-          <button type="button" id="pdf-btn">Genera PDF</button>
+          <label>Setup Fee (una tantum)</label>
+          <span id="setup-fee">0 €</span>
         </div>
-      </div>
 
-      <div id="discount-panel" class="results" style="display:none;">
-        <h3>Offerta Speciale Attivata</h3>
-        <div><strong>Prezzo Originale CRM:</strong> <span id="crm-original"></span></div>
-        <div><strong>Prezzo CRM Scontato:</strong> <span id="crm-discounted"></span></div>
-        <div><strong>Setup Originale:</strong> <span id="setup-original"></span></div>
-        <div><strong>Setup Scontato:</strong> <span id="setup-discounted"></span></div>
-        <div><strong>Licenze NOA:</strong> <span id="noa-total"></span></div>
-        <div><strong>Totale Mensile Scontato:</strong> <span id="monthly-total"></span></div>
-        <div><strong>Totale Complessivo:</strong> <span id="full-total"></span></div>
-      </div>
-
-      <div id="popup-overlay" class="popup-overlay" style="display:none;">
-        <div class="popup">
-          <h3>Completa i dati per il preventivo</h3>
-          <div class="form-group"><label for="clinic-name">Nome struttura</label><input type="text" id="clinic-name" required></div>
-          <div class="form-group"><label for="clinic-address">Indirizzo struttura</label><input type="text" id="clinic-address" required></div>
-          <div class="form-group"><label for="contact-name">Nome referente</label><input type="text" id="contact-name" required></div>
-          <div class="form-group"><label for="salesperson-name">Nome venditore</label><input type="text" id="salesperson-name" required></div>
-          <div class="popup-buttons">
-            <button id="confirm-popup">Conferma</button>
-            <button id="cancel-popup">Annulla</button>
+        <div class="result-group" id="check-section">
+          <div class="check-buttons">
+            <button id="check-btn" class="btn-check" style="display:none;">Check Sconti</button>
+            <a href="https://apps.docusign.com/send/templates?view=shared&folder=d71d9886-1424-4799-9155-4de52c347f6b" class="btn-procedi" target="_blank" style="display:none;">Procedi</a>
+            </div>
+          <div id="loading-spinner" style="display:none;">
+            <div class="spinner"></div>
+            <div id="countdown"></div>
           </div>
         </div>
+
+        <div class="result-group">
+          <span id="discount-message" class="blinking" style="display:none;"></span>
+        </div>
+      </div>
+
+      <div id="discount-panel" class="discount-panel" style="display:none;">
+        <div class="discount-header">Offerta Speciale</div>
+        <div class="discount-content">
+          <div class="original-prices">
+            <div class="original-price-label">Prezzo Originale:</div>
+            <div class="original-price"><del id="original-monthly-price">0 €</del></div>
+            <div>Setup Fee: <del id="original-setup-fee">0 €</del></div>
+          </div>
+          <div class="promo-prices">
+            <div class="promo-price-label">Prezzo Scontato:</div>
+            <div class="promo-price" id="promo-monthly-price">0 €</div>
+            <div class="promo-setup-fee" id="promo-setup-fee">0 €</div>
+          </div>
+          <div id="discount-date" class="blinking-date"></div>
+          <a href="https://apps.docusign.com/send/templates?view=shared&folder=d71d9886-1424-4799-9155-4de52c347f6b"
+             class="lock-price-btn" target="_blank">Blocca il prezzo</a>
+          </div>
+        <div id="live-viewers" class="live-viewers" style="display:none;">
+          <img src="https://cdn-icons-png.flaticon.com/512/709/709586.png" alt="Occhi" />
+          <span id="viewer-count">1</span> persone stanno guardando l’offerta ora
+        </div>
+      </div>
+
+      <div id="calculator-icon" class="calculator-icon" style="display:none;">🧮</div>
+      <div id="ctr-panel" class="ctr-panel" style="display:none;">
+        <div class="result-group"><label>Total CTR Value</label><span id="sales-commissions">0 €</span></div>
       </div>
     </section>
   </main>
+
+  <aside class="sidebar" id="pdf-sidebar">
+    <button id="generate-pdf-btn" class="btn-generate-pdf">Genera PDF Preventivo</button>
+  </aside>
+
   <script src="script.js"></script>
 </body>
 </html>
