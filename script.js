@@ -153,9 +153,10 @@ document.addEventListener("DOMContentLoaded", () => {
       additionalLocations: additionalLocations,
       noaLicenses: noa,
       noaPrice: noaPrice,
-      defaultMonthlyPrice: defaultMonthlyPrice.toFixed(2),
-      setupFeeOnetime: setupFeeDefault.toFixed(2), // Usa la Setup Fee singola per il PDF
-      promoMonthlyPrice: totalMonthlyPrice.toFixed(2),
+      defaultMonthlyPrice: defaultMonthlyPrice.toFixed(2), // 372.50 € ad esempio
+      setupFeeOnetime: setupFeeDefault.toFixed(2), // 500.00 € ad esempio
+      setupFeeDisplayed: setupFeeDisplayed.toFixed(2), // 1000.00 € ad esempio (raddoppiato)
+      promoMonthlyPrice: totalMonthlyPrice.toFixed(2), // 298.00 € ad esempio
       salesCommission: totalCommission.toFixed(2),
       offerDate: new Date().toLocaleDateString("it-IT"),
       validUntilDate: "", // Sarà aggiornata dopo il click su checkBtn
@@ -207,10 +208,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
           if (viewerBox) viewerBox.style.display = "flex";
           updateViewerCount();
-          // Importante: non chiamare setInterval più volte qui se la funzione non è progettata per quello
-          // L'updateViewerCount iniziale è sufficiente per il primo caricamento del discount panel
-          // Se vuoi un aggiornamento continuo, il setInterval deve essere fuori dal blocco if (seconds <= 0)
-          // e gestito per non crearne più di uno. Per ora, lo lasciamo così com'è.
+          setInterval(updateViewerCount, 20000);
 
           // La sidebar del PDF (che contiene il pulsante Genera PDF) rimane visibile come già impostato dopo il "Calcola".
           // Non è necessario cambiarne la visibilità qui.
@@ -336,36 +334,29 @@ document.addEventListener("DOMContentLoaded", () => {
           console.log("Campo 'Quota_mensile_default' compilato con:", window.calculatedOfferData.defaultMonthlyPrice);
         } catch (e) { console.warn("Campo PDF 'Quota_mensile_default' non trovato o errore:", e); }
 
-        // Field: "Canone mensile predefinito (pagina 2)" (Quota_mensile_default_2)
-        // HO RIMOSSO IL TENTATIVO DI COMPILARE QUESTO CAMPO PERCHÉ GENERAVA ERRORE NELLA CONSOLE
-        // Questo campo è stato segnalato come inesistente nel tuo PDF dallo screenshot precedente.
-        // try {
-        //   form.getTextField('Quota_mensile_default_2').setText(window.calculatedOfferData.defaultMonthlyPrice + ' €' || '0 €');
-        //   console.log("Campo 'Quota_mensile_default_2' compilato con:", window.calculatedOfferData.defaultMonthlyPrice);
-        // } catch (e) { console.warn("Campo PDF 'Quota_mensile_default_2' non trovato o errore:", e); }
 
         // Field: "Totale (canone + setup)" (Quota_scontata)
         // Questo campo deve essere compilato SOLO SE hasDiscountApplied è TRUE.
         // Se hasDiscountApplied è falso, il campo deve rimanere vuoto.
         try {
           if (window.calculatedOfferData.hasDiscountApplied) {
-            // Calcolo dello sconto effettivo totale
-            // Utilizziamo i valori non toFixed per il calcolo e poi toFixed per la stringa finale
-            const defaultMonthlyNum = parseFloat(window.calculatedOfferData.defaultMonthlyPrice);
-            const promoMonthlyNum = parseFloat(window.calculatedOfferData.promoMonthlyPrice);
-            
-            // Assicurati che setupFeeDisplayed sia un numero. Se setupFeeField.textContent non è corretto, potresti avere problemi.
-            // Utilizziamo i valori numerici originali da window.calculatedOfferData per coerenza.
-            const setupFeeDisplayedNum = parseFloat(window.calculatedOfferData.setupFeeDisplayed); // Usiamo il valore 'displayed' che è il raddoppiato
-            const setupFeeDefaultNum = parseFloat(window.calculatedOfferData.setupFeeOnetime); // Il valore base
+            // Prezzo Originale (defaultMonthlyPrice) e Prezzo Scontato (promoMonthlyPrice)
+            const prezzoOriginale = window.calculatedOfferData.defaultMonthlyPrice;
+            const prezzoScontato = window.calculatedOfferData.promoMonthlyPrice;
+            const setupOriginale = window.calculatedOfferData.setupFeeDisplayed; // Utilizziamo il valore raddoppiato come "originale" per la Setup Fee
+            const setupScontato = window.calculatedOfferData.setupFeeOnetime; // Utilizziamo il valore base come "scontato" per la Setup Fee
 
-            const scontoEffettivo = (defaultMonthlyNum - promoMonthlyNum) + (setupFeeDisplayedNum - setupFeeDefaultNum);
+            const riepilogoScontoString =
+              `Prezzo Originale: ${prezzoOriginale} €\n` +
+              `Setup Fee: ${setupOriginale} €\n\n` + // Aggiunto un doppio a capo per spaziatura
+              `Prezzo Scontato: ${prezzoScontato} €\n` +
+              `Setup Scontato: ${setupScontato} €`;
 
-            form.getTextField('Quota_scontata').setText(scontoEffettivo.toFixed(2) + ' €' || '0 €');
-            console.log("Campo 'Quota_scontata' (Sconto Effettivo) compilato con:", scontoEffettivo.toFixed(2) + ' €');
+            form.getTextField('Quota_scontata').setText(riepilogoScontoString);
+            console.log("Campo 'Quota_scontata' compilato con riepilogo sconto:", riepilogoScontoString);
           } else {
             form.getTextField('Quota_scontata').setText(''); // Svuota il campo
-            console.log("Campo 'Quota_scontata' (Sconto Effettivo) lasciato vuoto perché nessun sconto applicato.");
+            console.log("Campo 'Quota_scontata' lasciato vuoto perché nessun sconto applicato.");
           }
         } catch (e) { console.warn("Campo PDF 'Quota_scontata' non trovato o errore:", e); }
 
