@@ -370,6 +370,8 @@ button:hover {
   align-items: center;
   gap: 10px;
   z-index: 1000; /* Assicura che sia sopra gli altri elementi */
+  /* Nascondi la sidebar di default, JS la mostrerà */
+  display: none; /* Inizialmente nascosta */
 }
 
 .sidebar .btn-generate-pdf {
