@@ -5,7 +5,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const calculateBtn = document.getElementById("calculate-btn");
   const checkBtn = document.getElementById("check-btn");
   const procediBtn = document.querySelector(".btn-procedi");
-  const generatePdfBtn = document.getElementById("generate-pdf-btn");
+  const generatePdfBtn = document.getElementById("generate-pdf-btn"); // New PDF button
 
   const defaultMonthlyPriceField = document.getElementById("default-monthly-price");
   const setupFeeField = document.getElementById("setup-fee");
@@ -37,8 +37,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const noaPriceSelect = document.getElementById("noa-price");
 
   // Input fields for PDF customization
-  const preparedForInput = document.getElementById("prepared-for"); // Corresponds to nome_struttura
-  const preparedByInput = document.getElementById("prepared-by"); // Corresponds to Nome_referente, Nome_sale, Nome_sale1
+  const preparedForInput = document.getElementById("prepared-for");
+  const preparedByInput = document.getElementById("prepared-by");
 
   // Log to check if elements are found. This is where you'd see if 'calculateBtn' is null.
   console.log({ calculateBtn, roomsInput, preparedForInput, generatePdfBtn });
@@ -183,7 +183,8 @@ document.addEventListener("DOMContentLoaded", () => {
           updateViewerCount();
           setInterval(updateViewerCount, 20000);
 
-          // if (generatePdfBtn) generatePdfBtn.style.display = "inline-block"; // Already visible
+          // << MODIFIED: Ensure generatePdfBtn is visible within the discount panel context
+          if (generatePdfBtn) generatePdfBtn.style.display = "inline-block";
         }
       }, 1000);
     });
@@ -329,16 +330,6 @@ document.addEventListener("DOMContentLoaded", () => {
           console.log("Filled 'Quota_mensile_scontata':", window.calculatedOfferData.promoMonthlyPrice);
         } catch (e) { console.warn("PDF Field 'Quota_mensile_scontata' not found or error:", e); }
 
-        // Field: "Indirizzo struttura" is not explicitly in your latest list.
-        // If this field exists and you want it filled, you need to either add a new input field in HTML
-        // or decide which existing input should map to it. For now, it's not being filled.
-        // Example if it exists and uses 'preparedFor' as source (which might be too general):
-        /*
-        try {
-          form.getTextField('indirizzo').setText(window.calculatedOfferData.preparedFor || '');
-          console.log("Filled 'indirizzo':", window.calculatedOfferData.preparedFor);
-        } catch (e) { console.warn("PDF Field 'indirizzo' not found or error:", e); }
-        */
 
         // Flatten the form fields to make them part of the document content
         form.flatten();
