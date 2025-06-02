@@ -4,21 +4,20 @@ document.addEventListener("DOMContentLoaded", () => {
   // --- Controllo Accesso (Spostato qui per non interferire con il DOM) ---
   const refOk = document.referrer.includes("alfpes24.github.io") || window.opener;
   const accesso = localStorage.getItem("accessoMioDottore") === "ok";
-  const mainContent = document.getElementById("main-content"); // Nuovo ID aggiunto al main content
+  const mainContent = document.getElementById("main-content"); 
 
   if (!accesso || !refOk) {
     if (mainContent) {
-      mainContent.style.display = "none"; // Nasconde il contenuto principale
+      mainContent.style.display = "none"; 
       const unauthorizedMessage = document.createElement("h2");
       unauthorizedMessage.style.color = "red";
       unauthorizedMessage.style.textAlign = "center";
       unauthorizedMessage.textContent = "Accesso non autorizzato";
-      document.body.prepend(unauthorizedMessage); // Inserisce il messaggio all'inizio del body
+      document.body.prepend(unauthorizedMessage); 
     }
     setTimeout(() => location.replace("https://alfpes24.github.io/"), 1500);
-    return; // Ferma l'esecuzione del resto dello script
+    return; 
   }
-  // Se l'accesso è valido, il contenuto principale rimane visibile e lo script prosegue normalmente.
 
 
   // --- Get DOM Elements ---
@@ -127,7 +126,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const index = rooms >= 11 ? 10 : Math.max(rooms - 1, 0);
 
     const setupFeeDefault = setupFeeTable[index];
-    const setupFeeDisplayed = setupFeeDefault * 2; // Setup Fee raddoppiata per la visualizzazione iniziale sul web
+    const setupFeeDisplayed = setupFeeDefault * 2; 
 
     const monthlyPrice = pricePerRoomTable[index] * rooms;
     const locationsCost = additionalLocations * 99;
@@ -153,7 +152,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // --- Toggle Visibility of Sections/Buttons (Stato iniziale dopo il calcolo) ---
     if (resultsBox) resultsBox.style.display = "block";
-    if (discountPanel) discountPanel.style.display = "none"; // Nasconde il pannello sconti
+    if (discountPanel) discountPanel.style.display = "none"; 
     if (calculatorIcon) calculatorIcon.style.display = "none";
     if (discountMessage) discountMessage.style.display = "none";
     if (viewerBox) viewerBox.style.display = "none";
@@ -162,7 +161,6 @@ document.addEventListener("DOMContentLoaded", () => {
     if (procediBtn) procediBtn.style.display = "inline-block";
     if (checkBtn) checkBtn.style.display = noa >= 1 ? "inline-block" : "none";
 
-    // Mostra la sidebar del PDF dopo il calcolo iniziale.
     if (pdfSidebar) pdfSidebar.style.display = "flex"; 
 
 
@@ -170,7 +168,7 @@ document.addEventListener("DOMContentLoaded", () => {
     window.calculatedOfferData = {
       rooms: rooms,
       doctors: doctors,
-      cpl: cpl,
+      cpl: cpl, // Store the numeric cpl value
       additionalLocations: additionalLocations,
       noaLicenses: noa,
       noaPrice: noaPrice,
@@ -178,13 +176,13 @@ document.addEventListener("DOMContentLoaded", () => {
       setupFeeOnetime: setupFeeDefault.toFixed(2), 
       setupFeeDisplayed: setupFeeDisplayed.toFixed(2), 
       promoMonthlyPrice: totalMonthlyPrice.toFixed(2), 
-      salesCommissions: totalCommission.toFixed(2), // Corretto nome della variabile
+      salesCommissions: totalCommission.toFixed(2), 
       offerDate: new Date().toLocaleDateString("it-IT"),
       validUntilDate: "", 
       pdfTemplateUrl: PDF_TEMPLATE_URL,
       preparedFor: preparedForInput ? preparedForInput.value : "",
       preparedBy: preparedByInput ? preparedByInput.value : "",
-      hasDiscountApplied: false // Inizialmente false, gestito dalla checkbox
+      hasDiscountApplied: false 
     };
     console.log("Dati offerta calcolati e aggiornati:", window.calculatedOfferData);
   });
@@ -197,7 +195,6 @@ document.addEventListener("DOMContentLoaded", () => {
       if (countdown) countdown.textContent = "Attendere 15 secondi...";
       let seconds = 15;
 
-      // Disabilita la checkbox durante il countdown
       if (applyDiscountToPdfCheckbox) applyDiscountToPdfCheckbox.disabled = true;
 
       const interval = setInterval(() => {
@@ -224,14 +221,11 @@ document.addEventListener("DOMContentLoaded", () => {
           if (discountDate) discountDate.textContent = `Valido fino al: ${validUntilDateString}`;
 
           window.calculatedOfferData.validUntilDate = validUntilDateString;
-          // hasDiscountApplied NON viene impostato qui. Sarà gestito dalla checkbox.
           console.log("Sconto valido fino al:", validUntilDateString);
           
-          // Riabilita la checkbox e la imposta a true per default
           if (applyDiscountToPdfCheckbox) {
             applyDiscountToPdfCheckbox.disabled = false;
-            applyDiscountToPdfCheckbox.checked = true; // Pre-seleziona la checkbox
-            // Trigger l'evento change per aggiornare window.calculatedOfferData.hasDiscountApplied
+            applyDiscountToPdfCheckbox.checked = true; 
             applyDiscountToPdfCheckbox.dispatchEvent(new Event('change')); 
           }
 
@@ -246,13 +240,11 @@ document.addEventListener("DOMContentLoaded", () => {
     console.warn("Elemento 'check-btn' non trovato nell'HTML. L'event listener non verrà collegato.");
   }
 
-  // Listener per la checkbox per aggiornare hasDiscountApplied
   if (applyDiscountToPdfCheckbox) {
     applyDiscountToPdfCheckbox.addEventListener('change', () => {
       window.calculatedOfferData.hasDiscountApplied = applyDiscountToPdfCheckbox.checked;
       console.log("Checkbox 'Includi sconto nel PDF' cambiata. hasDiscountApplied:", window.calculatedOfferData.hasDiscountApplied);
     });
-    // Sincronizza lo stato iniziale del flag con lo stato della checkbox all'avvio
     window.calculatedOfferData.hasDiscountApplied = applyDiscountToPdfCheckbox.checked; 
   } else {
     console.warn("Elemento 'apply-discount-to-pdf' non trovato nell'HTML. La logica dello sconto nel PDF potrebbe non funzionare correttamente.");
@@ -361,10 +353,11 @@ document.addEventListener("DOMContentLoaded", () => {
         } catch (e) { console.warn("Campo PDF 'numero_ambulatori' non trovato o errore:", e); }
 
         // Field: "Capoluogo / Non capoluogo" (Cpl)
+        // Ora inseriamo la tariffa in Euro
         try {
-          const cplText = window.calculatedOfferData.cpl === 17 ? 'Capoluogo' : 'No Capoluogo';
-          form.getTextField('Cpl').setText(cplText);
-          console.log("Campo 'Cpl' compilato con:", cplText);
+          const cplTariffa = window.calculatedOfferData.cpl === 17 ? '17 €' : '13 €';
+          form.getTextField('Cpl').setText(cplTariffa);
+          console.log("Campo 'Cpl' compilato con tariffa:", cplTariffa);
         } catch (e) { console.warn("Campo PDF 'Cpl' non trovato o errore:", e); }
 
         // Field: "Canone mensile predefinito (pagina 1)" (Quota_mensile_default)
