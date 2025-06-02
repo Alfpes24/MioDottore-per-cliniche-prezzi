@@ -37,15 +37,13 @@ document.addEventListener("DOMContentLoaded", () => {
   const noaPriceSelect = document.getElementById("noa-price");
 
   // Input fields for PDF customization
-  const preparedForInput = document.getElementById("prepared-for");
-  const preparedByInput = document.getElementById("prepared-by");
+  const preparedForInput = document.getElementById("prepared-for"); // Corresponds to nome_struttura
+  const preparedByInput = document.getElementById("prepared-by"); // Corresponds to Nome_referente, Nome_sale, Nome_sale1
 
   // Log to check if elements are found. This is where you'd see if 'calculateBtn' is null.
   console.log({ calculateBtn, roomsInput, preparedForInput, generatePdfBtn });
   if (!calculateBtn) {
     console.error("Error: 'calculate-btn' not found in the DOM. Script will not function correctly.");
-    // If calculateBtn is not found, the script will log the error and then continue,
-    // but the event listener won't be attached to calculateBtn.
   }
 
   // Define the PDF template URL
@@ -56,7 +54,7 @@ document.addEventListener("DOMContentLoaded", () => {
   window.calculatedOfferData = {};
 
   // --- Event Listeners ---
-  if (calculatorIcon) { // Added check for calculatorIcon
+  if (calculatorIcon) {
     calculatorIcon.addEventListener("click", () => {
       console.log("Calculator icon clicked.");
       if (ctrPanel) ctrPanel.style.display = ctrPanel.style.display === "none" ? "block" : "none";
@@ -66,7 +64,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
 
-  if (calculateBtn) { // << IMPORTANT: Ensure calculateBtn exists before attaching listener
+  if (calculateBtn) {
     calculateBtn.addEventListener("click", () => {
       console.log("Calculate button clicked."); // This should definitely appear in console on click
 
@@ -119,7 +117,9 @@ document.addEventListener("DOMContentLoaded", () => {
       if (ctrPanel) ctrPanel.style.display = "none";
 
       if (procediBtn) procediBtn.style.display = "inline-block";
-      if (generatePdfBtn) generatePdfBtn.style.display = "inline-block"; // << MODIFIED: Show PDF button here after calculate
+      if (generatePdfBtn) { // << MODIFIED: Ensure generatePdfBtn is handled
+        generatePdfBtn.style.display = "inline-block"; // Show PDF button after calculate
+      }
       if (checkBtn) checkBtn.style.display = noa >= 1 ? "inline-block" : "none";
 
       // --- Store calculated data for PDF generation ---
@@ -148,7 +148,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
 
-  if (checkBtn) { // Added check for checkBtn
+  if (checkBtn) {
     checkBtn.addEventListener("click", () => {
       console.log("Check Sconti button clicked.");
       if (loadingSpinner) loadingSpinner.style.display = "block";
@@ -184,7 +184,11 @@ document.addEventListener("DOMContentLoaded", () => {
           setInterval(updateViewerCount, 20000);
 
           // << MODIFIED: Ensure generatePdfBtn is visible within the discount panel context
-          if (generatePdfBtn) generatePdfBtn.style.display = "inline-block";
+          if (generatePdfBtn) {
+            generatePdfBtn.style.display = "inline-block"; // Keep PDF button visible
+            // If you want it *inside* the discount panel, you'd need to move its HTML location,
+            // but for now, it's just ensuring visibility on the page.
+          }
         }
       }, 1000);
     });
@@ -193,7 +197,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
 
-  if (discountMessage) { // Added check for discountMessage
+  if (discountMessage) {
     discountMessage.addEventListener("click", () => {
       console.log("Discount message clicked. Scrolling to discount panel.");
       if (discountPanel) discountPanel.scrollIntoView({ behavior: "smooth" });
@@ -204,7 +208,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
   // --- PDF Generation Logic ---
-  if (generatePdfBtn) { // Added check for generatePdfBtn
+  if (generatePdfBtn) {
     generatePdfBtn.addEventListener("click", async () => {
       console.log("Generate PDF button clicked.");
 
