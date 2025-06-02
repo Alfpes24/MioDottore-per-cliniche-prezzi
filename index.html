@@ -1,15 +1,14 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Preventivo MioDottore</title>
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="style.css">
   <script src="https://unpkg.com/pdf-lib/dist/pdf-lib.min.js"></script>
 </head>
 <body>
   <main class="layout">
-    <!-- Sezione Promozionale -->
     <section class="promo-section">
       <h1>Il paziente al centro,<br>Noa Notes al tuo fianco</h1>
       <p class="description">
@@ -27,12 +26,11 @@
       </div>
     </section>
 
-    <!-- Sezione Calcolo e PDF -->
     <section class="form-section">
       <h2>Calcola il canone per la struttura</h2>
       <form id="calculator-form">
-        <div class="form-group"><label for="rooms">N° Ambulatori</label><input type="number" id="rooms" min="1" required /></div>
-        <div class="form-group"><label for="doctors">N° Dottori</label><input type="number" id="doctors" min="0" required /></div>
+        <div class="form-group"><label for="rooms">N° Ambulatori</label><input type="number" id="rooms" min="1" required></div>
+        <div class="form-group"><label for="doctors">N° Dottori</label><input type="number" id="doctors" min="0" required></div>
         <div class="form-group">
           <label for="cpl">Sede della clinica</label>
           <select id="cpl" required>
@@ -40,8 +38,8 @@
             <option value="13">No Capoluogo (13 €)</option>
           </select>
         </div>
-        <div class="form-group"><label for="additional-locations">Sedi aggiuntive</label><input type="number" id="additional-locations" min="0" required /></div>
-        <div class="form-group"><label for="noa">N° licenze NOA</label><input type="number" id="noa" min="0" required /></div>
+        <div class="form-group"><label for="additional-locations">Sedi aggiuntive</label><input type="number" id="additional-locations" min="0" required></div>
+        <div class="form-group"><label for="noa">N° licenze NOA</label><input type="number" id="noa" min="0" required></div>
         <div class="form-group">
           <label for="noa-price">Prezzo NOA</label>
           <select id="noa-price" required>
@@ -58,7 +56,6 @@
         <div class="result-group"><button type="button" id="pdf-btn">Genera PDF</button></div>
       </div>
 
-      <!-- Popup Dati per PDF -->
       <div id="popup-overlay" class="popup-overlay" style="display:none;">
         <div class="popup">
           <h3>Completa i dati per il preventivo</h3>
