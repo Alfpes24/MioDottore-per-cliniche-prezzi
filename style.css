@@ -36,6 +36,7 @@ body {
   max-width: 1200px;
   margin: 0 auto;
   padding: 40px 20px;
+  position: relative; /* Per posizionamento relativo della sidebar in responsive, se necessario */
 }
 
 /* ===== Promo Section ===== */
@@ -354,7 +355,58 @@ button:hover {
   color: var(--secondary-hover);
 }
 
+/* ===== New Sidebar Styles ===== */
+.sidebar {
+  position: fixed; /* Rende la sidebar fissa nello viewport */
+  top: 50%; /* La posiziona al centro verticalmente */
+  right: 20px; /* A 20px dal bordo destro */
+  transform: translateY(-50%); /* Centra verticalmente */
+  background-color: var(--surface);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  z-index: 1000; /* Assicura che sia sopra gli altri elementi */
+}
+
+.sidebar .btn-generate-pdf {
+  /* Stili per il pulsante specifico nella sidebar */
+  width: auto; /* Permette al pulsante di adattarsi al suo contenuto/padding */
+  padding: 10px 15px;
+  font-size: 14px;
+  background-color: var(--primary); /* Colore principale */
+  color: white;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: background-color 0.3s ease;
+}
+
+.sidebar .btn-generate-pdf:hover {
+  background-color: var(--primary-hover);
+}
+
+
 /* ===== Responsive ===== */
+@media (max-width: 1250px) { /* Adjust breakpoint if sidebar causes overlap */
+  .sidebar {
+    position: relative; /* Rende la sidebar relativa al flusso del documento */
+    top: auto;
+    right: auto;
+    transform: none;
+    margin-top: 20px;
+    width: 100%; /* Occupa l'intera larghezza disponibile */
+    order: 3; /* Sposta la sidebar sotto le altre sezioni su schermi più piccoli */
+    box-sizing: border-box; /* Assicura che padding non allarghi troppo */
+  }
+  .layout {
+    flex-direction: column;
+    align-items: center; /* Centra gli elementi nella colonna */
+  }
+}
+
 @media (max-width: 768px) {
   .layout {
     flex-direction: column;
