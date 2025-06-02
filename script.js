@@ -1,5 +1,3 @@
-// script.js aggiornato: campo "Quota_scontata" viene compilato solo se sono presenti sconti
-
 let preventivoData = {};
 
 window.addEventListener("DOMContentLoaded", () => {
@@ -8,7 +6,6 @@ window.addEventListener("DOMContentLoaded", () => {
   const popup = document.getElementById("popup-overlay");
   const confirmPopup = document.getElementById("confirm-popup");
   const cancelPopup = document.getElementById("cancel-popup");
-  let scontoAttivo = false;
 
   calculateBtn.addEventListener("click", () => {
     const rooms = parseInt(document.getElementById("rooms").value) || 0;
@@ -32,9 +29,6 @@ window.addEventListener("DOMContentLoaded", () => {
     const totalMonthlyPrice = monthlyPrice + locationsCost + noaTotalPrice;
     const defaultMonthlyPrice = totalMonthlyPrice * 1.25;
 
-    const commissionCpl = doctors * (cpl === 17 ? 8 : 6);
-    const totalCommission = monthlyPrice + commissionCpl + locationsCost + noaTotalPrice + setupFeeDefault / 12;
-
     preventivoData = {
       defaultMonthly: defaultMonthlyPrice.toFixed(2) + " €",
       setupFee: setupFeeDisplayed.toFixed(2) + " €",
@@ -47,16 +41,12 @@ window.addEventListener("DOMContentLoaded", () => {
       monthlyPrice,
       noaTotalPrice,
       locationsCost,
-      scontoAttivo: false
+      scontoAttivo: noa >= 1
     };
 
     document.getElementById("default-monthly-price").textContent = preventivoData.defaultMonthly;
     document.getElementById("setup-fee").textContent = preventivoData.setupFee;
     document.getElementById("results").style.display = "block";
-
-    if (noa >= 1) {
-      preventivoData.scontoAttivo = true;
-    }
   });
 
   pdfBtn.addEventListener("click", () => {
