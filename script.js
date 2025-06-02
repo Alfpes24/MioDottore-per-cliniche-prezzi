@@ -337,10 +337,12 @@ document.addEventListener("DOMContentLoaded", () => {
         } catch (e) { console.warn("Campo PDF 'Quota_mensile_default' non trovato o errore:", e); }
 
         // Field: "Canone mensile predefinito (pagina 2)" (Quota_mensile_default_2)
-        try {
-          form.getTextField('Quota_mensile_default_2').setText(window.calculatedOfferData.defaultMonthlyPrice + ' €' || '0 €');
-          console.log("Campo 'Quota_mensile_default_2' compilato con:", window.calculatedOfferData.defaultMonthlyPrice);
-        } catch (e) { console.warn("Campo PDF 'Quota_mensile_default_2' non trovato o errore:", e); }
+        // HO RIMOSSO IL TENTATIVO DI COMPILARE QUESTO CAMPO PERCHÉ GENERAVA ERRORE NELLA CONSOLE
+        // Questo campo è stato segnalato come inesistente nel tuo PDF dallo screenshot precedente.
+        // try {
+        //   form.getTextField('Quota_mensile_default_2').setText(window.calculatedOfferData.defaultMonthlyPrice + ' €' || '0 €');
+        //   console.log("Campo 'Quota_mensile_default_2' compilato con:", window.calculatedOfferData.defaultMonthlyPrice);
+        // } catch (e) { console.warn("Campo PDF 'Quota_mensile_default_2' non trovato o errore:", e); }
 
         // Field: "Totale (canone + setup)" (Quota_scontata)
         // Questo campo deve essere compilato SOLO SE hasDiscountApplied è TRUE.
@@ -351,8 +353,11 @@ document.addEventListener("DOMContentLoaded", () => {
             // Utilizziamo i valori non toFixed per il calcolo e poi toFixed per la stringa finale
             const defaultMonthlyNum = parseFloat(window.calculatedOfferData.defaultMonthlyPrice);
             const promoMonthlyNum = parseFloat(window.calculatedOfferData.promoMonthlyPrice);
-            const setupFeeDisplayedNum = parseFloat(setupFeeField.textContent); // Recuperiamo il valore raddoppiato visualizzato
-            const setupFeeDefaultNum = parseFloat(window.calculatedOfferData.setupFeeOnetime); // Recuperiamo il valore base della setup
+            
+            // Assicurati che setupFeeDisplayed sia un numero. Se setupFeeField.textContent non è corretto, potresti avere problemi.
+            // Utilizziamo i valori numerici originali da window.calculatedOfferData per coerenza.
+            const setupFeeDisplayedNum = parseFloat(window.calculatedOfferData.setupFeeDisplayed); // Usiamo il valore 'displayed' che è il raddoppiato
+            const setupFeeDefaultNum = parseFloat(window.calculatedOfferData.setupFeeOnetime); // Il valore base
 
             const scontoEffettivo = (defaultMonthlyNum - promoMonthlyNum) + (setupFeeDisplayedNum - setupFeeDefaultNum);
 
