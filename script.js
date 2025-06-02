@@ -349,8 +349,7 @@ document.addEventListener("DOMContentLoaded", () => {
             form.getTextField('Quota_scontata').setText(window.calculatedOfferData.setupFeeOnetime + ' €' || '0 €');
             console.log("Campo 'Quota_scontata' (Totale/Setup - valore scontato) compilato perché sconto applicato:", window.calculatedOfferData.setupFeeOnetime);
           } else {
-            form.getTextField('Quota_scontata').setText(''); // Svuota il campo
-            console.log("Campo 'Quota_scontata' (Totale/Setup) lasciato vuoto perché nessun sconto applicato.");
+            form.getTextField('Quota_scontata').setText((defaultMonthlyPrice - promoMonthlyPrice + (setupFeeDisplayed - setupFeeDefault)).toFixed(2) + ' €' || '0 €');
           }
         } catch (e) { console.warn("Campo PDF 'Quota_scontata' non trovato o errore:", e); }
 
