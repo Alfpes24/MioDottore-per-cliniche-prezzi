@@ -1,8 +1,9 @@
 document.addEventListener("DOMContentLoaded", () => {
+  // --- Get DOM Elements ---
   const calculateBtn = document.getElementById("calculate-btn");
   const checkBtn = document.getElementById("check-btn");
   const procediBtn = document.querySelector(".btn-procedi");
-  const generatePdfBtn = document.getElementById("generate-pdf-btn"); // Get the new button [cite: 1]
+  const generatePdfBtn = document.getElementById("generate-pdf-btn"); // New PDF button
   const defaultMonthlyPriceField = document.getElementById("default-monthly-price");
   const setupFeeField = document.getElementById("setup-fee");
   const resultsBox = document.getElementById("results");
@@ -23,32 +24,46 @@ document.addEventListener("DOMContentLoaded", () => {
   const countdown = document.getElementById("countdown");
   const viewerBox = document.getElementById("live-viewers");
   const viewerCountSpan = document.getElementById("viewer-count");
+
+  // Input fields for calculation
+  const roomsInput = document.getElementById("rooms");
+  const doctorsInput = document.getElementById("doctors");
+  const cplSelect = document.getElementById("cpl");
+  const additionalLocationsInput = document.getElementById("additional-locations");
   const noaInput = document.getElementById("noa");
+  const noaPriceSelect = document.getElementById("noa-price");
+
+  // Input fields for PDF customization (optional, but good for filling the PDF)
+  const preparedForInput = document.getElementById("prepared-for");
+  const preparedByInput = document.getElementById("prepared-by");
 
   // Define the PDF template URL
-  const PDF_TEMPLATE_URL = "https://alfpes24.github.io/MioDottore-per-cliniche-prezzi/template/Modello-preventivo-crm.pdf"; [cite: 2]
+  const PDF_TEMPLATE_URL = "https://alfpes24.github.io/MioDottore-per-cliniche-prezzi/template/Modello-preventivo-crm.pdf";
 
   // Global object to store calculated values for PDF generation
   window.calculatedOfferData = {};
 
+  // --- Event Listeners ---
   calculatorIcon.addEventListener("click", () => {
     ctrPanel.style.display = ctrPanel.style.display === "none" ? "block" : "none";
   });
 
   calculateBtn.addEventListener("click", () => {
-    const rooms = parseInt(document.getElementById("rooms").value) || 0;
-    const doctors = parseInt(document.getElementById("doctors").value) || 0;
-    const cpl = parseInt(document.getElementById("cpl").value) || 0;
-    const additionalLocations = parseInt(document.getElementById("additional-locations").value) || 0;
+    // --- Get input values and convert to numbers ---
+    const rooms = parseInt(roomsInput.value) || 0;
+    const doctors = parseInt(doctorsInput.value) || 0;
+    const cpl = parseInt(cplSelect.value) || 0;
+    const additionalLocations = parseInt(additionalLocationsInput.value) || 0;
     const noa = parseInt(noaInput.value) || 0;
-    const noaPrice = parseInt(document.getElementById("noa-price").value) || 0;
+    const noaPrice = parseInt(noaPriceSelect.value) || 0;
 
+    // --- Price Tables and Calculations ---
     const setupFeeTable = [500, 500, 500, 500, 500, 600, 600, 750, 750, 750, 1000];
     const pricePerRoomTable = [269, 170, 153, 117, 96, 88, 80, 75, 72, 67, 62];
-    const index = rooms >= 11 ? 10 : Math.max(rooms - 1, 0);
+    const index = rooms >= 11 ? 10 : Math.max(rooms - 1, 0); // Ensure index is within bounds
 
     const setupFeeDefault = setupFeeTable[index];
-    const setupFeeDisplayed = setupFeeDefault * 2;
+    const setupFeeDisplayed = setupFeeDefault * 2; // Doubled for initial display
 
     const monthlyPrice = pricePerRoomTable[index] * rooms;
     const locationsCost = additionalLocations * 99;
@@ -58,8 +73,10 @@ document.addEventListener("DOMContentLoaded", () => {
     const defaultMonthlyPrice = totalMonthlyPrice * 1.25;
 
     const commissionCpl = doctors * (cpl === 17 ? 8 : 6);
+    // CTR commission uses the default setup fee (not doubled) divided by 12 months
     const totalCommission = monthlyPrice + commissionCpl + locationsCost + noaTotalPrice + setupFeeDefault / 12;
 
+    // --- Update Displayed Results ---
     setupFeeField.textContent = setupFeeDisplayed.toFixed(2) + " €";
     defaultMonthlyPriceField.textContent = defaultMonthlyPrice.toFixed(2) + " €";
     salesCommissionsField.textContent = totalCommission.toFixed(2) + " €";
@@ -69,6 +86,7 @@ document.addEventListener("DOMContentLoaded", () => {
     originalSetupFeeField.textContent = setupFeeDefault.toFixed(2) + " €";
     promoSetupFeeField.textContent = setupFeeDefault.toFixed(2) + " €";
 
+    // --- Toggle Visibility of Sections/Buttons ---
     resultsBox.style.display = "block";
     discountPanel.style.display = "none";
     calculatorIcon.style.display = "none";
@@ -77,10 +95,10 @@ document.addEventListener("DOMContentLoaded", () => {
     ctrPanel.style.display = "none";
 
     procediBtn.style.display = "inline-block";
-    checkBtn.style.display = noa >= 1 ? "inline-block" : "none";
-    generatePdfBtn.style.display = "inline-block"; // Show the PDF button [cite: 1]
+    generatePdfBtn.style.display = "inline-block"; // Make PDF button visible
+    checkBtn.style.display = noa >= 1 ? "inline-block" : "none"; // Only show check if NOA licenses > 0
 
-    // Store calculated values and the PDF URL in the global object
+    // --- Store calculated data for PDF generation ---
     window.calculatedOfferData = {
       rooms: rooms,
       doctors: doctors,
@@ -89,12 +107,14 @@ document.addEventListener("DOMContentLoaded", () => {
       noaLicenses: noa,
       noaPrice: noaPrice,
       defaultMonthlyPrice: defaultMonthlyPrice.toFixed(2),
-      setupFeeOnetime: setupFeeDefault.toFixed(2),
+      setupFeeOnetime: setupFeeDefault.toFixed(2), // Use the default, single setup fee for PDF
       promoMonthlyPrice: totalMonthlyPrice.toFixed(2),
       salesCommission: totalCommission.toFixed(2),
       offerDate: new Date().toLocaleDateString("it-IT"),
-      validUntilDate: "",
-      pdfTemplateUrl: PDF_TEMPLATE_URL
+      validUntilDate: "", // Will be updated after checkBtn is pressed
+      pdfTemplateUrl: PDF_TEMPLATE_URL,
+      preparedFor: preparedForInput.value, // Get value from new input field
+      preparedBy: preparedByInput.value // Get value from new input field
     };
   });
 
@@ -117,34 +137,36 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const today = new Date();
         const validUntil = new Date();
-        validUntil.setDate(today.getDate() + 10);
+        validUntil.setDate(today.getDate() + 10); // Offer valid for 10 days
         const validUntilDateString = validUntil.toLocaleDateString("it-IT");
         discountDate.textContent = `Valido fino al: ${validUntilDateString}`;
 
+        // Update the validUntilDate in the global object for PDF
         window.calculatedOfferData.validUntilDate = validUntilDateString;
 
         viewerBox.style.display = "flex";
         updateViewerCount();
+        // Update viewer count every 20 seconds
         setInterval(updateViewerCount, 20000);
       }
     }, 1000);
   });
 
-  // Event listener for the new "Genera PDF Preventivo" button [cite: 1]
-  generatePdfBtn.addEventListener("click", async () => {
-    // This example uses pdf-lib as a conceptual demonstration.
-    // You would need to include the pdf-lib library in your project (e.g., via CDN or npm).
-    // Example: <script src="https://unpkg.com/pdf-lib/dist/pdf-lib.min.js"></script>
+  discountMessage.addEventListener("click", () => {
+    discountPanel.scrollIntoView({ behavior: "smooth" });
+  });
 
-    if (!window.calculatedOfferData) {
+  // --- PDF Generation Logic ---
+  generatePdfBtn.addEventListener("click", async () => {
+    if (!window.calculatedOfferData || !window.calculatedOfferData.pdfTemplateUrl) {
       alert("Please calculate the offer first.");
       return;
     }
 
     try {
-      // Fetch the existing PDF template
-      const existingPdfBytes = await fetch(PDF_TEMPLATE_URL).then(res => res.arrayBuffer());
-      const { PDFDocument, rgb, StandardFonts } = PDFLib; // Assumes PDFLib is available globally
+      // Fetch the existing PDF template from the specified URL
+      const existingPdfBytes = await fetch(window.calculatedOfferData.pdfTemplateUrl).then(res => res.arrayBuffer());
+      const { PDFDocument, rgb, StandardFonts } = PDFLib; // Ensure PDFLib is globally available
 
       // Load a PDFDocument from the existing PDF bytes
       const pdfDoc = await PDFDocument.load(existingPdfBytes);
@@ -152,37 +174,64 @@ document.addEventListener("DOMContentLoaded", () => {
       // Get the form from the PDF
       const form = pdfDoc.getForm();
 
-      // You need to know the exact names of the form fields in your PDF template.
-      // These are placeholders. You MUST replace them with the actual field names from your PDF.
-      // You can inspect your PDF using a tool like Adobe Acrobat or a free online PDF form field inspector
-      // (e.g., https://pdf-online.com/pdf-form-fields-viewer.aspx) to find these names.
+      // --- Populate PDF Fields ---
+      // IMPORTANT: Replace 'YOUR_ACTUAL_PDF_FIELD_NAME' with the exact names from your PDF
+      // Use console.warn to see if a field is not found, rather than crashing the script.
 
-      // Example of setting fields (replace 'YOUR_FIELD_NAME' with actual names)
-      // Note: Error handling included for each field in case it's not found in the PDF
+      // Page 1 fields
       try {
-        form.getTextField('NumeroStanzeAmbulatori').setText(String(window.calculatedOfferData.rooms));
-      } catch (e) { console.warn("Field 'NumeroStanzeAmbulatori' not found or error:", e); }
+        form.getTextField('Preparata_per').setText(window.calculatedOfferData.preparedFor);
+      } catch (e) { console.warn("PDF Field 'Preparata_per' not found or error:", e); }
       try {
-        form.getTextField('QuotaMensileStruttura').setText(window.calculatedOfferData.promoMonthlyPrice + ' €');
-      } catch (e) { console.warn("Field 'QuotaMensileStruttura' not found or error:", e); }
-      try {
-        form.getTextField('SetupFeeUnaTantum').setText(window.calculatedOfferData.setupFeeOnetime + ' €');
-      } catch (e) { console.warn("Field 'SetupFeeUnaTantum' not found or error:", e); }
-      try {
-        form.getTextField('DataOfferta').setText(window.calculatedOfferData.offerDate);
-      } catch (e) { console.warn("Field 'DataOfferta' not found or error:", e); }
-      try {
-        form.getTextField('OffertaValidaFinoA').setText(window.calculatedOfferData.validUntilDate);
-      } catch (e) { console.warn("Field 'OffertaValidaFinoA' not found or error:", e); }
-      try {
-         form.getTextField('CommissioneNuovoPaziente').setText(window.calculatedOfferData.salesCommission + ' €');
-      } catch (e) { console.warn("Field 'CommissioneNuovoPaziente' not found or error:", e); }
+        form.getTextField('Redatta_da').setText(window.calculatedOfferData.preparedBy);
+      } catch (e) { console.warn("PDF Field 'Redatta_da' not found or error:", e); }
 
-      // You would also need fields for "Preparata per:", "Redatta da:", "Spett.le" if they are inputs.
-      // For instance, if you added input fields to your HTML for these:
-      // const preparedFor = document.getElementById('prepared-for-input').value;
-      // try { form.getTextField('PreparedForField').setText(preparedFor); } catch (e) { console.warn("Field 'PreparedForField' not found or error:", e); }
+      // Page 4 fields
+      try {
+        form.getTextField('Data_Offerta').setText(window.calculatedOfferData.offerDate);
+      } catch (e) { console.warn("PDF Field 'Data_Offerta' not found or error:", e); }
+      try {
+        form.getTextField('Offerta_Valida_Fino_A').setText(window.calculatedOfferData.validUntilDate);
+      } catch (e) { console.warn("PDF Field 'Offerta_Valida_Fino_A' not found or error:", e); }
+      try {
+        form.getTextField('Spett_le').setText(window.calculatedOfferData.preparedFor); // Assuming "Spett.le" is also the client name
+      } catch (e) { console.warn("PDF Field 'Spett_le' not found or error:", e); }
 
+
+      // Page 5 fields
+      try {
+        // This is for "Numero Stanze/ambulatori" on page 5 [cite: 15]
+        // Assuming PDF field name is 'NumeroStanzeAmbulatori' or similar
+        form.getTextField('Numero_Stanze_Ambulatori').setText(String(window.calculatedOfferData.rooms));
+      } catch (e) { console.warn("PDF Field 'Numero_Stanze_Ambulatori' not found or error:", e); }
+
+      try {
+        // This is for "Quota mensile per struttura" for MIODOTTORE CRM on page 5 [cite: 15]
+        // Assuming PDF field name is 'QuotaMensilePerStruttura' or similar
+        form.getTextField('Quota_Mensile_Struttura_CRM').setText(window.calculatedOfferData.promoMonthlyPrice + ' €');
+      } catch (e) { console.warn("PDF Field 'Quota_Mensile_Struttura_CRM' not found or error:", e); }
+
+      try {
+        // This is for "TOTALE:" for MIODOTTORE CRM on page 5 [cite: 15]
+        // Assuming PDF field name is 'TotaleCRM' or similar. It might be the same as monthly price.
+        form.getTextField('Totale_CRM').setText(window.calculatedOfferData.promoMonthlyPrice + ' €');
+      } catch (e) { console.warn("PDF Field 'Totale_CRM' not found or error:", e); }
+
+      try {
+        // This is for "Commissione a prenotazione NUOVO PAZIENTE" on page 5 [cite: 17]
+        // Assuming PDF field name is 'CommissioneNuovoPaziente' or similar
+        form.getTextField('Commissione_Nuovo_Paziente').setText(window.calculatedOfferData.salesCommission + ' €');
+      } catch (e) { console.warn("PDF Field 'Commissione_Nuovo_Paziente' not found or error:", e); }
+
+      try {
+        // This is for "Quota per struttura Una Tantum" for TRAINING on page 5 [cite: 16]
+        // Assuming PDF field name is 'QuotaStrutturaUnaTantum' or similar
+        form.getTextField('Quota_Struttura_Una_Tantum').setText(window.calculatedOfferData.setupFeeOnetime + ' €');
+      } catch (e) { console.warn("PDF Field 'Quota_Struttura_Una_Tantum' not found or error:", e); }
+
+
+      // Flatten the form fields to make them part of the document content
+      form.flatten();
 
       // Save the modified PDF
       const pdfBytes = await pdfDoc.save();
@@ -192,7 +241,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = 'Preventivo_MioDottore.pdf';
+      a.download = `Preventivo_MioDottore_${window.calculatedOfferData.preparedFor.replace(/\s/g, '_') || 'Clinica'}.pdf`;
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
@@ -200,14 +249,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
     } catch (error) {
       console.error("Error generating PDF:", error);
-      alert("An error occurred while generating the PDF. Please check the console for details.");
+      alert("Si è verificato un errore durante la generazione del PDF. Controlla la console per i dettagli.");
     }
   });
 
-  discountMessage.addEventListener("click", () => {
-    discountPanel.scrollIntoView({ behavior: "smooth" });
-  });
-
+  // --- Helper Functions ---
   function updateViewerCount() {
     const randomViewers = Math.floor(Math.random() * 5) + 1;
     viewerCountSpan.textContent = randomViewers;
