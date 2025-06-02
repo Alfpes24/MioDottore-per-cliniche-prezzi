@@ -41,6 +41,9 @@ document.addEventListener("DOMContentLoaded", () => {
   const preparedForInput = document.getElementById("prepared-for");
   const preparedByInput = document.getElementById("prepared-by");
 
+  // NUOVO: Checkbox per lo sconto nel PDF
+  const applyDiscountToPdfCheckbox = document.getElementById("apply-discount-to-pdf");
+
   // Log all critical elements at startup to quickly identify if any are missing
   console.log("--- Elementi DOM al caricamento ---");
   console.log("calculateBtn:", calculateBtn);
@@ -50,6 +53,7 @@ document.addEventListener("DOMContentLoaded", () => {
   console.log("discountPanel:", discountPanel);
   console.log("roomsInput:", roomsInput);
   console.log("preparedForInput:", preparedForInput);
+  console.log("applyDiscountToPdfCheckbox:", applyDiscountToPdfCheckbox); // NUOVO LOG
   console.log("--- Fine elementi DOM ---");
 
   // Critical error check: if calculateBtn is not found, the script cannot proceed meaningfully
@@ -89,7 +93,6 @@ document.addEventListener("DOMContentLoaded", () => {
     console.log("Pulsante 'Calcola' cliccato. Inizio calcoli."); // Questo dovrebbe apparire nella console al click
 
     // --- Get input values and convert to numbers ---
-    // Added robust checks for input elements before accessing .value
     const rooms = parseInt(roomsInput ? roomsInput.value : "0") || 0;
     const doctors = parseInt(doctorsInput ? doctorsInput.value : "0") || 0;
     const cpl = parseInt(cplSelect ? cplSelect.value : "0") || 0;
@@ -141,7 +144,6 @@ document.addEventListener("DOMContentLoaded", () => {
     if (checkBtn) checkBtn.style.display = noa >= 1 ? "inline-block" : "none";
 
     // << MODIFICATO: Mostra la sidebar del PDF dopo il calcolo iniziale.
-    // Il pulsante Genera PDF Preventivo è ora all'interno di pdfSidebar, quindi la sua visibilità dipende da pdfSidebar.
     if (pdfSidebar) pdfSidebar.style.display = "flex"; // Mostra la sidebar (che contiene il pulsante Genera PDF)
 
 
@@ -163,7 +165,8 @@ document.addEventListener("DOMContentLoaded", () => {
       pdfTemplateUrl: PDF_TEMPLATE_URL,
       preparedFor: preparedForInput ? preparedForInput.value : "",
       preparedBy: preparedByInput ? preparedByInput.value : "",
-      hasDiscountApplied: false // Flag inizialmente falso
+      // hasDiscountApplied è inizialmente false. Verrà gestito dalla checkbox ora.
+      hasDiscountApplied: false
     };
     console.log("Dati offerta calcolati e aggiornati:", window.calculatedOfferData);
   });
@@ -171,20 +174,22 @@ document.addEventListener("DOMContentLoaded", () => {
 
   if (checkBtn) {
     checkBtn.addEventListener("click", () => {
-      console.log("Pulsante 'Check Sconti' cliccato. Inizio conto alla rovescia."); // Questo dovrebbe apparire nella console al click
+      console.log("Pulsante 'Check Sconti' cliccato. Inizio conto alla rovescia.");
       if (loadingSpinner) loadingSpinner.style.display = "block";
       if (countdown) countdown.textContent = "Attendere 15 secondi...";
       let seconds = 15;
+
+      // Disabilita la checkbox durante il countdown per evitare interazioni premature
+      if (applyDiscountToPdfCheckbox) applyDiscountToPdfCheckbox.disabled = true;
 
       const interval = setInterval(() => {
         seconds--;
         if (countdown) countdown.textContent = `Attendere ${seconds} secondi...`;
 
-        // Nuovo log per debug: viene raggiunto questo punto?
         console.log("Conto alla rovescia: " + seconds + " secondi rimanenti.");
 
         if (seconds <= 0) {
-          console.log("Conto alla rovescia terminato (seconds <= 0). Eseguo blocco finale."); // Nuovo log
+          console.log("Conto alla rovescia terminato (seconds <= 0). Eseguo blocco finale.");
           clearInterval(interval);
           if (loadingSpinner) loadingSpinner.style.display = "none";
           if (discountPanel) discountPanel.style.display = "block"; // Mostra il pannello sconti
@@ -201,22 +206,38 @@ document.addEventListener("DOMContentLoaded", () => {
           if (discountDate) discountDate.textContent = `Valido fino al: ${validUntilDateString}`;
 
           window.calculatedOfferData.validUntilDate = validUntilDateString;
-          window.calculatedOfferData.hasDiscountApplied = true; // Flag true: sconto applicato
+          // IMPORTANT: hasDiscountApplied NON viene impostato qui. Sarà gestito dalla checkbox.
           console.log("Sconto valido fino al:", validUntilDateString);
-          console.log("Flag 'hasDiscountApplied' impostato a:", window.calculatedOfferData.hasDiscountApplied);
-
+          
+          // Riabilita la checkbox e la imposta al valore predefinito (es. true, se lo sconto è "disponibile")
+          if (applyDiscountToPdfCheckbox) {
+            applyDiscountToPdfCheckbox.disabled = false;
+            applyDiscountToPdfCheckbox.checked = true; // Potresti volerla pre-selezionata dopo il check sconti
+            // Trigger l'evento change per aggiornare subito window.calculatedOfferData.hasDiscountApplied
+            applyDiscountToPdfCheckbox.dispatchEvent(new Event('change')); 
+          }
 
           if (viewerBox) viewerBox.style.display = "flex";
           updateViewerCount();
-          setInterval(updateViewerCount, 20000);
+          setInterval(updateViewerCount, 20000); // Aggiorna i visualizzatori ogni 20 secondi
 
-          // La sidebar del PDF (che contiene il pulsante Genera PDF) rimane visibile come già impostato dopo il "Calcola".
-          // Non è necessario cambiarne la visibilità qui.
         }
       }, 1000);
     });
   } else {
     console.warn("Elemento 'check-btn' non trovato nell'HTML. L'event listener non verrà collegato.");
+  }
+
+  // NUOVO: Listener per la checkbox per aggiornare hasDiscountApplied
+  if (applyDiscountToPdfCheckbox) {
+    applyDiscountToPdfCheckbox.addEventListener('change', () => {
+      window.calculatedOfferData.hasDiscountApplied = applyDiscountToPdfCheckbox.checked;
+      console.log("Checkbox 'Includi sconto nel PDF' cambiata. hasDiscountApplied:", window.calculatedOfferData.hasDiscountApplied);
+    });
+    // Inizialmente la checkbox potrebbe essere invisibile, ma il suo stato iniziale dovrebbe essere false
+    window.calculatedOfferData.hasDiscountApplied = applyDiscountToPdfCheckbox.checked; // Sincronizza lo stato iniziale
+  } else {
+    console.warn("Elemento 'apply-discount-to-pdf' non trovato nell'HTML. La logica dello sconto nel PDF potrebbe non funzionare correttamente.");
   }
 
 
@@ -336,9 +357,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
         // Field: "Totale (canone + setup)" (Quota_scontata)
-        // Questo campo deve essere compilato SOLO SE hasDiscountApplied è TRUE.
-        // Se hasDiscountApplied è falso, il campo deve rimanere vuoto.
-        // Qui viene generata la stringa di riepilogo dello sconto con il formato desiderato.
+        // Questo campo viene compilato con il riepilogo dello sconto SOLO SE la checkbox è spuntata.
         try {
           if (window.calculatedOfferData.hasDiscountApplied) {
             const prezzoOriginale = window.calculatedOfferData.defaultMonthlyPrice;
@@ -347,9 +366,6 @@ document.addEventListener("DOMContentLoaded", () => {
             const setupScontato = window.calculatedOfferData.setupFeeOnetime; 
 
             // Creiamo la stringa esattamente come mostrato nell'immagine
-            // Utilizziamo parseFloat per assicurarci che siano numeri prima di toFixed,
-            // anche se sono già stringhe formattate con "€" per display,
-            // qui sono numeri convertiti da .toFixed(2) in calculatedOfferData.
             const riepilogoScontoString =
               `Prezzo Originale: ${prezzoOriginale} €\n` +
               `Setup Fee: ${setupOriginale} €\n\n` + // Doppio a capo per spaziatura, come nello screenshot
@@ -360,7 +376,7 @@ document.addEventListener("DOMContentLoaded", () => {
             console.log("Campo 'Quota_scontata' compilato con riepilogo sconto:", riepilogoScontoString);
           } else {
             form.getTextField('Quota_scontata').setText(''); // Svuota il campo
-            console.log("Campo 'Quota_scontata' lasciato vuoto perché nessun sconto applicato.");
+            console.log("Campo 'Quota_scontata' lasciato vuoto perché la checkbox sconto non è spuntata.");
           }
         } catch (e) { console.warn("Campo PDF 'Quota_scontata' non trovato o errore:", e); }
 
@@ -369,45 +385,4 @@ document.addEventListener("DOMContentLoaded", () => {
         try {
           form.getTextField('Quota_mensile_scontata').setText(window.calculatedOfferData.promoMonthlyPrice + ' €' || '0 €');
           console.log("Campo 'Quota_mensile_scontata' compilato con:", window.calculatedOfferData.promoMonthlyPrice);
-        } catch (e) { console.warn("Campo PDF 'Quota_mensile_scontata' non trovato o errore:", e); }
-
-
-        // Flatten the form fields to make them part of the document content
-        form.flatten();
-        console.log("Campi del modulo PDF appiattiti.");
-
-        // Save the modified PDF
-        const pdfBytes = await pdfDoc.save();
-        console.log("PDF salvato in byte.");
-
-        // Create a Blob from the PDF bytes and create a download link
-        const blob = new Blob([pdfBytes], { type: 'application/pdf' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        const clientNameForFilename = (window.calculatedOfferData.preparedFor || 'Clinica').replace(/\s/g, '_').replace(/[^\w-]/g, '');
-        const dateForFilename = new Date().toLocaleDateString('it-IT').replace(/\//g, '-');
-        a.download = `Preventivo_MioDottore_${clientNameForFilename}_${dateForFilename}.pdf`;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
-        console.log("Download PDF avviato.");
-
-      } catch (error) {
-        console.error("Errore durante la generazione del PDF:", error);
-        alert("Si è verificato un errore durante la generazione del PDF. Controlla la console per i dettagli.");
-      }
-    });
-  } else {
-    console.warn("Elemento 'generate-pdf-btn' non trovato. La generazione PDF non funzionerà.");
-  }
-
-
-  // --- Helper Functions ---
-  function updateViewerCount() {
-    const randomViewers = Math.floor(Math.random() * 5) + 1;
-    if (viewerCountSpan) viewerCountSpan.textContent = randomViewers;
-    console.log("Numero di visualizzatori aggiornato a:", randomViewers);
-  }
-});
+        } catch (e)
