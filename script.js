@@ -5,9 +5,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const calculateBtn = document.getElementById("calculate-btn");
   const checkBtn = document.getElementById("check-btn");
   const procediBtn = document.querySelector(".btn-procedi");
-  // Ora generatePdfBtn è nella sidebar
+  // Recupera il pulsante e la sidebar
   const generatePdfBtn = document.getElementById("generate-pdf-btn");
-  // Nuova reference per la sidebar per gestirne la visibilità
   const pdfSidebar = document.getElementById("pdf-sidebar");
 
 
@@ -51,6 +50,9 @@ document.addEventListener("DOMContentLoaded", () => {
   }
   if (!generatePdfBtn) {
     console.error("ERRORE CRITICO: Pulsante 'Genera PDF Preventivo' (ID: generate-pdf-btn) non trovato. La generazione PDF non funzionerà.");
+  }
+  if (!pdfSidebar) {
+    console.error("ERRORE CRITICO: Elemento 'Sidebar' (ID: pdf-sidebar) non trovato. La barra laterale non funzionerà.");
   }
 
 
@@ -126,9 +128,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
       if (procediBtn) procediBtn.style.display = "inline-block";
       if (checkBtn) checkBtn.style.display = noa >= 1 ? "inline-block" : "none";
-
-      // << MODIFICATO: Mostra la sidebar del PDF dopo il calcolo iniziale
-      if (pdfSidebar) pdfSidebar.style.display = "flex";
+      // << MODIFICATO: La sidebar del PDF appare dopo il calcolo iniziale.
+      if (pdfSidebar) pdfSidebar.style.display = "flex"; // Mostra la sidebar (che contiene il pulsante Genera PDF)
 
 
       // --- Store calculated data for PDF generation ---
@@ -192,7 +193,8 @@ document.addEventListener("DOMContentLoaded", () => {
           updateViewerCount();
           setInterval(updateViewerCount, 20000);
 
-          // La sidebar del PDF rimane visibile come già impostato.
+          // La sidebar del PDF rimane visibile come già impostato dopo il "Calcola".
+          // Non è necessario cambiarne la visibilità qui.
         }
       }, 1000);
     });
@@ -283,49 +285,4 @@ document.addEventListener("DOMContentLoaded", () => {
         // Field: "Data scadenza offerta" (Scadenza_offerta)
         try {
           form.getTextField('Scadenza_offerta').setText(window.calculatedOfferData.validUntilDate || '');
-          console.log("Campo 'Scadenza_offerta' compilato con:", window.calculatedOfferData.validUntilDate);
-        } catch (e) { console.warn("Campo PDF 'Scadenza_offerta' non trovato o errore:", e); }
-
-        // Field: "Nome venditore (pagina 2)" (Nome_sale1)
-        // Corrisponde all'input HTML 'prepared-by'
-        try {
-          form.getTextField('Nome_sale1').setText(window.calculatedOfferData.preparedBy || '');
-          console.log("Campo 'Nome_sale1' compilato con:", window.calculatedOfferData.preparedBy);
-        } catch (e) { console.warn("Campo PDF 'Nome_sale1' non trovato o errore:", e); }
-
-        // Field: "Numero ambulatori inseriti" (numero_ambulatori)
-        // Corrisponde all'input HTML 'rooms'
-        try {
-          form.getTextField('numero_ambulatori').setText(String(window.calculatedOfferData.rooms || '0'));
-          console.log("Campo 'numero_ambulatori' compilato con:", window.calculatedOfferData.rooms);
-        } catch (e) { console.warn("Campo PDF 'numero_ambulatori' non trovato o errore:", e); }
-
-        // Field: "Capoluogo / Non capoluogo" (Cpl)
-        try {
-          const cplText = window.calculatedOfferData.cpl === 17 ? 'Capoluogo' : 'No Capoluogo';
-          form.getTextField('Cpl').setText(cplText);
-          console.log("Campo 'Cpl' compilato con:", cplText);
-        } catch (e) { console.warn("Campo PDF 'Cpl' non trovato o errore:", e); }
-
-        // Field: "Canone mensile predefinito (pagina 1)" (Quota_mensile_default)
-        try {
-          form.getTextField('Quota_mensile_default').setText(window.calculatedOfferData.defaultMonthlyPrice + ' €' || '0 €');
-          console.log("Campo 'Quota_mensile_default' compilato con:", window.calculatedOfferData.defaultMonthlyPrice);
-        } catch (e) { console.warn("PDF Field 'Quota_mensile_default' non trovato o errore:", e); }
-
-        // Field: "Canone mensile predefinito (pagina 2)" (Quota_mensile_default_2)
-        try {
-          form.getTextField('Quota_mensile_default_2').setText(window.calculatedOfferData.defaultMonthlyPrice + ' €' || '0 €');
-          console.log("Campo 'Quota_mensile_default_2' compilato con:", window.calculatedOfferData.defaultMonthlyPrice);
-        } catch (e) { console.warn("PDF Field 'Quota_mensile_default_2' non trovato o errore:", e); }
-
-        // Field: "Totale (canone + setup)" (Quota_scontata)
-        // Questo campo deve essere compilato SOLO SE hasDiscountApplied è TRUE.
-        // Se hasDiscountApplied è falso, il campo deve rimanere vuoto.
-        try {
-          if (window.calculatedOfferData.hasDiscountApplied) {
-            form.getTextField('Quota_scontata').setText(window.calculatedOfferData.setupFeeOnetime + ' €' || '0 €');
-            console.log("Campo 'Quota_scontata' (Totale/Setup) compilato perché sconto applicato:", window.calculatedOfferData.setupFeeOnetime);
-          } else {
-            form.getTextField('Quota_scontata').setText(''); // Svuota il campo
-            console.log("Campo 'Quota
+          console.log("Campo 'Scadenza_offerta' compilato con:", window
