@@ -1,7 +1,7 @@
 document.addEventListener("DOMContentLoaded", () => {
   console.log("DOM fully loaded and parsed. Initializing script.");
 
-  // --- Controllo Accesso (Spostato qui per non interferire con il DOM) ---
+  // --- Controllo Accesso (CORRETTO E COMPLETO ALL'INIZIO) ---
   const refOk = document.referrer.includes("alfpes24.github.io") || window.opener;
   const accesso = localStorage.getItem("accessoMioDottore") === "ok";
   const mainContent = document.getElementById("main-content"); 
@@ -16,7 +16,7 @@ document.addEventListener("DOMContentLoaded", () => {
       document.body.prepend(unauthorizedMessage); 
     }
     setTimeout(() => location.replace("https://alfpes24.github.io/"), 1500);
-    return; 
+    return; // Ferma l'esecuzione del resto dello script
   }
 
 
