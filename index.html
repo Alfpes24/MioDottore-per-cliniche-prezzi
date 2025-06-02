@@ -10,12 +10,10 @@
   <script>
     const refOk = document.referrer.includes("alfpes24.github.io") || window.opener;
     const accesso = localStorage.getItem("accessoMioDottore") === "ok";
-
     if (!accesso || !refOk) {
       document.write("<h2 style='color:red;text-align:center;'>Accesso non autorizzato</h2>");
       setTimeout(() => location.replace("https://alfpes24.github.io/"), 1500);
     }
-    // Se l'accesso è valido, non facciamo nulla qui, script.js sarà caricato alla fine del body.
   </script>
 
   <main class="layout">
@@ -60,6 +58,21 @@
         <button type="button" id="calculate-btn">Calcola</button>
       </form>
 
+      <!-- POPUP con tutti i dati richiesti -->
+      <div id="popup-overlay" class="popup-overlay" style="display:none;">
+        <div class="popup">
+          <h3>Completa i dati per il preventivo</h3>
+          <div class="form-group"><label for="clinic-name">Nome struttura</label><input type="text" id="clinic-name" required /></div>
+          <div class="form-group"><label for="clinic-address">Indirizzo struttura</label><input type="text" id="clinic-address" required /></div>
+          <div class="form-group"><label for="contact-name">Nome referente</label><input type="text" id="contact-name" required /></div>
+          <div class="form-group"><label for="salesperson-name">Nome venditore</label><input type="text" id="salesperson-name" required /></div>
+          <div class="popup-buttons">
+            <button id="confirm-popup">Conferma</button>
+            <button id="cancel-popup" class="btn-check">Annulla</button>
+          </div>
+        </div>
+      </div>
+
       <div id="results" class="results" style="display:none;">
         <div class="result-group"><label>Canone Mensile Predefinito</label><span id="default-monthly-price">0 €</span></div>
         <div class="result-group"><label>Setup Fee (una tantum)</label><span id="setup-fee">0 €</span></div>
@@ -67,7 +80,7 @@
         <div class="result-group" id="check-section">
           <div class="check-buttons">
             <button id="check-btn" class="btn-check" style="display:none;">Check Sconti</button>
-            <a href="https://apps.docusign.com/send/templates?view=shared&folder=d71d9886-1424-4799-9155-4de52c347f6b" class="btn-procedi" target="_blank" style="display:none;">Procedi</a>
+            <button id="pdf-btn" class="btn-procedi">Genera PDF</button>
           </div>
           <div id="loading-spinner" style="display:none;">
             <div class="spinner"></div>
@@ -92,8 +105,6 @@
             <div class="promo-setup-fee" id="promo-setup-fee">0 €</div>
           </div>
           <div id="discount-date" class="blinking-date"></div>
-          <a href="https://apps.docusign.com/send/templates?view=shared&folder=d71d9886-1424-4799-9155-4de52c347f6b"
-             class="lock-price-btn" target="_blank">Blocca il prezzo</a>
         </div>
         <div id="live-viewers" class="live-viewers" style="display:none;">
           <img src="https://cdn-icons-png.flaticon.com/512/709/709586.png" alt="Occhi" />
