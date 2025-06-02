@@ -73,7 +73,7 @@ document.addEventListener("DOMContentLoaded", () => {
   console.log("discountPanel:", discountPanel);
   console.log("roomsInput:", roomsInput);
   console.log("preparedForInput:", preparedForInput);
-  console.log("applyDiscountToPdfCheckbox:", applyDiscountToPdfCheckbox);
+  console.log("applyDiscountToPdfCheckbox:", applyDiscountToPdfCheckbox); 
   console.log("--- Fine elementi DOM ---");
 
   // Critical error check: if calculateBtn is not found, the script cannot proceed meaningfully
@@ -178,7 +178,7 @@ document.addEventListener("DOMContentLoaded", () => {
       setupFeeOnetime: setupFeeDefault.toFixed(2), 
       setupFeeDisplayed: setupFeeDisplayed.toFixed(2), 
       promoMonthlyPrice: totalMonthlyPrice.toFixed(2), 
-      salesCommission: totalCommission.toFixed(2),
+      salesCommissions: totalCommission.toFixed(2), // Corretto nome della variabile
       offerDate: new Date().toLocaleDateString("it-IT"),
       validUntilDate: "", 
       pdfTemplateUrl: PDF_TEMPLATE_URL,
@@ -333,4 +333,115 @@ document.addEventListener("DOMContentLoaded", () => {
           console.log("Campo 'Data_offerta' compilato con:", window.calculatedOfferData.offerDate);
         } catch (e) { console.warn("Campo PDF 'Data_offerta' non trovato o errore:", e); }
 
-        // Field: "Nome struttura (pagina 2)" (Nome_struttura1
+        // Field: "Nome struttura (pagina 2)" (Nome_struttura1)
+        // Corrisponde all'input HTML 'prepared-for'
+        try {
+          form.getTextField('Nome_struttura1').setText(window.calculatedOfferData.preparedFor || '');
+          console.log("Campo 'Nome_struttura1' compilato con:", window.calculatedOfferData.preparedFor);
+        } catch (e) { console.warn("Campo PDF 'Nome_struttura1' non trovato o errore:", e); }
+
+        // Field: "Data scadenza offerta" (Scadenza_offerta)
+        try {
+          form.getTextField('Scadenza_offerta').setText(window.calculatedOfferData.validUntilDate || '');
+          console.log("Campo 'Scadenza_offerta' compilato con:", window.calculatedOfferData.validUntilDate);
+        } catch (e) { console.warn("Campo PDF 'Scadenza_offerta' non trovato o errore:", e); }
+
+        // Field: "Nome venditore (pagina 2)" (Nome_sale1)
+        // Corrisponde all'input HTML 'prepared-by'
+        try {
+          form.getTextField('Nome_sale1').setText(window.calculatedOfferData.preparedBy || '');
+          console.log("Campo 'Nome_sale1' compilato con:", window.calculatedOfferData.preparedBy);
+        } catch (e) { console.warn("Campo PDF 'Nome_sale1' non trovato o errore:", e); }
+
+        // Field: "Numero ambulatori inseriti" (numero_ambulatori)
+        // Corrisponde all'input HTML 'rooms'
+        try {
+          form.getTextField('numero_ambulatori').setText(String(window.calculatedOfferData.rooms || '0'));
+          console.log("Campo 'numero_ambulatori' compilato con:", window.calculatedOfferData.rooms);
+        } catch (e) { console.warn("Campo PDF 'numero_ambulatori' non trovato o errore:", e); }
+
+        // Field: "Capoluogo / Non capoluogo" (Cpl)
+        try {
+          const cplText = window.calculatedOfferData.cpl === 17 ? 'Capoluogo' : 'No Capoluogo';
+          form.getTextField('Cpl').setText(cplText);
+          console.log("Campo 'Cpl' compilato con:", cplText);
+        } catch (e) { console.warn("Campo PDF 'Cpl' non trovato o errore:", e); }
+
+        // Field: "Canone mensile predefinito (pagina 1)" (Quota_mensile_default)
+        try {
+          form.getTextField('Quota_mensile_default').setText(window.calculatedOfferData.defaultMonthlyPrice + ' €' || '0 €');
+          console.log("Campo 'Quota_mensile_default' compilato con:", window.calculatedOfferData.defaultMonthlyPrice);
+        } catch (e) { console.warn("Campo PDF 'Quota_mensile_default' non trovato o errore:", e); }
+
+
+        // Field: "Totale (canone + setup)" (Quota_scontata)
+        // Questo campo viene compilato con il riepilogo dello sconto SOLO SE la checkbox è spuntata.
+        try {
+          if (window.calculatedOfferData.hasDiscountApplied) {
+            const prezzoOriginale = window.calculatedOfferData.defaultMonthlyPrice;
+            const prezzoScontato = window.calculatedOfferData.promoMonthlyPrice;
+            const setupOriginale = window.calculatedOfferData.setupFeeDisplayed; 
+            const setupScontato = window.calculatedOfferData.setupFeeOnetime; 
+
+            // Creiamo la stringa esattamente come mostrato nell'immagine
+            const riepilogoScontoString =
+              `Prezzo Originale: ${prezzoOriginale} €\n` +
+              `Setup Fee: ${setupOriginale} €\n\n` + 
+              `Prezzo Scontato: ${prezzoScontato} €\n` +
+              `Setup Scontato: ${setupScontato} €`;
+
+            form.getTextField('Quota_scontata').setText(riepilogoScontoString);
+            console.log("Campo 'Quota_scontata' compilato con riepilogo sconto:", riepilogoScontoString);
+          } else {
+            form.getTextField('Quota_scontata').setText(''); // Svuota il campo
+            console.log("Campo 'Quota_scontata' lasciato vuoto perché la checkbox sconto non è spuntata.");
+          }
+        } catch (e) { console.warn("Campo PDF 'Quota_scontata' non trovato o errore:", e); }
+
+        // Field: "Canone mensile scontato (se applicabile)" (Quota_mensile_scontata)
+        // Questo deve essere sempre il promoMonthlyPrice (prezzo scontato dopo il calcolo).
+        try {
+          form.getTextField('Quota_mensile_scontata').setText(window.calculatedOfferData.promoMonthlyPrice + ' €' || '0 €');
+          console.log("Campo 'Quota_mensile_scontata' compilato con:", window.calculatedOfferData.promoMonthlyPrice);
+        } catch (e) { console.warn("Campo PDF 'Quota_mensile_scontata' non trovato o errore:", e); }
+
+
+        // Flatten the form fields to make them part of the document content
+        form.flatten();
+        console.log("Campi del modulo PDF appiattiti.");
+
+        // Save the modified PDF
+        const pdfBytes = await pdfDoc.save();
+        console.log("PDF salvato in byte.");
+
+        // Create a Blob from the PDF bytes and create a download link
+        const blob = new Blob([pdfBytes], { type: 'application/pdf' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        const clientNameForFilename = (window.calculatedOfferData.preparedFor || 'Clinica').replace(/\s/g, '_').replace(/[^\w-]/g, '');
+        const dateForFilename = new Date().toLocaleDateString('it-IT').replace(/\//g, '-');
+        a.download = `Preventivo_MioDottore_${clientNameForFilename}_${dateForFilename}.pdf`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        console.log("Download PDF avviato.");
+
+      } catch (error) {
+        console.error("Errore durante la generazione del PDF:", error);
+        alert("Si è verificato un errore durante la generazione del PDF. Controlla la console per i dettagli.");
+      }
+    });
+  } else {
+    console.warn("Elemento 'generate-pdf-btn' non trovato. La generazione PDF non funzionerà.");
+  }
+
+
+  // --- Helper Functions ---
+  function updateViewerCount() {
+    const randomViewers = Math.floor(Math.random() * 5) + 1;
+    if (viewerCountSpan) viewerCountSpan.textContent = randomViewers;
+    console.log("Numero di visualizzatori aggiornato a:", randomViewers);
+  }
+});
