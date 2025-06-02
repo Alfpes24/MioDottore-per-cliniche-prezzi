@@ -38,7 +38,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Input fields for PDF customization
   const preparedForInput = document.getElementById("prepared-for");
-  const preparedByInput = document.getElementById("prepared-by"); // This maps to Nome_referente (from the PDF fields)
+  const preparedByInput = document.getElementById("prepared-by");
 
   // Log to check if elements are found
   console.log({ calculateBtn, roomsInput, preparedForInput, generatePdfBtn });
@@ -104,7 +104,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // --- Toggle Visibility of Sections/Buttons ---
     if (resultsBox) resultsBox.style.display = "block";
-    if (discountPanel) discountPanel.style.display = "none";
+    if (discountPanel) discountPanel.style.display = "none"; // Hide discount panel by default
     if (calculatorIcon) calculatorIcon.style.display = "none";
     if (discountMessage) discountMessage.style.display = "none";
     if (viewerBox) viewerBox.style.display = "none";
@@ -129,8 +129,9 @@ document.addEventListener("DOMContentLoaded", () => {
       offerDate: new Date().toLocaleDateString("it-IT"),
       validUntilDate: "", // Will be updated after checkBtn is pressed
       pdfTemplateUrl: PDF_TEMPLATE_URL,
-      preparedFor: preparedForInput ? preparedForInput.value : "", // For 'nome_struttura' and 'indirizzo' (if provided in preparedFor)
-      preparedBy: preparedByInput ? preparedByInput.value : "" // For 'Nome_referente'
+      preparedFor: preparedForInput ? preparedForInput.value : "",
+      preparedBy: preparedByInput ? preparedByInput.value : "",
+      hasDiscountApplied: false // New flag: initially false
     };
     console.log("Updated window.calculatedOfferData:", window.calculatedOfferData);
   });
@@ -162,6 +163,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if (discountDate) discountDate.textContent = `Valido fino al: ${validUntilDateString}`;
 
         window.calculatedOfferData.validUntilDate = validUntilDateString;
+        window.calculatedOfferData.hasDiscountApplied = true; // Set flag to true when discount panel is shown
         console.log("Discount valid until:", validUntilDateString);
 
         if (viewerBox) viewerBox.style.display = "flex";
@@ -225,10 +227,8 @@ document.addEventListener("DOMContentLoaded", () => {
         } catch (e) { console.warn("PDF Field 'nome_struttura1' not found or error:", e); }
 
         // Field: "Indirizzo struttura"
-        // This is not a separate input in your HTML. If 'prepared-for' includes the address,
-        // it would need parsing, or you'd need a new input. For now, it will be empty or use 'preparedFor'.
+        // This is not a separate input in your HTML. Assuming 'prepared-for' might contain this.
         try {
-          // Assuming 'indirizzo' is meant to be the full client name/address from preparedFor
           form.getTextField('indirizzo').setText(window.calculatedOfferData.preparedFor || '');
           console.log("Filled 'indirizzo':", window.calculatedOfferData.preparedFor);
         } catch (e) { console.warn("PDF Field 'indirizzo' not found or error:", e); }
@@ -243,10 +243,6 @@ document.addEventListener("DOMContentLoaded", () => {
         // Field: "Nome venditore"
         // Corresponds to HTML input 'prepared-by' (assuming commercial/sales person)
         try {
-          // Assuming 'Nome_sale' here means the sales person's name or is an old field for rooms.
-          // Your list connects 'Nome_sale' and 'Nome_sale1' to 'Nome venditore'.
-          // If it means "Nome venditore", use preparedBy. If it's still for "rooms", then rooms.
-          // Let's assume 'Nome venditore' mapping for now.
           form.getTextField('Nome_sale').setText(window.calculatedOfferData.preparedBy || '');
           console.log("Filled 'Nome_sale' (Nome venditore):", window.calculatedOfferData.preparedBy);
         } catch (e) { console.warn("PDF Field 'Nome_sale' not found or error:", e); }
@@ -265,13 +261,19 @@ document.addEventListener("DOMContentLoaded", () => {
           console.log("Filled 'Quota_mensile_default_2':", window.calculatedOfferData.defaultMonthlyPrice);
         } catch (e) { console.warn("PDF Field 'Quota_mensile_default_2' not found or error:", e); }
 
+        // Field: "Setup fee" - This is the field to conditionally fill
         try {
-          // Your list implies Quota_scontata is for "Setup fee"
-          // However, based on previous iterations, promoMonthlyPrice was assigned to Quota_scontata.
-          // Let's use it for Setup Fee as per your latest list.
-          form.getTextField('Quota_scontata').setText(window.calculatedOfferData.setupFeeOnetime + ' €' || '0 €');
-          console.log("Filled 'Quota_scontata' (Setup Fee):", window.calculatedOfferData.setupFeeOnetime);
+          if (window.calculatedOfferData.hasDiscountApplied) {
+            // Fill Quota_scontata only if discounts were checked/applied
+            form.getTextField('Quota_scontata').setText(window.calculatedOfferData.setupFeeOnetime + ' €' || '0 €');
+            console.log("Filled 'Quota_scontata' (Setup Fee) because discount applied:", window.calculatedOfferData.setupFeeOnetime);
+          } else {
+            // Otherwise, leave it empty
+            form.getTextField('Quota_scontata').setText('');
+            console.log("Left 'Quota_scontata' (Setup Fee) empty as no discount applied.");
+          }
         } catch (e) { console.warn("PDF Field 'Quota_scontata' not found or error:", e); }
+
 
         // Field: "Data offerta"
         try {
@@ -298,26 +300,9 @@ document.addEventListener("DOMContentLoaded", () => {
           console.log("Filled 'Cpl':", cplText);
         } catch (e) { console.warn("PDF Field 'Cpl' not found or error:", e); }
 
-
-        // Note: The previous fields for 'Commissione_a_prenotazione_NUOVO_PAZIENTE' and 'Quota_per_struttura_Una_Tantum'
-        // are not explicitly in your *new* list, so I'm commenting them out to avoid filling non-existent fields.
-        // If they are present and you want them filled, you need to add them back with their correct names.
-        /*
+        // Re-adding the 'Quota_mensile_scontata' which is likely the actual discounted price for the CRM section
+        // as per your previous intention and screenshots.
         try {
-            form.getTextField('Commissione_a_prenotazione_NUOVO_PAZIENTE').setText(window.calculatedOfferData.salesCommission + ' €' || '0 €');
-            console.log("Filled 'Commissione_a_prenotazione_NUOVO_PAZIENTE':", window.calculatedOfferData.salesCommission);
-        } catch (e) { console.warn("PDF Field 'Commissione_a_prenotazione_NUOVO_PAZIENTE' not found or error:", e); }
-
-        try {
-            form.getTextField('Quota_per_struttura_Una_Tantum').setText(window.calculatedOfferData.setupFeeOnetime + ' €' || '0 €');
-            console.log("Filled 'Quota_per_struttura_Una_Tantum':", window.calculatedOfferData.setupFeeOnetime);
-        } catch (e) { console.warn("PDF Field 'Quota_per_struttura_Una_Tantum' not found or error:", e); }
-        */
-
-        // If 'Quota_mensile_scontata' still represents the promo monthly price, keep this:
-        try {
-          // This field (Quota_mensile_scontata) was in your *previous* list as "Quota mensile per struttura".
-          // It seems to be the discounted monthly price.
           form.getTextField('Quota_mensile_scontata').setText(window.calculatedOfferData.promoMonthlyPrice + ' €' || '0 €');
           console.log("Filled 'Quota_mensile_scontata':", window.calculatedOfferData.promoMonthlyPrice);
         } catch (e) { console.warn("PDF Field 'Quota_mensile_scontata' not found or error:", e); }
