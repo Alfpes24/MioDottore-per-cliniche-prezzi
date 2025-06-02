@@ -452,7 +452,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const unauthorizedMessage = document.createElement("h2");
       unauthorizedMessage.style.color = "red";
       unauthorizedMessage.style.textAlign = "center";
-      unauthorizedMessage.textContent = "Accesso non autorizzato";
+      
       document.body.prepend(unauthorizedMessage); 
     }
     setTimeout(() => location.replace("https://alfpes24.github.io/"), 1500);
