@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Preventivo MioDottore</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css" />
   <script src="https://unpkg.com/pdf-lib/dist/pdf-lib.min.js"></script>
 </head>
 <body>
@@ -29,8 +29,8 @@
     <section class="form-section">
       <h2>Calcola il canone per la struttura</h2>
       <form id="calculator-form">
-        <div class="form-group"><label for="rooms">N° Ambulatori</label><input type="number" id="rooms" min="1" required></div>
-        <div class="form-group"><label for="doctors">N° Dottori</label><input type="number" id="doctors" min="0" required></div>
+        <div class="form-group"><label for="rooms">N° Ambulatori</label><input type="number" id="rooms" min="1" required /></div>
+        <div class="form-group"><label for="doctors">N° Dottori</label><input type="number" id="doctors" min="0" required /></div>
         <div class="form-group">
           <label for="cpl">Sede della clinica</label>
           <select id="cpl" required>
@@ -38,8 +38,8 @@
             <option value="13">No Capoluogo (13 €)</option>
           </select>
         </div>
-        <div class="form-group"><label for="additional-locations">Sedi aggiuntive</label><input type="number" id="additional-locations" min="0" required></div>
-        <div class="form-group"><label for="noa">N° licenze NOA</label><input type="number" id="noa" min="0" required></div>
+        <div class="form-group"><label for="additional-locations">Sedi aggiuntive</label><input type="number" id="additional-locations" min="0" required /></div>
+        <div class="form-group"><label for="noa">N° licenze NOA</label><input type="number" id="noa" min="0" required /></div>
         <div class="form-group">
           <label for="noa-price">Prezzo NOA</label>
           <select id="noa-price" required>
@@ -53,7 +53,23 @@
       <div id="results" class="results" style="display:none;">
         <div class="result-group"><label>Canone Mensile Predefinito</label><span id="default-monthly-price">0 €</span></div>
         <div class="result-group"><label>Setup Fee (una tantum)</label><span id="setup-fee">0 €</span></div>
-        <div class="result-group"><button type="button" id="pdf-btn">Genera PDF</button></div>
+        <div class="result-group">
+          <button type="button" id="check-discount-btn">Check Sconti</button>
+        </div>
+        <div class="result-group">
+          <button type="button" id="pdf-btn">Genera PDF</button>
+        </div>
+      </div>
+
+      <div id="discount-panel" class="results" style="display:none;">
+        <h3>Offerta Speciale Attivata</h3>
+        <div><strong>Prezzo Originale CRM:</strong> <span id="crm-original"></span></div>
+        <div><strong>Prezzo CRM Scontato:</strong> <span id="crm-discounted"></span></div>
+        <div><strong>Setup Originale:</strong> <span id="setup-original"></span></div>
+        <div><strong>Setup Scontato:</strong> <span id="setup-discounted"></span></div>
+        <div><strong>Licenze NOA:</strong> <span id="noa-total"></span></div>
+        <div><strong>Totale Mensile Scontato:</strong> <span id="monthly-total"></span></div>
+        <div><strong>Totale Complessivo:</strong> <span id="full-total"></span></div>
       </div>
 
       <div id="popup-overlay" class="popup-overlay" style="display:none;">
@@ -71,7 +87,6 @@
       </div>
     </section>
   </main>
-
   <script src="script.js"></script>
 </body>
 </html>
