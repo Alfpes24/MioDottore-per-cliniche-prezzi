@@ -5,7 +5,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const calculateBtn = document.getElementById("calculate-btn");
   const checkBtn = document.getElementById("check-btn");
   const procediBtn = document.querySelector(".btn-procedi");
-  const generatePdfBtn = document.getElementById("generate-pdf-btn"); // New PDF button
+  const generatePdfBtn = document.getElementById("generate-pdf-btn");
 
   const defaultMonthlyPriceField = document.getElementById("default-monthly-price");
   const setupFeeField = document.getElementById("setup-fee");
@@ -37,13 +37,15 @@ document.addEventListener("DOMContentLoaded", () => {
   const noaPriceSelect = document.getElementById("noa-price");
 
   // Input fields for PDF customization
-  const preparedForInput = document.getElementById("prepared-for");
-  const preparedByInput = document.getElementById("prepared-by");
+  const preparedForInput = document.getElementById("prepared-for"); // Corresponds to nome_struttura
+  const preparedByInput = document.getElementById("prepared-by"); // Corresponds to Nome_referente, Nome_sale, Nome_sale1
 
-  // Log to check if elements are found
+  // Log to check if elements are found. This is where you'd see if 'calculateBtn' is null.
   console.log({ calculateBtn, roomsInput, preparedForInput, generatePdfBtn });
   if (!calculateBtn) {
-    console.error("Error: 'calculate-btn' not found in the DOM. Script may not function correctly.");
+    console.error("Error: 'calculate-btn' not found in the DOM. Script will not function correctly.");
+    // If calculateBtn is not found, the script will log the error and then continue,
+    // but the event listener won't be attached to calculateBtn.
   }
 
   // Define the PDF template URL
@@ -54,136 +56,154 @@ document.addEventListener("DOMContentLoaded", () => {
   window.calculatedOfferData = {};
 
   // --- Event Listeners ---
-  calculatorIcon.addEventListener("click", () => {
-    console.log("Calculator icon clicked.");
-    if (ctrPanel) ctrPanel.style.display = ctrPanel.style.display === "none" ? "block" : "none";
-  });
+  if (calculatorIcon) { // Added check for calculatorIcon
+    calculatorIcon.addEventListener("click", () => {
+      console.log("Calculator icon clicked.");
+      if (ctrPanel) ctrPanel.style.display = ctrPanel.style.display === "none" ? "block" : "none";
+    });
+  } else {
+    console.warn("Element with ID 'calculator-icon' not found.");
+  }
 
-  calculateBtn.addEventListener("click", () => {
-    console.log("Calculate button clicked.");
 
-    // --- Get input values and convert to numbers ---
-    const rooms = parseInt(roomsInput ? roomsInput.value : "0") || 0;
-    const doctors = parseInt(doctorsInput ? doctorsInput.value : "0") || 0;
-    const cpl = parseInt(cplSelect ? cplSelect.value : "0") || 0;
-    const additionalLocations = parseInt(additionalLocationsInput ? additionalLocationsInput.value : "0") || 0;
-    const noa = parseInt(noaInput ? noaInput.value : "0") || 0;
-    const noaPrice = parseInt(noaPriceSelect ? noaPriceSelect.value : "0") || 0;
+  if (calculateBtn) { // << IMPORTANT: Ensure calculateBtn exists before attaching listener
+    calculateBtn.addEventListener("click", () => {
+      console.log("Calculate button clicked."); // This should definitely appear in console on click
 
-    console.log("Input values for calculation:", { rooms, doctors, cpl, additionalLocations, noa, noaPrice });
+      // --- Get input values and convert to numbers ---
+      const rooms = parseInt(roomsInput ? roomsInput.value : "0") || 0;
+      const doctors = parseInt(doctorsInput ? doctorsInput.value : "0") || 0;
+      const cpl = parseInt(cplSelect ? cplSelect.value : "0") || 0;
+      const additionalLocations = parseInt(additionalLocationsInput ? additionalLocationsInput.value : "0") || 0;
+      const noa = parseInt(noaInput ? noaInput.value : "0") || 0;
+      const noaPrice = parseInt(noaPriceSelect ? noaPriceSelect.value : "0") || 0;
 
-    // --- Price Tables and Calculations ---
-    const setupFeeTable = [500, 500, 500, 500, 500, 600, 600, 750, 750, 750, 1000];
-    const pricePerRoomTable = [269, 170, 153, 117, 96, 88, 80, 75, 72, 67, 62];
-    const index = rooms >= 11 ? 10 : Math.max(rooms - 1, 0);
+      console.log("Input values for calculation:", { rooms, doctors, cpl, additionalLocations, noa, noaPrice });
 
-    const setupFeeDefault = setupFeeTable[index];
-    const setupFeeDisplayed = setupFeeDefault * 2;
+      // --- Price Tables and Calculations ---
+      const setupFeeTable = [500, 500, 500, 500, 500, 600, 600, 750, 750, 750, 1000];
+      const pricePerRoomTable = [269, 170, 153, 117, 96, 88, 80, 75, 72, 67, 62];
+      const index = rooms >= 11 ? 10 : Math.max(rooms - 1, 0);
 
-    const monthlyPrice = pricePerRoomTable[index] * rooms;
-    const locationsCost = additionalLocations * 99;
-    const noaTotalPrice = noa * noaPrice;
+      const setupFeeDefault = setupFeeTable[index];
+      const setupFeeDisplayed = setupFeeDefault * 2;
 
-    const totalMonthlyPrice = monthlyPrice + locationsCost + noaTotalPrice;
-    const defaultMonthlyPrice = totalMonthlyPrice * 1.25;
+      const monthlyPrice = pricePerRoomTable[index] * rooms;
+      const locationsCost = additionalLocations * 99;
+      const noaTotalPrice = noa * noaPrice;
 
-    const commissionCpl = doctors * (cpl === 17 ? 8 : 6);
-    const totalCommission = monthlyPrice + commissionCpl + locationsCost + noaTotalPrice + setupFeeDefault / 12;
+      const totalMonthlyPrice = monthlyPrice + locationsCost + noaTotalPrice;
+      const defaultMonthlyPrice = totalMonthlyPrice * 1.25;
 
-    console.log("Calculated pricing details:", { setupFeeDefault, monthlyPrice, totalMonthlyPrice, defaultMonthlyPrice, totalCommission });
+      const commissionCpl = doctors * (cpl === 17 ? 8 : 6);
+      const totalCommission = monthlyPrice + commissionCpl + locationsCost + noaTotalPrice + setupFeeDefault / 12;
 
-    // --- Update Displayed Results ---
-    if (setupFeeField) setupFeeField.textContent = setupFeeDisplayed.toFixed(2) + " €";
-    if (defaultMonthlyPriceField) defaultMonthlyPriceField.textContent = defaultMonthlyPrice.toFixed(2) + " €";
-    if (salesCommissionsField) salesCommissionsField.textContent = totalCommission.toFixed(2) + " €";
+      console.log("Calculated pricing details:", { setupFeeDefault, monthlyPrice, totalMonthlyPrice, defaultMonthlyPrice, totalCommission });
 
-    if (originalMonthlyPriceField) originalMonthlyPriceField.textContent = defaultMonthlyPrice.toFixed(2) + " €";
-    if (promoMonthlyPriceField) promoMonthlyPriceField.textContent = totalMonthlyPrice.toFixed(2) + " €";
-    if (originalSetupFeeField) originalSetupFeeField.textContent = setupFeeDefault.toFixed(2) + " €";
-    if (promoSetupFeeField) promoSetupFeeField.textContent = setupFeeDefault.toFixed(2) + " €";
+      // --- Update Displayed Results ---
+      if (defaultMonthlyPriceField) defaultMonthlyPriceField.textContent = defaultMonthlyPrice.toFixed(2) + " €";
+      if (setupFeeField) setupFeeField.textContent = setupFeeDisplayed.toFixed(2) + " €"; // Initial Setup Fee
+      if (salesCommissionsField) salesCommissionsField.textContent = totalCommission.toFixed(2) + " €";
 
-    // --- Toggle Visibility of Sections/Buttons ---
-    if (resultsBox) resultsBox.style.display = "block";
-    if (discountPanel) discountPanel.style.display = "none"; // Hide discount panel by default
-    if (calculatorIcon) calculatorIcon.style.display = "none";
-    if (discountMessage) discountMessage.style.display = "none";
-    if (viewerBox) viewerBox.style.display = "none";
-    if (ctrPanel) ctrPanel.style.display = "none";
+      if (originalMonthlyPriceField) originalMonthlyPriceField.textContent = defaultMonthlyPrice.toFixed(2) + " €";
+      if (promoMonthlyPriceField) promoMonthlyPriceField.textContent = totalMonthlyPrice.toFixed(2) + " €";
+      if (originalSetupFeeField) originalSetupFeeField.textContent = setupFeeDefault.toFixed(2) + " €";
+      if (promoSetupFeeField) promoSetupFeeField.textContent = setupFeeDefault.toFixed(2) + " €";
 
-    if (procediBtn) procediBtn.style.display = "inline-block";
-    if (generatePdfBtn) generatePdfBtn.style.display = "inline-block"; // << MODIFIED: Show PDF button here
-    if (checkBtn) checkBtn.style.display = noa >= 1 ? "inline-block" : "none";
+      // --- Toggle Visibility of Sections/Buttons ---
+      if (resultsBox) resultsBox.style.display = "block";
+      if (discountPanel) discountPanel.style.display = "none"; // Hide discount panel by default
+      if (calculatorIcon) calculatorIcon.style.display = "none";
+      if (discountMessage) discountMessage.style.display = "none";
+      if (viewerBox) viewerBox.style.display = "none";
+      if (ctrPanel) ctrPanel.style.display = "none";
 
-    // --- Store calculated data for PDF generation ---
-    window.calculatedOfferData = {
-      rooms: rooms,
-      doctors: doctors,
-      cpl: cpl,
-      additionalLocations: additionalLocations,
-      noaLicenses: noa,
-      noaPrice: noaPrice,
-      defaultMonthlyPrice: defaultMonthlyPrice.toFixed(2),
-      setupFeeOnetime: setupFeeDefault.toFixed(2), // Use the default, single setup fee for PDF
-      promoMonthlyPrice: totalMonthlyPrice.toFixed(2),
-      salesCommission: totalCommission.toFixed(2),
-      offerDate: new Date().toLocaleDateString("it-IT"),
-      validUntilDate: "", // Will be updated after checkBtn is pressed
-      pdfTemplateUrl: PDF_TEMPLATE_URL,
-      preparedFor: preparedForInput ? preparedForInput.value : "",
-      preparedBy: preparedByInput ? preparedByInput.value : "",
-      hasDiscountApplied: false // << IMPORTANT: Flag is false initially
-    };
-    console.log("Updated window.calculatedOfferData:", window.calculatedOfferData);
-  });
+      if (procediBtn) procediBtn.style.display = "inline-block";
+      if (generatePdfBtn) generatePdfBtn.style.display = "inline-block"; // << MODIFIED: Show PDF button here after calculate
+      if (checkBtn) checkBtn.style.display = noa >= 1 ? "inline-block" : "none";
 
-  checkBtn.addEventListener("click", () => {
-    console.log("Check Sconti button clicked.");
-    if (loadingSpinner) loadingSpinner.style.display = "block";
-    if (countdown) countdown.textContent = "Attendere 15 secondi...";
-    let seconds = 15;
+      // --- Store calculated data for PDF generation ---
+      window.calculatedOfferData = {
+        rooms: rooms,
+        doctors: doctors,
+        cpl: cpl,
+        additionalLocations: additionalLocations,
+        noaLicenses: noa,
+        noaPrice: noaPrice,
+        defaultMonthlyPrice: defaultMonthlyPrice.toFixed(2),
+        setupFeeOnetime: setupFeeDefault.toFixed(2), // Use the default, single setup fee for PDF
+        promoMonthlyPrice: totalMonthlyPrice.toFixed(2),
+        salesCommission: totalCommission.toFixed(2),
+        offerDate: new Date().toLocaleDateString("it-IT"),
+        validUntilDate: "", // Will be updated after checkBtn is pressed
+        pdfTemplateUrl: PDF_TEMPLATE_URL,
+        preparedFor: preparedForInput ? preparedForInput.value : "",
+        preparedBy: preparedByInput ? preparedByInput.value : "",
+        hasDiscountApplied: false // << IMPORTANT: Flag is false initially
+      };
+      console.log("Updated window.calculatedOfferData:", window.calculatedOfferData);
+    });
+  } else {
+    console.error("Critical Error: 'calculate-btn' element not found. Cannot attach event listener.");
+  }
 
-    const interval = setInterval(() => {
-      seconds--;
-      if (countdown) countdown.textContent = `Attendere ${seconds} secondi...`;
 
-      if (seconds <= 0) {
-        clearInterval(interval);
-        if (loadingSpinner) loadingSpinner.style.display = "none";
-        if (discountPanel) discountPanel.style.display = "block";
-        if (calculatorIcon) calculatorIcon.style.display = "block";
-        if (discountMessage) {
-          discountMessage.textContent = "Sono presenti sconti clicca qui";
-          discountMessage.style.display = "inline-block";
+  if (checkBtn) { // Added check for checkBtn
+    checkBtn.addEventListener("click", () => {
+      console.log("Check Sconti button clicked.");
+      if (loadingSpinner) loadingSpinner.style.display = "block";
+      if (countdown) countdown.textContent = "Attendere 15 secondi...";
+      let seconds = 15;
+
+      const interval = setInterval(() => {
+        seconds--;
+        if (countdown) countdown.textContent = `Attendere ${seconds} secondi...`;
+
+        if (seconds <= 0) {
+          clearInterval(interval);
+          if (loadingSpinner) loadingSpinner.style.display = "none";
+          if (discountPanel) discountPanel.style.display = "block";
+          if (calculatorIcon) calculatorIcon.style.display = "block";
+          if (discountMessage) {
+            discountMessage.textContent = "Sono presenti sconti clicca qui";
+            discountMessage.style.display = "inline-block";
+          }
+
+          const today = new Date();
+          const validUntil = new Date();
+          validUntil.setDate(today.getDate() + 10);
+          const validUntilDateString = validUntil.toLocaleDateString("it-IT");
+          if (discountDate) discountDate.textContent = `Valido fino al: ${validUntilDateString}`;
+
+          window.calculatedOfferData.validUntilDate = validUntilDateString;
+          window.calculatedOfferData.hasDiscountApplied = true; // Set flag to true here
+          console.log("Discount valid until:", validUntilDateString);
+
+          if (viewerBox) viewerBox.style.display = "flex";
+          updateViewerCount();
+          setInterval(updateViewerCount, 20000);
+
+          // if (generatePdfBtn) generatePdfBtn.style.display = "inline-block"; // Already visible
         }
+      }, 1000);
+    });
+  } else {
+    console.warn("Element with ID 'check-btn' not found.");
+  }
 
-        const today = new Date();
-        const validUntil = new Date();
-        validUntil.setDate(today.getDate() + 10);
-        const validUntilDateString = validUntil.toLocaleDateString("it-IT");
-        if (discountDate) discountDate.textContent = `Valido fino al: ${validUntilDateString}`;
 
-        window.calculatedOfferData.validUntilDate = validUntilDateString;
-        window.calculatedOfferData.hasDiscountApplied = true; // Set flag to true here
-        console.log("Discount valid until:", validUntilDateString);
-
-        if (viewerBox) viewerBox.style.display = "flex";
-        updateViewerCount();
-        setInterval(updateViewerCount, 20000);
-
-        // if (generatePdfBtn) generatePdfBtn.style.display = "inline-block"; // << REMOVED: Already visible
-      }
-    }, 1000);
-  });
-
-  if (discountMessage) {
+  if (discountMessage) { // Added check for discountMessage
     discountMessage.addEventListener("click", () => {
       console.log("Discount message clicked. Scrolling to discount panel.");
       if (discountPanel) discountPanel.scrollIntoView({ behavior: "smooth" });
     });
+  } else {
+    console.warn("Element with ID 'discount-message' not found.");
   }
 
+
   // --- PDF Generation Logic ---
-  if (generatePdfBtn) {
+  if (generatePdfBtn) { // Added check for generatePdfBtn
     generatePdfBtn.addEventListener("click", async () => {
       console.log("Generate PDF button clicked.");
 
@@ -309,6 +329,16 @@ document.addEventListener("DOMContentLoaded", () => {
           console.log("Filled 'Quota_mensile_scontata':", window.calculatedOfferData.promoMonthlyPrice);
         } catch (e) { console.warn("PDF Field 'Quota_mensile_scontata' not found or error:", e); }
 
+        // Field: "Indirizzo struttura" is not explicitly in your latest list.
+        // If this field exists and you want it filled, you need to either add a new input field in HTML
+        // or decide which existing input should map to it. For now, it's not being filled.
+        // Example if it exists and uses 'preparedFor' as source (which might be too general):
+        /*
+        try {
+          form.getTextField('indirizzo').setText(window.calculatedOfferData.preparedFor || '');
+          console.log("Filled 'indirizzo':", window.calculatedOfferData.preparedFor);
+        } catch (e) { console.warn("PDF Field 'indirizzo' not found or error:", e); }
+        */
 
         // Flatten the form fields to make them part of the document content
         form.flatten();
