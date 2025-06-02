@@ -47,113 +47,15 @@ window.addEventListener("DOMContentLoaded", () => {
     document.getElementById("default-monthly-price").textContent = preventivoData.defaultMonthly;
     document.getElementById("setup-fee").textContent = preventivoData.setupFee;
     document.getElementById("results").style.display = "block";
-
-    // Mostra pulsante "Check Sconti" solo se presente almeno una licenza NOA
-    const checkBtn = document.getElementById("check-discount-btn");
-    const procediBtn = document.getElementById("proceed-btn");
-    const discountPanel = document.getElementById("discount-panel");
-    const spinner = document.getElementById("loading-spinner");
-    const countdown = document.getElementById("countdown");
-
-    if (preventivoData.scontoAttivo) {
-      checkBtn.style.display = "inline-block";
-    } else {
-      checkBtn.style.display = "none";
-    }
-
-    checkBtn.addEventListener("click", () => {
-      let counter = 5;
-      spinner.style.display = "flex";
-      checkBtn.style.display = "none";
-
-      const interval = setInterval(() => {
-        countdown.textContent = counter + " secondi...";
-        counter--;
-
-        if (counter < 0) {
-          clearInterval(interval);
-          spinner.style.display = "none";
-          discountPanel.style.display = "block";
-          procediBtn.style.display = "inline-block";
-
-          // Riempie i valori nel pannello sconti
-          document.getElementById("original-monthly-price").textContent = (preventivoData.monthlyPrice * 1.25).toFixed(2) + " €";
-          document.getElementById("promo-monthly-price").textContent = preventivoData.totalMonthlyPrice.toFixed(2) + " €";
-          document.getElementById("original-setup-fee").textContent = preventivoData.setupFeeDisplayed.toFixed(2) + " €";
-          document.getElementById("promo-setup-fee").textContent = preventivoData.setupFeeDefault.toFixed(2) + " €";
-        }
-      }, 1000);
-    });
-
-  
-  const checkBtn = document.getElementById("check-discount-btn");
-
-  checkBtn.addEventListener("click", () => {
-    if (!preventivoData || !preventivoData.scontoAttivo) {
-      alert("Nessuno sconto applicabile. Inserisci almeno una licenza NOA.");
-      return;
-    }
-
-    document.getElementById("crm-original").textContent = (preventivoData.monthlyPrice * 1.25).toFixed(2) + " €";
-    document.getElementById("crm-discounted").textContent = preventivoData.monthlyPrice.toFixed(2) + " €";
-    document.getElementById("setup-original").textContent = preventivoData.setupFeeDisplayed.toFixed(2) + " €";
-    document.getElementById("setup-discounted").textContent = preventivoData.setupFeeDefault.toFixed(2) + " €";
-    document.getElementById("noa-total").textContent = preventivoData.noaTotalPrice.toFixed(2) + " €";
-    document.getElementById("monthly-total").textContent = preventivoData.totalMonthlyPrice.toFixed(2) + " €";
-    document.getElementById("full-total").textContent = (preventivoData.totalMonthlyPrice + preventivoData.setupFeeDefault).toFixed(2) + " €";
-
-    document.getElementById("discount-panel").style.display = "block";
   });
-
-});
 
   pdfBtn.addEventListener("click", () => {
     popup.style.display = "flex";
-  
-  const checkBtn = document.getElementById("check-discount-btn");
-
-  checkBtn.addEventListener("click", () => {
-    if (!preventivoData || !preventivoData.scontoAttivo) {
-      alert("Nessuno sconto applicabile. Inserisci almeno una licenza NOA.");
-      return;
-    }
-
-    document.getElementById("crm-original").textContent = (preventivoData.monthlyPrice * 1.25).toFixed(2) + " €";
-    document.getElementById("crm-discounted").textContent = preventivoData.monthlyPrice.toFixed(2) + " €";
-    document.getElementById("setup-original").textContent = preventivoData.setupFeeDisplayed.toFixed(2) + " €";
-    document.getElementById("setup-discounted").textContent = preventivoData.setupFeeDefault.toFixed(2) + " €";
-    document.getElementById("noa-total").textContent = preventivoData.noaTotalPrice.toFixed(2) + " €";
-    document.getElementById("monthly-total").textContent = preventivoData.totalMonthlyPrice.toFixed(2) + " €";
-    document.getElementById("full-total").textContent = (preventivoData.totalMonthlyPrice + preventivoData.setupFeeDefault).toFixed(2) + " €";
-
-    document.getElementById("discount-panel").style.display = "block";
   });
-
-});
 
   cancelPopup.addEventListener("click", () => {
     popup.style.display = "none";
-  
-  const checkBtn = document.getElementById("check-discount-btn");
-
-  checkBtn.addEventListener("click", () => {
-    if (!preventivoData || !preventivoData.scontoAttivo) {
-      alert("Nessuno sconto applicabile. Inserisci almeno una licenza NOA.");
-      return;
-    }
-
-    document.getElementById("crm-original").textContent = (preventivoData.monthlyPrice * 1.25).toFixed(2) + " €";
-    document.getElementById("crm-discounted").textContent = preventivoData.monthlyPrice.toFixed(2) + " €";
-    document.getElementById("setup-original").textContent = preventivoData.setupFeeDisplayed.toFixed(2) + " €";
-    document.getElementById("setup-discounted").textContent = preventivoData.setupFeeDefault.toFixed(2) + " €";
-    document.getElementById("noa-total").textContent = preventivoData.noaTotalPrice.toFixed(2) + " €";
-    document.getElementById("monthly-total").textContent = preventivoData.totalMonthlyPrice.toFixed(2) + " €";
-    document.getElementById("full-total").textContent = (preventivoData.totalMonthlyPrice + preventivoData.setupFeeDefault).toFixed(2) + " €";
-
-    document.getElementById("discount-panel").style.display = "block";
   });
-
-});
 
   confirmPopup.addEventListener("click", async () => {
     const struttura = document.getElementById("clinic-name").value;
@@ -162,68 +64,8 @@ window.addEventListener("DOMContentLoaded", () => {
     const venditore = document.getElementById("salesperson-name").value;
 
     popup.style.display = "none";
-    await generaPDF({ struttura, indirizzo, referente, venditore 
-  const checkBtn = document.getElementById("check-discount-btn");
-
-  checkBtn.addEventListener("click", () => {
-    if (!preventivoData || !preventivoData.scontoAttivo) {
-      alert("Nessuno sconto applicabile. Inserisci almeno una licenza NOA.");
-      return;
-    }
-
-    document.getElementById("crm-original").textContent = (preventivoData.monthlyPrice * 1.25).toFixed(2) + " €";
-    document.getElementById("crm-discounted").textContent = preventivoData.monthlyPrice.toFixed(2) + " €";
-    document.getElementById("setup-original").textContent = preventivoData.setupFeeDisplayed.toFixed(2) + " €";
-    document.getElementById("setup-discounted").textContent = preventivoData.setupFeeDefault.toFixed(2) + " €";
-    document.getElementById("noa-total").textContent = preventivoData.noaTotalPrice.toFixed(2) + " €";
-    document.getElementById("monthly-total").textContent = preventivoData.totalMonthlyPrice.toFixed(2) + " €";
-    document.getElementById("full-total").textContent = (preventivoData.totalMonthlyPrice + preventivoData.setupFeeDefault).toFixed(2) + " €";
-
-    document.getElementById("discount-panel").style.display = "block";
+    await generaPDF({ struttura, indirizzo, referente, venditore });
   });
-
-});
-  
-  const checkBtn = document.getElementById("check-discount-btn");
-
-  checkBtn.addEventListener("click", () => {
-    if (!preventivoData || !preventivoData.scontoAttivo) {
-      alert("Nessuno sconto applicabile. Inserisci almeno una licenza NOA.");
-      return;
-    }
-
-    document.getElementById("crm-original").textContent = (preventivoData.monthlyPrice * 1.25).toFixed(2) + " €";
-    document.getElementById("crm-discounted").textContent = preventivoData.monthlyPrice.toFixed(2) + " €";
-    document.getElementById("setup-original").textContent = preventivoData.setupFeeDisplayed.toFixed(2) + " €";
-    document.getElementById("setup-discounted").textContent = preventivoData.setupFeeDefault.toFixed(2) + " €";
-    document.getElementById("noa-total").textContent = preventivoData.noaTotalPrice.toFixed(2) + " €";
-    document.getElementById("monthly-total").textContent = preventivoData.totalMonthlyPrice.toFixed(2) + " €";
-    document.getElementById("full-total").textContent = (preventivoData.totalMonthlyPrice + preventivoData.setupFeeDefault).toFixed(2) + " €";
-
-    document.getElementById("discount-panel").style.display = "block";
-  });
-
-});
-
-  const checkBtn = document.getElementById("check-discount-btn");
-
-  checkBtn.addEventListener("click", () => {
-    if (!preventivoData || !preventivoData.scontoAttivo) {
-      alert("Nessuno sconto applicabile. Inserisci almeno una licenza NOA.");
-      return;
-    }
-
-    document.getElementById("crm-original").textContent = (preventivoData.monthlyPrice * 1.25).toFixed(2) + " €";
-    document.getElementById("crm-discounted").textContent = preventivoData.monthlyPrice.toFixed(2) + " €";
-    document.getElementById("setup-original").textContent = preventivoData.setupFeeDisplayed.toFixed(2) + " €";
-    document.getElementById("setup-discounted").textContent = preventivoData.setupFeeDefault.toFixed(2) + " €";
-    document.getElementById("noa-total").textContent = preventivoData.noaTotalPrice.toFixed(2) + " €";
-    document.getElementById("monthly-total").textContent = preventivoData.totalMonthlyPrice.toFixed(2) + " €";
-    document.getElementById("full-total").textContent = (preventivoData.totalMonthlyPrice + preventivoData.setupFeeDefault).toFixed(2) + " €";
-
-    document.getElementById("discount-panel").style.display = "block";
-  });
-
 });
 
 async function generaPDF(datiPopup) {
@@ -267,27 +109,7 @@ async function generaPDF(datiPopup) {
   }
 
   const pdfBytes = await pdfDoc.save();
-  const blob = new Blob([pdfBytes], { type: "application/pdf" 
-  const checkBtn = document.getElementById("check-discount-btn");
-
-  checkBtn.addEventListener("click", () => {
-    if (!preventivoData || !preventivoData.scontoAttivo) {
-      alert("Nessuno sconto applicabile. Inserisci almeno una licenza NOA.");
-      return;
-    }
-
-    document.getElementById("crm-original").textContent = (preventivoData.monthlyPrice * 1.25).toFixed(2) + " €";
-    document.getElementById("crm-discounted").textContent = preventivoData.monthlyPrice.toFixed(2) + " €";
-    document.getElementById("setup-original").textContent = preventivoData.setupFeeDisplayed.toFixed(2) + " €";
-    document.getElementById("setup-discounted").textContent = preventivoData.setupFeeDefault.toFixed(2) + " €";
-    document.getElementById("noa-total").textContent = preventivoData.noaTotalPrice.toFixed(2) + " €";
-    document.getElementById("monthly-total").textContent = preventivoData.totalMonthlyPrice.toFixed(2) + " €";
-    document.getElementById("full-total").textContent = (preventivoData.totalMonthlyPrice + preventivoData.setupFeeDefault).toFixed(2) + " €";
-
-    document.getElementById("discount-panel").style.display = "block";
-  });
-
-});
+  const blob = new Blob([pdfBytes], { type: "application/pdf" });
   const link = document.createElement("a");
   link.href = URL.createObjectURL(blob);
   link.download = `Preventivo_MioDottore_${datiPopup.struttura.replace(/\s+/g, "_")}_${formatDate(today)}.pdf`;
