@@ -123,11 +123,11 @@ document.addEventListener("DOMContentLoaded", () => {
       noaLicenses: noa,
       noaPrice: noaPrice,
       defaultMonthlyPrice: defaultMonthlyPrice.toFixed(2),
-      setupFeeOnetime: setupFeeDefault.toFixed(2),
+      setupFeeOnetime: setupFeeDefault.toFixed(2), // Use the default, single setup fee for PDF
       promoMonthlyPrice: totalMonthlyPrice.toFixed(2),
       salesCommission: totalCommission.toFixed(2),
       offerDate: new Date().toLocaleDateString("it-IT"),
-      validUntilDate: "",
+      validUntilDate: "", // Will be updated after checkBtn is pressed
       pdfTemplateUrl: PDF_TEMPLATE_URL,
       preparedFor: preparedForInput ? preparedForInput.value : "",
       preparedBy: preparedByInput ? preparedByInput.value : ""
@@ -157,7 +157,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const today = new Date();
         const validUntil = new Date();
-        validUntil.setDate(today.getDate() + 10);
+        validUntil.setDate(today.getDate() + 10); // Offer valid for 10 days
         const validUntilDateString = validUntil.toLocaleDateString("it-IT");
         if (discountDate) discountDate.textContent = `Valido fino al: ${validUntilDateString}`;
 
@@ -212,6 +212,10 @@ document.addEventListener("DOMContentLoaded", () => {
         console.log("PDF form obtained.");
 
         // --- Populate PDF Fields using the provided names ---
+        // IMPORTANT: These names come from your list. If the PDF still doesn't fill
+        // correctly, these names are NOT the exact internal names of your PDF fields.
+        // You MUST verify them using a PDF form field inspection tool.
+
         // Page 1 fields
         try {
           form.getTextField('nome_struttura').setText(window.calculatedOfferData.preparedFor || '');
@@ -228,20 +232,22 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // Fields from Page 5 (Proposta commerciale) which seem to correspond to form inputs
         try {
+          // This field might be used for the number of rooms, per your list
           form.getTextField('Nome_sale').setText(String(window.calculatedOfferData.rooms || '0'));
           console.log("Filled 'Nome_sale':", window.calculatedOfferData.rooms);
         } catch (e) { console.warn("PDF Field 'Nome_sale' not found or error:", e); }
         try {
+          // Another potential field for number of rooms
           form.getTextField('Nome_sale1').setText(String(window.calculatedOfferData.rooms || '0'));
           console.log("Filled 'Nome_sale1':", window.calculatedOfferData.rooms);
         } catch (e) { console.warn("PDF Field 'Nome_sale1' not found or error:", e); }
         try {
+          // Yet another potential field for number of rooms
           form.getTextField('numero_ambulatori').setText(String(window.calculatedOfferData.rooms || '0'));
           console.log("Filled 'numero_ambulatori':", window.calculatedOfferData.rooms);
         } catch (e) { console.warn("PDF Field 'numero_ambulatori' not found or error:", e); }
         try {
           // This field (Cpl) from the PDF might be for Capoluogo/No Capoluogo text.
-          // You might want to map cpl (17/13) to "Capoluogo" or "No Capoluogo" text.
           const cplText = window.calculatedOfferData.cpl === 17 ? 'Capoluogo' : 'No Capoluogo';
           form.getTextField('Cpl').setText(cplText);
           console.log("Filled 'Cpl':", cplText);
@@ -258,7 +264,7 @@ document.addEventListener("DOMContentLoaded", () => {
         } catch (e) { console.warn("PDF Field 'Scadenza_offerta' not found or error:", e); }
 
         try {
-          // This is for "Quota mensile per struttura" for MIODOTTORE CRM on page 5
+          // This is for "Quota mensile per struttura" (MIODOTTORE CRM) - scontata
           form.getTextField('Quota_mensile_scontata').setText(window.calculatedOfferData.promoMonthlyPrice + ' €' || '0 €');
           console.log("Filled 'Quota_mensile_scontata':", window.calculatedOfferData.promoMonthlyPrice);
         } catch (e) { console.warn("PDF Field 'Quota_mensile_scontata' not found or error:", e); }
@@ -282,13 +288,10 @@ document.addEventListener("DOMContentLoaded", () => {
         } catch (e) { console.warn("PDF Field 'Quota_per_struttura_Una_Tantum' not found or error:", e); }
 
         try {
-            // This field "Quota_mensile_default" or "Quota_mensile_default_2" is likely the "Canone Mensile Predefinito" for display
-            // You mentioned 'Quota_mensile_default_2' for page 2/3 but your PDF is page 1-5.
-            // Let's assume 'Quota_mensile_default' is on page 5 or 4 as the default price.
+            // This is "Quota_mensile_default" (Canone mensile senza sconto)
             form.getTextField('Quota_mensile_default').setText(window.calculatedOfferData.defaultMonthlyPrice + ' €' || '0 €');
             console.log("Filled 'Quota_mensile_default':", window.calculatedOfferData.defaultMonthlyPrice);
         } catch (e) { console.warn("PDF Field 'Quota_mensile_default' not found or error:", e); }
-        // If 'Quota_mensile_default_2' truly exists and needs filling, you'd add another try/catch for it.
 
 
         // Flatten the form fields to make them part of the document content
