@@ -1,6 +1,26 @@
 document.addEventListener("DOMContentLoaded", () => {
   console.log("DOM fully loaded and parsed. Initializing script.");
 
+  // --- Controllo Accesso (Spostato qui per non interferire con il DOM) ---
+  const refOk = document.referrer.includes("alfpes24.github.io") || window.opener;
+  const accesso = localStorage.getItem("accessoMioDottore") === "ok";
+  const mainContent = document.getElementById("main-content"); // Nuovo ID aggiunto al main content
+
+  if (!accesso || !refOk) {
+    if (mainContent) {
+      mainContent.style.display = "none"; // Nasconde il contenuto principale
+      const unauthorizedMessage = document.createElement("h2");
+      unauthorizedMessage.style.color = "red";
+      unauthorizedMessage.style.textAlign = "center";
+      unauthorizedMessage.textContent = "Accesso non autorizzato";
+      document.body.prepend(unauthorizedMessage); // Inserisce il messaggio all'inizio del body
+    }
+    setTimeout(() => location.replace("https://alfpes24.github.io/"), 1500);
+    return; // Ferma l'esecuzione del resto dello script
+  }
+  // Se l'accesso è valido, il contenuto principale rimane visibile e lo script prosegue normalmente.
+
+
   // --- Get DOM Elements ---
   const calculateBtn = document.getElementById("calculate-btn");
   const checkBtn = document.getElementById("check-btn");
@@ -41,11 +61,11 @@ document.addEventListener("DOMContentLoaded", () => {
   const preparedForInput = document.getElementById("prepared-for");
   const preparedByInput = document.getElementById("prepared-by");
 
-  // NUOVO: Checkbox per lo sconto nel PDF
+  // Checkbox per lo sconto nel PDF
   const applyDiscountToPdfCheckbox = document.getElementById("apply-discount-to-pdf");
 
   // Log all critical elements at startup to quickly identify if any are missing
-  console.log("--- Elementi DOM al caricamento ---");
+  console.log("--- Elementi DOM al caricamento (dopo controllo accesso) ---");
   console.log("calculateBtn:", calculateBtn);
   console.log("checkBtn:", checkBtn);
   console.log("generatePdfBtn:", generatePdfBtn);
@@ -53,15 +73,14 @@ document.addEventListener("DOMContentLoaded", () => {
   console.log("discountPanel:", discountPanel);
   console.log("roomsInput:", roomsInput);
   console.log("preparedForInput:", preparedForInput);
-  console.log("applyDiscountToPdfCheckbox:", applyDiscountToPdfCheckbox); // NUOVO LOG
+  console.log("applyDiscountToPdfCheckbox:", applyDiscountToPdfCheckbox);
   console.log("--- Fine elementi DOM ---");
 
   // Critical error check: if calculateBtn is not found, the script cannot proceed meaningfully
   if (!calculateBtn) {
     console.error("ERRORE CRITICO: Pulsante 'Calcola' (ID: calculate-btn) non trovato nell'HTML. Si prega di verificare l'ID.");
-    return; // Stop script execution if the main button is missing
+    return; 
   }
-  // Other critical elements for PDF generation
   if (!generatePdfBtn) {
     console.error("ERRORE CRITICO: Pulsante 'Genera PDF Preventivo' (ID: generate-pdf-btn) non trovato. La generazione PDF non funzionerà.");
   }
@@ -90,7 +109,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Main Calculate Button Logic
   calculateBtn.addEventListener("click", () => {
-    console.log("Pulsante 'Calcola' cliccato. Inizio calcoli."); // Questo dovrebbe apparire nella console al click
+    console.log("Pulsante 'Calcola' cliccato. Inizio calcoli."); 
 
     // --- Get input values and convert to numbers ---
     const rooms = parseInt(roomsInput ? roomsInput.value : "0") || 0;
@@ -143,8 +162,8 @@ document.addEventListener("DOMContentLoaded", () => {
     if (procediBtn) procediBtn.style.display = "inline-block";
     if (checkBtn) checkBtn.style.display = noa >= 1 ? "inline-block" : "none";
 
-    // << MODIFICATO: Mostra la sidebar del PDF dopo il calcolo iniziale.
-    if (pdfSidebar) pdfSidebar.style.display = "flex"; // Mostra la sidebar (che contiene il pulsante Genera PDF)
+    // Mostra la sidebar del PDF dopo il calcolo iniziale.
+    if (pdfSidebar) pdfSidebar.style.display = "flex"; 
 
 
     // --- Store calculated data for PDF generation ---
@@ -155,18 +174,17 @@ document.addEventListener("DOMContentLoaded", () => {
       additionalLocations: additionalLocations,
       noaLicenses: noa,
       noaPrice: noaPrice,
-      defaultMonthlyPrice: defaultMonthlyPrice.toFixed(2), // 372.50 € ad esempio
-      setupFeeOnetime: setupFeeDefault.toFixed(2), // 500.00 € ad esempio
-      setupFeeDisplayed: setupFeeDisplayed.toFixed(2), // 1000.00 € ad esempio (raddoppiato)
-      promoMonthlyPrice: totalMonthlyPrice.toFixed(2), // 298.00 € ad esempio
+      defaultMonthlyPrice: defaultMonthlyPrice.toFixed(2), 
+      setupFeeOnetime: setupFeeDefault.toFixed(2), 
+      setupFeeDisplayed: setupFeeDisplayed.toFixed(2), 
+      promoMonthlyPrice: totalMonthlyPrice.toFixed(2), 
       salesCommission: totalCommission.toFixed(2),
       offerDate: new Date().toLocaleDateString("it-IT"),
-      validUntilDate: "", // Sarà aggiornata dopo il click su checkBtn
+      validUntilDate: "", 
       pdfTemplateUrl: PDF_TEMPLATE_URL,
       preparedFor: preparedForInput ? preparedForInput.value : "",
       preparedBy: preparedByInput ? preparedByInput.value : "",
-      // hasDiscountApplied è inizialmente false. Verrà gestito dalla checkbox ora.
-      hasDiscountApplied: false
+      hasDiscountApplied: false // Inizialmente false, gestito dalla checkbox
     };
     console.log("Dati offerta calcolati e aggiornati:", window.calculatedOfferData);
   });
@@ -174,12 +192,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
   if (checkBtn) {
     checkBtn.addEventListener("click", () => {
-      console.log("Pulsante 'Check Sconti' cliccato. Inizio conto alla rovescia.");
+      console.log("Pulsante 'Check Sconti' cliccato. Inizio conto alla rovescia."); 
       if (loadingSpinner) loadingSpinner.style.display = "block";
       if (countdown) countdown.textContent = "Attendere 15 secondi...";
       let seconds = 15;
 
-      // Disabilita la checkbox durante il countdown per evitare interazioni premature
+      // Disabilita la checkbox durante il countdown
       if (applyDiscountToPdfCheckbox) applyDiscountToPdfCheckbox.disabled = true;
 
       const interval = setInterval(() => {
@@ -189,10 +207,10 @@ document.addEventListener("DOMContentLoaded", () => {
         console.log("Conto alla rovescia: " + seconds + " secondi rimanenti.");
 
         if (seconds <= 0) {
-          console.log("Conto alla rovescia terminato (seconds <= 0). Eseguo blocco finale.");
+          console.log("Conto alla rovescia terminato (seconds <= 0). Eseguo blocco finale."); 
           clearInterval(interval);
           if (loadingSpinner) loadingSpinner.style.display = "none";
-          if (discountPanel) discountPanel.style.display = "block"; // Mostra il pannello sconti
+          if (discountPanel) discountPanel.style.display = "block"; 
           if (calculatorIcon) calculatorIcon.style.display = "block";
           if (discountMessage) {
             discountMessage.textContent = "Sono presenti sconti clicca qui";
@@ -206,20 +224,20 @@ document.addEventListener("DOMContentLoaded", () => {
           if (discountDate) discountDate.textContent = `Valido fino al: ${validUntilDateString}`;
 
           window.calculatedOfferData.validUntilDate = validUntilDateString;
-          // IMPORTANT: hasDiscountApplied NON viene impostato qui. Sarà gestito dalla checkbox.
+          // hasDiscountApplied NON viene impostato qui. Sarà gestito dalla checkbox.
           console.log("Sconto valido fino al:", validUntilDateString);
           
-          // Riabilita la checkbox e la imposta al valore predefinito (es. true, se lo sconto è "disponibile")
+          // Riabilita la checkbox e la imposta a true per default
           if (applyDiscountToPdfCheckbox) {
             applyDiscountToPdfCheckbox.disabled = false;
-            applyDiscountToPdfCheckbox.checked = true; // Potresti volerla pre-selezionata dopo il check sconti
-            // Trigger l'evento change per aggiornare subito window.calculatedOfferData.hasDiscountApplied
+            applyDiscountToPdfCheckbox.checked = true; // Pre-seleziona la checkbox
+            // Trigger l'evento change per aggiornare window.calculatedOfferData.hasDiscountApplied
             applyDiscountToPdfCheckbox.dispatchEvent(new Event('change')); 
           }
 
           if (viewerBox) viewerBox.style.display = "flex";
           updateViewerCount();
-          setInterval(updateViewerCount, 20000); // Aggiorna i visualizzatori ogni 20 secondi
+          setInterval(updateViewerCount, 20000); 
 
         }
       }, 1000);
@@ -228,14 +246,14 @@ document.addEventListener("DOMContentLoaded", () => {
     console.warn("Elemento 'check-btn' non trovato nell'HTML. L'event listener non verrà collegato.");
   }
 
-  // NUOVO: Listener per la checkbox per aggiornare hasDiscountApplied
+  // Listener per la checkbox per aggiornare hasDiscountApplied
   if (applyDiscountToPdfCheckbox) {
     applyDiscountToPdfCheckbox.addEventListener('change', () => {
       window.calculatedOfferData.hasDiscountApplied = applyDiscountToPdfCheckbox.checked;
       console.log("Checkbox 'Includi sconto nel PDF' cambiata. hasDiscountApplied:", window.calculatedOfferData.hasDiscountApplied);
     });
-    // Inizialmente la checkbox potrebbe essere invisibile, ma il suo stato iniziale dovrebbe essere false
-    window.calculatedOfferData.hasDiscountApplied = applyDiscountToPdfCheckbox.checked; // Sincronizza lo stato iniziale
+    // Sincronizza lo stato iniziale del flag con lo stato della checkbox all'avvio
+    window.calculatedOfferData.hasDiscountApplied = applyDiscountToPdfCheckbox.checked; 
   } else {
     console.warn("Elemento 'apply-discount-to-pdf' non trovato nell'HTML. La logica dello sconto nel PDF potrebbe non funzionare correttamente.");
   }
@@ -315,74 +333,4 @@ document.addEventListener("DOMContentLoaded", () => {
           console.log("Campo 'Data_offerta' compilato con:", window.calculatedOfferData.offerDate);
         } catch (e) { console.warn("Campo PDF 'Data_offerta' non trovato o errore:", e); }
 
-        // Field: "Nome struttura (pagina 2)" (Nome_struttura1)
-        // Corrisponde all'input HTML 'prepared-for'
-        try {
-          form.getTextField('Nome_struttura1').setText(window.calculatedOfferData.preparedFor || '');
-          console.log("Campo 'Nome_struttura1' compilato con:", window.calculatedOfferData.preparedFor);
-        } catch (e) { console.warn("Campo PDF 'Nome_struttura1' non trovato o errore:", e); }
-
-        // Field: "Data scadenza offerta" (Scadenza_offerta)
-        try {
-          form.getTextField('Scadenza_offerta').setText(window.calculatedOfferData.validUntilDate || '');
-          console.log("Campo 'Scadenza_offerta' compilato con:", window.calculatedOfferData.validUntilDate);
-        } catch (e) { console.warn("Campo PDF 'Scadenza_offerta' non trovato o errore:", e); }
-
-        // Field: "Nome venditore (pagina 2)" (Nome_sale1)
-        // Corrisponde all'input HTML 'prepared-by'
-        try {
-          form.getTextField('Nome_sale1').setText(window.calculatedOfferData.preparedBy || '');
-          console.log("Campo 'Nome_sale1' compilato con:", window.calculatedOfferData.preparedBy);
-        } catch (e) { console.warn("Campo PDF 'Nome_sale1' non trovato o errore:", e); }
-
-        // Field: "Numero ambulatori inseriti" (numero_ambulatori)
-        // Corrisponde all'input HTML 'rooms'
-        try {
-          form.getTextField('numero_ambulatori').setText(String(window.calculatedOfferData.rooms || '0'));
-          console.log("Campo 'numero_ambulatori' compilato con:", window.calculatedOfferData.rooms);
-        } catch (e) { console.warn("Campo PDF 'numero_ambulatori' non trovato o errore:", e); }
-
-        // Field: "Capoluogo / Non capoluogo" (Cpl)
-        try {
-          const cplText = window.calculatedOfferData.cpl === 17 ? 'Capoluogo' : 'No Capoluogo';
-          form.getTextField('Cpl').setText(cplText);
-          console.log("Campo 'Cpl' compilato con:", cplText);
-        } catch (e) { console.warn("Campo PDF 'Cpl' non trovato o errore:", e); }
-
-        // Field: "Canone mensile predefinito (pagina 1)" (Quota_mensile_default)
-        try {
-          form.getTextField('Quota_mensile_default').setText(window.calculatedOfferData.defaultMonthlyPrice + ' €' || '0 €');
-          console.log("Campo 'Quota_mensile_default' compilato con:", window.calculatedOfferData.defaultMonthlyPrice);
-        } catch (e) { console.warn("Campo PDF 'Quota_mensile_default' non trovato o errore:", e); }
-
-
-        // Field: "Totale (canone + setup)" (Quota_scontata)
-        // Questo campo viene compilato con il riepilogo dello sconto SOLO SE la checkbox è spuntata.
-        try {
-          if (window.calculatedOfferData.hasDiscountApplied) {
-            const prezzoOriginale = window.calculatedOfferData.defaultMonthlyPrice;
-            const prezzoScontato = window.calculatedOfferData.promoMonthlyPrice;
-            const setupOriginale = window.calculatedOfferData.setupFeeDisplayed; 
-            const setupScontato = window.calculatedOfferData.setupFeeOnetime; 
-
-            // Creiamo la stringa esattamente come mostrato nell'immagine
-            const riepilogoScontoString =
-              `Prezzo Originale: ${prezzoOriginale} €\n` +
-              `Setup Fee: ${setupOriginale} €\n\n` + // Doppio a capo per spaziatura, come nello screenshot
-              `Prezzo Scontato: ${prezzoScontato} €\n` +
-              `Setup Scontato: ${setupScontato} €`;
-
-            form.getTextField('Quota_scontata').setText(riepilogoScontoString);
-            console.log("Campo 'Quota_scontata' compilato con riepilogo sconto:", riepilogoScontoString);
-          } else {
-            form.getTextField('Quota_scontata').setText(''); // Svuota il campo
-            console.log("Campo 'Quota_scontata' lasciato vuoto perché la checkbox sconto non è spuntata.");
-          }
-        } catch (e) { console.warn("Campo PDF 'Quota_scontata' non trovato o errore:", e); }
-
-        // Field: "Canone mensile scontato (se applicabile)" (Quota_mensile_scontata)
-        // Questo deve essere sempre il promoMonthlyPrice (prezzo scontato dopo il calcolo).
-        try {
-          form.getTextField('Quota_mensile_scontata').setText(window.calculatedOfferData.promoMonthlyPrice + ' €' || '0 €');
-          console.log("Campo 'Quota_mensile_scontata' compilato con:", window.calculatedOfferData.promoMonthlyPrice);
-        } catch (e)
+        // Field: "Nome struttura (pagina 2)" (Nome_struttura1
