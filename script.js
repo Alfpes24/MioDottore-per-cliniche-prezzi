@@ -1,4 +1,4 @@
-// script.js aggiornato — mantiene struttura precedente ma adotta logica calcoli da script (3).js
+// script.js aggiornato — con calcoli da script (3).js e generazione PDF
 
 let preventivoData = {};
 
