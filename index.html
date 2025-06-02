@@ -5,9 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Prezzi per Cliniche | MioDottore</title>
   <link rel="stylesheet" href="style.css" />
+  <script src="https://unpkg.com/pdf-lib/dist/pdf-lib.min.js"></script>
 </head>
 <body>
   <script>
+    // Access control logic
     const refOk = document.referrer.includes("alfpes24.github.io") || window.opener;
     const accesso = localStorage.getItem("accessoMioDottore") === "ok";
 
@@ -15,7 +17,7 @@
       document.write("<h2 style='color:red;text-align:center;'>Accesso non autorizzato</h2>");
       setTimeout(() => location.replace("https://alfpes24.github.io/"), 1500);
     }
-    // Se l'accesso è valido, non facciamo nulla qui, script.js sarà caricato alla fine del body.
+    // If access is valid, script.js will be loaded at the end of the body.
   </script>
 
   <main class="layout">
@@ -39,8 +41,14 @@
     <section class="form-section">
       <h2>Calcola il canone per la struttura</h2>
       <form id="calculator-form">
-        <div class="form-group"><label for="rooms">N° Ambulatori</label><input type="number" id="rooms" min="1" required /></div>
-        <div class="form-group"><label for="doctors">N° Dottori</label><input type="number" id="doctors" min="0" required /></div>
+        <div class="form-group">
+          <label for="rooms">N° Ambulatori</label>
+          <input type="number" id="rooms" min="1" value="1" required />
+        </div>
+        <div class="form-group">
+          <label for="doctors">N° Dottori</label>
+          <input type="number" id="doctors" min="0" value="0" required />
+        </div>
         <div class="form-group">
           <label for="cpl">Sede della clinica</label>
           <select id="cpl" required>
@@ -48,8 +56,14 @@
             <option value="13">No Capoluogo (13 €)</option>
           </select>
         </div>
-        <div class="form-group"><label for="additional-locations">Sedi aggiuntive</label><input type="number" id="additional-locations" min="0" required /></div>
-        <div class="form-group"><label for="noa">N° licenze NOA</label><input type="number" id="noa" min="0" required /></div>
+        <div class="form-group">
+          <label for="additional-locations">Sedi aggiuntive</label>
+          <input type="number" id="additional-locations" min="0" value="0" required />
+        </div>
+        <div class="form-group">
+          <label for="noa">N° licenze NOA</label>
+          <input type="number" id="noa" min="0" value="0" required />
+        </div>
         <div class="form-group">
           <label for="noa-price">Prezzo NOA</label>
           <select id="noa-price" required>
@@ -57,12 +71,27 @@
             <option value="39">39 €</option>
           </select>
         </div>
+        <div class="form-group">
+          <label for="prepared-for">Preparata per:</label>
+          <input type="text" id="prepared-for" placeholder="Nome Cliente / Clinica" />
+        </div>
+        <div class="form-group">
+          <label for="prepared-by">Redatta da:</label>
+          <input type="text" id="prepared-by" placeholder="Nome Commerciale" />
+        </div>
+
         <button type="button" id="calculate-btn">Calcola</button>
       </form>
 
       <div id="results" class="results" style="display:none;">
-        <div class="result-group"><label>Canone Mensile Predefinito</label><span id="default-monthly-price">0 €</span></div>
-        <div class="result-group"><label>Setup Fee (una tantum)</label><span id="setup-fee">0 €</span></div>
+        <div class="result-group">
+          <label>Canone Mensile Predefinito</label>
+          <span id="default-monthly-price">0 €</span>
+        </div>
+        <div class="result-group">
+          <label>Setup Fee (una tantum)</label>
+          <span id="setup-fee">0 €</span>
+        </div>
 
         <div class="result-group" id="check-section">
           <div class="check-buttons">
@@ -76,7 +105,9 @@
           </div>
         </div>
 
-        <div class="result-group"><span id="discount-message" class="blinking" style="display:none;"></span></div>
+        <div class="result-group">
+          <span id="discount-message" class="blinking" style="display:none;"></span>
+        </div>
       </div>
 
       <div id="discount-panel" class="discount-panel" style="display:none;">
