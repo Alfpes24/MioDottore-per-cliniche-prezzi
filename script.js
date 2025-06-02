@@ -1,4 +1,4 @@
-// script.js aggiornato con riepilogo sconti nel campo PDF 'Quota_scontata'
+// script.js aggiornato: campo "Quota_scontata" viene compilato solo se sono presenti sconti
 
 let preventivoData = {};
 
@@ -8,6 +8,7 @@ window.addEventListener("DOMContentLoaded", () => {
   const popup = document.getElementById("popup-overlay");
   const confirmPopup = document.getElementById("confirm-popup");
   const cancelPopup = document.getElementById("cancel-popup");
+  let scontoAttivo = false;
 
   calculateBtn.addEventListener("click", () => {
     const rooms = parseInt(document.getElementById("rooms").value) || 0;
@@ -41,12 +42,21 @@ window.addEventListener("DOMContentLoaded", () => {
       ambulatori: rooms,
       capoluogo: cpl === 17 ? "Capoluogo" : "No Capoluogo",
       setupFeeDefault,
-      totalMonthlyPrice
+      setupFeeDisplayed,
+      totalMonthlyPrice,
+      monthlyPrice,
+      noaTotalPrice,
+      locationsCost,
+      scontoAttivo: false
     };
 
     document.getElementById("default-monthly-price").textContent = preventivoData.defaultMonthly;
     document.getElementById("setup-fee").textContent = preventivoData.setupFee;
     document.getElementById("results").style.display = "block";
+
+    if (noa >= 1) {
+      preventivoData.scontoAttivo = true;
+    }
   });
 
   pdfBtn.addEventListener("click", () => {
@@ -78,10 +88,18 @@ async function generaPDF(datiPopup) {
   const scadenza = new Date(today.getTime() + 10 * 24 * 60 * 60 * 1000);
   const formatDate = (d) => d.toLocaleDateString("it-IT");
 
-  const riepilogoSconto = `Canone CRM: ${preventivoData.totalMonthlyPrice.toFixed(2)} €\n` +
-                          `Sconto NOA incluso\n` +
-                          `Setup scontato: ${preventivoData.setupFeeDefault} €\n` +
-                          `Totale scontato: ${(preventivoData.totalMonthlyPrice + preventivoData.setupFeeDefault).toFixed(2)} €`;
+  let riepilogoSconto = "";
+  if (preventivoData.scontoAttivo) {
+    riepilogoSconto =
+      `Prezzo Originale CRM: ${(preventivoData.monthlyPrice * 1.25).toFixed(2)} €\n` +
+      `Prezzo CRM Scontato: ${preventivoData.monthlyPrice.toFixed(2)} €\n` +
+      `Setup Originale: ${preventivoData.setupFeeDisplayed.toFixed(2)} €\n` +
+      `Setup Scontato: ${preventivoData.setupFeeDefault.toFixed(2)} €\n` +
+      `Visibilità inclusa\n` +
+      `Licenze NOA: ${preventivoData.noaTotalPrice.toFixed(2)} €\n` +
+      `Totale Mensile Scontato: ${preventivoData.totalMonthlyPrice.toFixed(2)} €\n` +
+      `Totale Complessivo: ${(preventivoData.totalMonthlyPrice + preventivoData.setupFeeDefault).toFixed(2)} €`;
+  }
 
   form.getTextField("nome_struttura").setText(datiPopup.struttura);
   form.getTextField("Nome_struttura1").setText(datiPopup.struttura);
@@ -94,8 +112,11 @@ async function generaPDF(datiPopup) {
   form.getTextField("Scadenza_offerta").setText(formatDate(scadenza));
   form.getTextField("Quota_mensile_default").setText(preventivoData.defaultMonthly);
   form.getTextField("Quota_mensile_default_2").setText(preventivoData.defaultMonthly);
-  form.getTextField("Quota_scontata").setText(riepilogoSconto);
-  form.getTextField("Quota_mensile_scontata").setText(preventivoData.defaultMonthly);
+  form.getTextField("Quota_mensile_scontata").setText(preventivoData.totalMonthlyPrice.toFixed(2) + " €");
+
+  if (preventivoData.scontoAttivo) {
+    form.getTextField("Quota_scontata").setText(riepilogoSconto);
+  }
 
   const pdfBytes = await pdfDoc.save();
   const blob = new Blob([pdfBytes], { type: "application/pdf" });
