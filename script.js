@@ -1,11 +1,7 @@
-// script.js - Generazione preventivo PDF con pdf-lib
-
-// Includi pdf-lib nel tuo HTML:
-// <script src="https://unpkg.com/pdf-lib/dist/pdf-lib.min.js"></script>
+// script.js - Gestione preventivo PDF compilabile per MioDottore
 
 let preventivoData = {};
 
-// Bottone calcola
 const calculateBtn = document.getElementById("calculate-btn");
 calculateBtn.addEventListener("click", () => {
   const rooms = +document.getElementById("rooms").value;
@@ -31,7 +27,6 @@ calculateBtn.addEventListener("click", () => {
   document.getElementById("results").style.display = "block";
 });
 
-// Mostra popup per dati aggiuntivi
 const popup = document.getElementById("popup-overlay");
 const confirmPopup = document.getElementById("confirm-popup");
 const cancelPopup = document.getElementById("cancel-popup");
@@ -55,10 +50,10 @@ confirmPopup.addEventListener("click", async () => {
   await generaPDF({ struttura, indirizzo, referente, venditore });
 });
 
-// Genera PDF con pdf-lib
 async function generaPDF(datiPopup) {
-  const formUrl = "/template/Modello%20preventivo%20crm%20digitale.pdf"; // Cambia percorso se necessario
+  const formUrl = "/template/Modello%20preventivo%20crm%20digitale.pdf";
   const formBytes = await fetch(formUrl).then(res => res.arrayBuffer());
+
   const pdfDoc = await PDFLib.PDFDocument.load(formBytes);
   const form = pdfDoc.getForm();
 
@@ -67,7 +62,6 @@ async function generaPDF(datiPopup) {
 
   const formatDate = (d) => d.toLocaleDateString("it-IT");
 
-  // Compila i campi del modulo PDF
   form.getTextField("nome_struttura").setText(datiPopup.struttura);
   form.getTextField("Nome_struttura1").setText(datiPopup.struttura);
   form.getTextField("Nome_referente").setText(datiPopup.referente);
@@ -83,7 +77,6 @@ async function generaPDF(datiPopup) {
   form.getTextField("Quota_mensile_scontata").setText(preventivoData.defaultMonthly);
 
   const pdfBytes = await pdfDoc.save();
-
   const blob = new Blob([pdfBytes], { type: "application/pdf" });
   const link = document.createElement("a");
   link.href = URL.createObjectURL(blob);
