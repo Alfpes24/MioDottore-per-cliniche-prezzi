@@ -5,6 +5,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const calculateBtn = document.getElementById("calculate-btn");
   const checkBtn = document.getElementById("check-btn");
   const procediBtn = document.querySelector(".btn-procedi");
+  // Recupera il pulsante e la sidebar
   const generatePdfBtn = document.getElementById("generate-pdf-btn");
   const pdfSidebar = document.getElementById("pdf-sidebar");
 
@@ -142,7 +143,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // << MODIFICATO: Mostra la sidebar del PDF dopo il calcolo iniziale.
     // Il pulsante Genera PDF Preventivo è ora all'interno di pdfSidebar, quindi la sua visibilità dipende da pdfSidebar.
-    if (pdfSidebar) pdfSidebar.style.display = "flex";
+    if (pdfSidebar) pdfSidebar.style.display = "flex"; // Mostra la sidebar (che contiene il pulsante Genera PDF)
 
 
     // --- Store calculated data for PDF generation ---
@@ -168,7 +169,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
 
-  if (checkBtn) { // << IMPORTANT: checkBtn must be found for this listener to attach
+  if (checkBtn) {
     checkBtn.addEventListener("click", () => {
       console.log("Pulsante 'Check Sconti' cliccato."); // Questo dovrebbe apparire nella console al click
       if (loadingSpinner) loadingSpinner.style.display = "block";
@@ -204,7 +205,7 @@ document.addEventListener("DOMContentLoaded", () => {
           setInterval(updateViewerCount, 20000);
 
           // La sidebar del PDF (che contiene il pulsante Genera PDF) rimane visibile come già impostato dopo il "Calcola".
-          // Non è necessario modificarne la visibilità qui.
+          // Non è necessario cambiarne la visibilità qui.
         }
       }, 1000);
     });
@@ -224,7 +225,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
   // --- PDF Generation Logic ---
-  if (generatePdfBtn) { // << IMPORTANT: generatePdfBtn must be found for this listener to attach
+  if (generatePdfBtn) {
     generatePdfBtn.addEventListener("click", async () => {
       console.log("Pulsante 'Genera PDF' cliccato.");
 
@@ -234,7 +235,6 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
       }
 
-      // Check if PDFLib is available
       if (typeof PDFLib === 'undefined' || !PDFLib.PDFDocument) {
           alert("Errore: La libreria PDF non è stata caricata correttamente. Assicurati che <script src='https://unpkg.com/pdf-lib/dist/pdf-lib.min.js'></script> sia nel tuo HTML, prima del tuo script.js.");
           console.error("PDFLib non è definito. Assicurati che lo script CDN di pdf-lib sia caricato.");
@@ -350,7 +350,7 @@ document.addEventListener("DOMContentLoaded", () => {
         try {
           form.getTextField('Quota_mensile_scontata').setText(window.calculatedOfferData.promoMonthlyPrice + ' €' || '0 €');
           console.log("Campo 'Quota_mensile_scontata' compilato con:", window.calculatedOfferData.promoMonthlyPrice);
-        } catch (e) { console.warn("PDF Field 'Quota_mensile_scontata' non trovato o errore:", e); }
+        } catch (e) { console.warn("Campo PDF 'Quota_mensile_scontata' non trovato o errore:", e); }
 
 
         // Flatten the form fields to make them part of the document content
