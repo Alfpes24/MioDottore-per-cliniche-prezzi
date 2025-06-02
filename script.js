@@ -5,7 +5,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const calculateBtn = document.getElementById("calculate-btn");
   const checkBtn = document.getElementById("check-btn");
   const procediBtn = document.querySelector(".btn-procedi");
-  // Recupera il pulsante e la sidebar
   const generatePdfBtn = document.getElementById("generate-pdf-btn");
   const pdfSidebar = document.getElementById("pdf-sidebar");
 
@@ -337,8 +336,18 @@ document.addEventListener("DOMContentLoaded", () => {
         // Se hasDiscountApplied è falso, il campo deve rimanere vuoto.
         try {
           if (window.calculatedOfferData.hasDiscountApplied) {
+            // Calcola l'importo dello sconto totale (es. differenza tra setup raddoppiata e base)
+            // L'ammontare dello sconto sul pannello web è 500.00€ se la setup fee è 500, o la differenza fra default e promo.
+            // Data la richiesta "riportasse solo il valore degli sconti", calcoliamo lo sconto effettivo.
+            // Se "Quota_scontata" è il beneficio dello sconto sulla setup, questo è setupFeeDisplayed - setupFeeDefault.
+            // Se è lo sconto totale sul canone mensile + setup, è (defaultMonthlyPrice + setupFeeDisplayed) - (promoMonthlyPrice + setupFeeDefault).
+            // Dalle tue indicazioni, il "500" è la setup fee, che viene "scontata" dal prezzo raddoppiato a quello base.
+            // Quindi, lo sconto effettivo sulla setup è setupFeeDisplayed - setupFeeDefault.
+            // Oppure, se "Quota_scontata" deve essere il valore della setup fee (non raddoppiata) come da ultima lista,
+            // e come indicato dalla tua immagine del "500.00 €", allora è semplicemente window.calculatedOfferData.setupFeeOnetime.
+            // Manteniamo la logica di compilare con setupFeeOnetime se lo sconto è applicato, come nella tua ultima lista.
             form.getTextField('Quota_scontata').setText(window.calculatedOfferData.setupFeeOnetime + ' €' || '0 €');
-            console.log("Campo 'Quota_scontata' (Totale/Setup) compilato perché sconto applicato:", window.calculatedOfferData.setupFeeOnetime);
+            console.log("Campo 'Quota_scontata' (Totale/Setup - valore scontato) compilato perché sconto applicato:", window.calculatedOfferData.setupFeeOnetime);
           } else {
             form.getTextField('Quota_scontata').setText(''); // Svuota il campo
             console.log("Campo 'Quota_scontata' (Totale/Setup) lasciato vuoto perché nessun sconto applicato.");
