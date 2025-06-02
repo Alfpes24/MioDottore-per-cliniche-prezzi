@@ -5,8 +5,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const calculateBtn = document.getElementById("calculate-btn");
   const checkBtn = document.getElementById("check-btn");
   const procediBtn = document.querySelector(".btn-procedi");
-  // Assicurati che generatePdfBtn sia recuperato DOPO che il suo HTML è stato spostato
-  const generatePdfBtn = document.getElementById("generate-pdf-btn");
+  const generatePdfBtn = document.getElementById("generate-pdf-btn"); // Recupearted here
 
   const defaultMonthlyPriceField = document.getElementById("default-monthly-price");
   const setupFeeField = document.getElementById("setup-fee");
@@ -124,8 +123,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       if (procediBtn) procediBtn.style.display = "inline-block";
       if (checkBtn) checkBtn.style.display = noa >= 1 ? "inline-block" : "none";
-      // Il pulsante Genera PDF Preventivo viene gestito dalla logica di 'checkBtn'
-      // o dal pannello sconti, quindi lo nascondiamo qui inizialmente se non è già gestito altrove
+      // Il pulsante Genera PDF Preventivo deve essere nascosto qui, poiché apparirà solo DOPO il Check Sconti nel discount-panel.
       if (generatePdfBtn) generatePdfBtn.style.display = "none";
 
 
@@ -190,13 +188,10 @@ document.addEventListener("DOMContentLoaded", () => {
           updateViewerCount();
           setInterval(updateViewerCount, 20000);
 
-          // << MODIFICATO: Rende il pulsante Genera PDF visibile qui, dentro il pannello sconti
+          // << MODIFICATO: Rende il pulsante Genera PDF visibile QUI, quando il pannello sconti appare.
+          // Dato che è già posizionato nell'HTML dentro il discount-panel, questa è la logica corretta.
           if (generatePdfBtn) {
               generatePdfBtn.style.display = "inline-block";
-              // Se vuoi che sia visibile in entrambi i posti contemporaneamente, devi clonarlo o riposizionarlo con CSS.
-              // Dato che l'abbiamo spostato in HTML dentro discount-panel, sarà visibile solo quando discountPanel è visibile.
-              // Se vuoi che sia visibile SEMPRE dopo Calcola, e ANCHE in discountPanel, dovremmo avere due pulsanti HTML.
-              // Per la tua richiesta "dovrebbe apparire anche su questo pannello", questo è il comportamento corretto.
           }
         }
       }, 1000);
@@ -269,7 +264,7 @@ document.addEventListener("DOMContentLoaded", () => {
         // Corrisponde all'input HTML 'prepared-by'
         try {
           form.getTextField('Nome_sale').setText(window.calculatedOfferData.preparedBy || '');
-          console.log("Campo 'Nome_sale' compilato con:", window.calculatedOfferata.preparedBy);
+          console.log("Campo 'Nome_sale' compilato con:", window.calculatedOfferData.preparedBy);
         } catch (e) { console.warn("Campo PDF 'Nome_sale' non trovato o errore:", e); }
 
         // Field: "Data generazione del preventivo" (Data_offerta)
@@ -303,84 +298,4 @@ document.addEventListener("DOMContentLoaded", () => {
         try {
           form.getTextField('numero_ambulatori').setText(String(window.calculatedOfferData.rooms || '0'));
           console.log("Campo 'numero_ambulatori' compilato con:", window.calculatedOfferData.rooms);
-        } catch (e) { console.warn("Campo PDF 'numero_ambulatori' non trovato o errore:", e); }
-
-        // Field: "Capoluogo / Non capoluogo" (Cpl)
-        try {
-          const cplText = window.calculatedOfferData.cpl === 17 ? 'Capoluogo' : 'No Capoluogo';
-          form.getTextField('Cpl').setText(cplText);
-          console.log("Campo 'Cpl' compilato con:", cplText);
-        } catch (e) { console.warn("Campo PDF 'Cpl' non trovato o errore:", e); }
-
-        // Field: "Canone mensile predefinito (pagina 1)" (Quota_mensile_default)
-        try {
-          form.getTextField('Quota_mensile_default').setText(window.calculatedOfferData.defaultMonthlyPrice + ' €' || '0 €');
-          console.log("Campo 'Quota_mensile_default' compilato con:", window.calculatedOfferData.defaultMonthlyPrice);
-        } catch (e) { console.warn("Campo PDF 'Quota_mensile_default' non trovato o errore:", e); }
-
-        // Field: "Canone mensile predefinito (pagina 2)" (Quota_mensile_default_2)
-        try {
-          form.getTextField('Quota_mensile_default_2').setText(window.calculatedOfferData.defaultMonthlyPrice + ' €' || '0 €');
-          console.log("Campo 'Quota_mensile_default_2' compilato con:", window.calculatedOfferData.defaultMonthlyPrice);
-        } catch (e) { console.warn("Campo PDF 'Quota_mensile_default_2' non trovato o errore:", e); }
-
-        // Field: "Totale (canone + setup)" (Quota_scontata)
-        // Questo campo deve essere compilato SOLO SE hasDiscountApplied è TRUE.
-        // Se hasDiscountApplied è falso, il campo deve rimanere vuoto.
-        try {
-          if (window.calculatedOfferData.hasDiscountApplied) {
-            form.getTextField('Quota_scontata').setText(window.calculatedOfferData.setupFeeOnetime + ' €' || '0 €');
-            console.log("Campo 'Quota_scontata' (Totale/Setup) compilato perché sconto applicato:", window.calculatedOfferData.setupFeeOnetime);
-          } else {
-            form.getTextField('Quota_scontata').setText(''); // Svuota il campo
-            console.log("Campo 'Quota_scontata' (Totale/Setup) lasciato vuoto perché nessun sconto applicato.");
-          }
-        } catch (e) { console.warn("Campo PDF 'Quota_scontata' non trovato o errore:", e); }
-
-        // Field: "Canone mensile scontato (se applicabile)" (Quota_mensile_scontata)
-        // Questo deve essere sempre il promoMonthlyPrice (prezzo scontato dopo il calcolo).
-        try {
-          form.getTextField('Quota_mensile_scontata').setText(window.calculatedOfferData.promoMonthlyPrice + ' €' || '0 €');
-          console.log("Campo 'Quota_mensile_scontata' compilato con:", window.calculatedOfferData.promoMonthlyPrice);
-        } catch (e) { console.warn("Campo PDF 'Quota_mensile_scontata' non trovato o errore:", e); }
-
-
-        // Flatten the form fields to make them part of the document content
-        form.flatten();
-        console.log("Campi del modulo PDF appiattiti.");
-
-        // Save the modified PDF
-        const pdfBytes = await pdfDoc.save();
-        console.log("PDF salvato in byte.");
-
-        // Create a Blob from the PDF bytes and create a download link
-        const blob = new Blob([pdfBytes], { type: 'application/pdf' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        const clientNameForFilename = (window.calculatedOfferData.preparedFor || 'Clinica').replace(/\s/g, '_').replace(/[^\w-]/g, '');
-        const dateForFilename = new Date().toLocaleDateString('it-IT').replace(/\//g, '-');
-        a.download = `Preventivo_MioDottore_${clientNameForFilename}_${dateForFilename}.pdf`;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
-        console.log("Download PDF avviato.");
-
-      } catch (error) {
-        console.error("Errore durante la generazione del PDF:", error);
-        alert("Si è verificato un errore durante la generazione del PDF. Controlla la console per i dettagli.");
-      }
-    });
-  } else {
-    console.warn("Elemento 'generate-pdf-btn' non trovato. La generazione PDF non funzionerà.");
-  }
-
-
-  // --- Helper Functions ---
-  function updateViewerCount() {
-    const randomViewers = Math.floor(Math.random() * 5) + 1;
-    if (viewerCountSpan) viewerCountSpan.textContent = randomViewers;
-    console.log("Numero di visualizzatori aggiornato a:", randomViewers);
-  }
-});
+        } catch
