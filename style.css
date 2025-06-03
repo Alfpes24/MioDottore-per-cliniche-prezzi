@@ -420,12 +420,6 @@ button:hover {
   .form-section {
     padding: 30px 20px;
   }
-
-  /* Questo blocco era vuoto, rimosso se non ha scopo specifico */
-  /* .check-buttons {
-    flex-direction: column;
-    align-items: stretch;
-  } */
 }
 
 
@@ -472,4 +466,3 @@ button:hover {
   justify-content: flex-end;
   gap: 10px;
 }
-/* La parentesi graffa in eccesso è stata rimossa da qui */
