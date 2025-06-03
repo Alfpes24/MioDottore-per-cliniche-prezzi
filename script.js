@@ -43,143 +43,125 @@ document.addEventListener("DOMContentLoaded", () => {
   // Oggetto globale per conservare i dati calcolati e passati al PDF
   window.calculatedOfferData = {};
 
-  // Funzione per calcolare i prezzi
-  const calculatePrices = () => {
+  // Funzione per aggiornare il conteggio dei visualizzatori (rimasta come prima)
+  function updateViewerCount() {
+    const randomViewers = Math.floor(Math.random() * 5) + 1;
+    viewerCountSpan.textContent = randomViewers;
+  }
+
+  // Event Listener per l'icona della calcolatrice (rimasta come prima)
+  calculatorIcon.addEventListener("click", () => {
+    ctrPanel.style.display = ctrPanel.style.display === "none" ? "block" : "none";
+  });
+
+  // Logica di calcolo dei prezzi (aggiornata con il codice fornito dall'utente)
+  calculateBtn.addEventListener("click", () => {
     const rooms = parseInt(roomsInput.value) || 0;
     const doctors = parseInt(doctorsInput.value) || 0;
     const cpl = parseInt(cplSelect.value) || 0;
     const additionalLocations = parseInt(additionalLocationsInput.value) || 0;
-    const noaLicenses = parseInt(noaInput.value) || 0;
+    const noa = parseInt(noaInput.value) || 0;
     const noaPrice = parseInt(noaPriceSelect.value) || 0;
 
-    // Logica di calcolo (basata su ipotesi, da adattare alle tue regole)
-    const baseMonthlyPrice = (rooms * 50) + (doctors * 30); // Esempio
-    const cplCost = cpl * rooms; // Esempio
-    const additionalLocationsCost = additionalLocations * 20; // Esempio
-    const noaTotalCost = noaLicenses * noaPrice;
+    const setupFeeTable = [500, 500, 500, 500, 500, 600, 600, 750, 750, 750, 1000];
+    const pricePerRoomTable = [269, 170, 153, 117, 96, 88, 80, 75, 72, 67, 62];
+    const index = rooms >= 11 ? 10 : Math.max(rooms - 1, 0);
 
-    const defaultMonthly = baseMonthlyPrice + cplCost + additionalLocationsCost + noaTotalCost;
-    const setupFee = 250; // Esempio di setup fee fissa o calcolata
+    const setupFeeDefault = setupFeeTable[index];
+    const setupFeeDisplayed = setupFeeDefault * 2; // Questo è il valore che appare inizialmente nel modulo
 
-    // Inizializza i dati per l'offerta
+    const monthlyPrice = pricePerRoomTable[index] * rooms;
+    const locationsCost = additionalLocations * 99;
+    const noaTotalPrice = noa * noaPrice;
+
+    const totalMonthlyPrice = monthlyPrice + locationsCost + noaTotalPrice;
+    const defaultMonthlyPrice = totalMonthlyPrice * 1.25; // Prezzo con markup del 25%
+
+    const commissionCpl = doctors * (cpl === 17 ? 8 : 6);
+    const totalCommission = monthlyPrice + commissionCpl + locationsCost + noaTotalPrice + setupFeeDefault / 12;
+
+    // Aggiorna gli elementi della UI
+    setupFeeSpan.textContent = setupFeeDisplayed.toFixed(2) + " €";
+    defaultMonthlyPriceSpan.textContent = defaultMonthlyPrice.toFixed(2) + " €";
+    salesCommissionsSpan.textContent = totalCommission.toFixed(2) + " €";
+
+    // Imposta i valori nell'oggetto globale per la generazione PDF
     window.calculatedOfferData = {
-      defaultMonthlyPrice: defaultMonthly,
-      setupFeeDisplayed: setupFee,
-      promoMonthlyPrice: defaultMonthly, // Inizialmente uguale al default
-      setupFeeOnetime: setupFee, // Inizialmente uguale al default
-      hasDiscountApplied: false,
-      totalCTRValue: 0, // Esempio, da calcolare se necessario
+      defaultMonthlyPrice: defaultMonthlyPrice,
+      setupFeeDisplayed: setupFeeDisplayed, // Valore setup fee "normale" per il PDF
+      promoMonthlyPrice: totalMonthlyPrice, // Valore "scontato" per il PDF (senza markup)
+      setupFeeOnetime: setupFeeDefault, // Valore setup fee scontato per il PDF
+      hasDiscountApplied: false, // Inizialmente false, verrà impostato da checkBtn
+      totalCTRValue: totalCommission,
     };
 
-    // Mostra i risultati iniziali
-    defaultMonthlyPriceSpan.textContent = `${defaultMonthly} €`;
-    setupFeeSpan.textContent = `${setupFee} €`;
+    // Aggiorna i campi del pannello sconti con i valori "originali" e "scontati"
+    originalMonthlyPriceDel.textContent = defaultMonthlyPrice.toFixed(2) + " €";
+    promoMonthlyPriceSpan.textContent = totalMonthlyPrice.toFixed(2) + " €"; // Questo è il prezzo "scontato"
+    originalSetupFeeDel.textContent = setupFeeDisplayed.toFixed(2) + " €";
+    promoSetupFeeSpan.textContent = setupFeeDefault.toFixed(2) + " €"; // Questo è il setup "scontato"
 
+    // Gestione della visibilità delle sezioni
     resultsSection.style.display = "block";
-    checkBtn.style.display = "inline-block";
-    procediBtn.style.display = "inline-block";
-    discountPanel.style.display = "none"; // Nasconde il pannello sconti finché non vengono "verificati"
+    discountPanel.style.display = "none";
+    calculatorIcon.style.display = "none";
     discountMessageSpan.style.display = "none";
     liveViewersDiv.style.display = "none";
+    ctrPanel.style.display = "none"; // Nasconde il pannello CTR inizialmente
+
+    procediBtn.style.display = "inline-block";
+    // Il pulsante check viene mostrato solo se ci sono licenze NOA
+    checkBtn.style.display = noa >= 1 ? "inline-block" : "none";
     pdfSidebar.style.display = "flex"; // Mostra la sidebar del PDF una volta calcolato
+  });
 
-    // Nasconde il pannello CTR e l'icona della calcolatrice se non pertinenti subito
-    ctrPanel.style.display = "none";
-    calculatorIcon.style.display = "none";
-  };
-
-  // Event Listener per il pulsante "Calcola"
-  calculateBtn.addEventListener("click", calculatePrices);
-
-  // Event Listener per il pulsante "Check Sconti"
+  // Event Listener per il pulsante "Check Sconti" (rimasta come prima)
   checkBtn.addEventListener("click", () => {
-    // Simulazione di un caricamento per la verifica sconti
-    checkBtn.style.display = "none";
-    procediBtn.style.display = "none";
     loadingSpinner.style.display = "block";
-    discountMessageSpan.style.display = "none";
-    discountPanel.style.display = "none";
-    liveViewersDiv.style.display = "none"; // Nascondi anche i viewer durante il check
+    countdownSpan.textContent = "Attendere 15 secondi...";
+    let seconds = 15;
 
-    let countdown = 3; // Simula 3 secondi di attesa
-    countdownSpan.textContent = `Verifica sconti in corso... ${countdown}s`;
+    // Imposta hasDiscountApplied a true se il check viene attivato (si presume che il check sia per lo sconto)
+    window.calculatedOfferData.hasDiscountApplied = true;
 
-    const countdownInterval = setInterval(() => {
-      countdown--;
-      if (countdown > 0) {
-        countdownSpan.textContent = `Verifica sconti in corso... ${countdown}s`;
-      } else {
-        clearInterval(countdownInterval);
+    const interval = setInterval(() => {
+      seconds--;
+      countdownSpan.textContent = `Attendere ${seconds} secondi...`;
+
+      if (seconds <= 0) {
+        clearInterval(interval);
         loadingSpinner.style.display = "none";
-        // Simulazione della logica di sconto
-        const hasDiscount = Math.random() < 0.7; // 70% di possibilità di sconto
+        
+        discountPanel.style.display = "block";
+        calculatorIcon.style.display = "block";
+        discountMessageSpan.textContent = "Sono presenti sconti clicca qui";
+        discountMessageSpan.style.display = "inline-block";
 
-        if (hasDiscount) {
-          const originalMonthly = window.calculatedOfferData.defaultMonthlyPrice;
-          const originalSetup = window.calculatedOfferData.setupFeeDisplayed;
+        const today = new Date();
+        today.setDate(today.getDate() + 10);
+        const validUntilDateString = today.toLocaleDateString("it-IT");
+        discountDateSpan.textContent = `Valido fino al: ${validUntilDateString}`;
+        window.calculatedOfferData.validUntilDate = validUntilDateString; // Imposta la data di scadenza per il PDF
 
-          // Esempio di applicazione sconto: 10% sul mensile, 50% sul setup
-          const promoMonthly = Math.round(originalMonthly * 0.90);
-          const promoSetup = Math.round(originalSetup * 0.50);
+        liveViewersDiv.style.display = "flex";
+        updateViewerCount();
+        setInterval(updateViewerCount, 20000); // Aggiorna il conteggio ogni 20 secondi
 
-          window.calculatedOfferData.promoMonthlyPrice = promoMonthly;
-          window.calculatedOfferData.setupFeeOnetime = promoSetup;
-          window.calculatedOfferData.hasDiscountApplied = true;
-          window.calculatedOfferData.totalCTRValue = promoMonthly * 12 * 0.15; // Esempio CTR: 15% del valore annuale
-
-          discountMessageSpan.textContent = "Congratulazioni! Offerta Speciale Disponibile!";
-          discountMessageSpan.style.display = "block";
-          discountPanel.style.display = "block";
-
-          originalMonthlyPriceDel.textContent = `${originalMonthly} €`;
-          originalSetupFeeDel.textContent = `${originalSetup} €`;
-          promoMonthlyPriceSpan.textContent = `${promoMonthly} €`;
-          promoSetupFeeSpan.textContent = `${promoSetup} €`;
-
-          // Data di scadenza dell'offerta (es. 10 giorni da oggi)
-          const validUntil = new Date(Date.now() + 10 * 24 * 60 * 60 * 1000);
-          const validUntilDateString = validUntil.toLocaleDateString("it-IT");
-          discountDateSpan.textContent = `Offerta valida fino al ${validUntilDateString}`;
-          window.calculatedOfferData.validUntilDate = validUntilDateString;
-
-          // Simula i visualizzatori live
-          const randomViewers = Math.floor(Math.random() * 5) + 1; // Da 1 a 5
-          viewerCountSpan.textContent = randomViewers;
-          liveViewersDiv.style.display = "flex";
-
-          // Mostra l'icona calcolatrice solo se c'è un CTR
-          calculatorIcon.style.display = "block";
-          salesCommissionsSpan.textContent = `${window.calculatedOfferData.totalCTRValue.toFixed(2)} €`;
-
-        } else {
-          discountMessageSpan.textContent = "Nessun sconto disponibile al momento. Riprova più tardi!";
-          discountMessageSpan.style.display = "block";
-          procediBtn.style.display = "inline-block"; // Riabilita il procedi senza sconti
-          calculatorIcon.style.display = "none"; // Nasconde l'icona se non c'è CTR
-        }
-        checkBtn.style.display = "none"; // Nasconde il pulsante check dopo la verifica
+        procediBtn.style.display = "none"; // Nasconde il pulsante "Procedi" quando lo sconto è attivo
+        checkBtn.style.display = "none"; // Nasconde il pulsante "Check Sconti" dopo la verifica
       }
     }, 1000);
   });
 
-  // Event Listener per l'icona della calcolatrice
-  calculatorIcon.addEventListener("click", () => {
-    if (ctrPanel.style.display === "none" || ctrPanel.style.display === "") {
-      ctrPanel.style.display = "block";
-    } else {
-      ctrPanel.style.display = "none";
-    }
+  // Event Listener per il messaggio di sconto (rimasta come prima)
+  discountMessageSpan.addEventListener("click", () => {
+    discountPanel.scrollIntoView({ behavior: "smooth" });
   });
-
 
   // Gestione del popup di generazione PDF
   generatePdfBtn.addEventListener("click", (e) => {
     e.preventDefault();
     popupOverlay.style.display = "flex";
-    // Pre-popola i campi se ci sono dati disponibili (es. da una sessione precedente o valori di default)
-    // popupStructureInput.value = "Clinica Esempio";
-    // popupReferentInput.value = "Dott. Mario Rossi";
-    // popupSalesInput.value = "Giulia Bianchi";
   });
 
   popupCancelBtn.addEventListener("click", () => {
@@ -222,23 +204,27 @@ document.addEventListener("DOMContentLoaded", () => {
       form.getTextField("Nome_sale1").setText(d.nomeSale);
       form.getTextField("Scadenza_offerta").setText(d.validUntilDate);
 
-      // Campi predefiniti o scontati
-      form.getTextField("Quota_mensile_default").setText(`${d.defaultMonthlyPrice || "0"} €`);
+      // Campi per il canone mensile (predefinito o scontato)
+      form.getTextField("Quota_mensile_default").setText(`${d.defaultMonthlyPrice.toFixed(2)} €`);
 
       if (includeDiscount && d.hasDiscountApplied) {
-        form.getTextField("Quota_mensile_scontata").setText(`${d.promoMonthlyPrice || "0"} €`);
-        form.getTextField("Quota_formazione_setup").setText(`${d.setupFeeOnetime} € (scontato)`);
+        form.getTextField("Quota_mensile_scontata").setText(`${d.promoMonthlyPrice.toFixed(2)} €`);
+        form.getTextField("Quota_formazione_setup").setText(`${d.setupFeeOnetime.toFixed(2)} € (scontato)`);
 
         const quotaScontataText =
-          `Prezzo Originale: ~~${d.defaultMonthlyPrice} €~~\n` +
-          `Setup Fee: ~~${d.setupFeeDisplayed} €~~\n\n` +
-          `Prezzo Scontato: ${d.promoMonthlyPrice} €\n` +
-          `Setup Scontato: ${d.setupFeeOnetime} €`;
+          `Prezzo Originale: ~~${d.defaultMonthlyPrice.toFixed(2)} €~~
+` +
+          `Setup Fee: ~~${d.setupFeeDisplayed.toFixed(2)} €~~
+
+` +
+          `Prezzo Scontato: ${d.promoMonthlyPrice.toFixed(2)} €
+` +
+          `Setup Scontato: ${d.setupFeeOnetime.toFixed(2)} €`;
         form.getTextField("Quota_scontata").setText(quotaScontataText);
       } else {
         // Se non si applica lo sconto o non c'è sconto, usa i valori predefiniti
-        form.getTextField("Quota_mensile_scontata").setText(`${d.defaultMonthlyPrice || "0"} €`);
-        form.getTextField("Quota_formazione_setup").setText(`${d.setupFeeDisplayed} €`);
+        form.getTextField("Quota_mensile_scontata").setText(`${d.defaultMonthlyPrice.toFixed(2)} €`);
+        form.getTextField("Quota_formazione_setup").setText(`${d.setupFeeDisplayed.toFixed(2)} €`);
         form.getTextField("Quota_scontata").setText(""); // Svuota il campo di testo dello sconto dettagliato
       }
 
@@ -263,6 +249,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // Inizializza i valori predefiniti nel caso l'utente non clicchi "Calcola" subito
-  calculatePrices();
+  // Eseguire il calcolo iniziale per mostrare i valori di default all'avvio
+  calculateBtn.click(); // Simula un click sul pulsante calcola all'avvio della pagina
 });
