@@ -60,49 +60,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const preparedForInput = document.getElementById("prepared-for");
   const preparedByInput = document.getElementById("prepared-by");
 
-  
-  // Popup Elements
-  const popupOverlay = document.getElementById("pdf-popup");
-  const popupStructureInput = document.getElementById("popup-structure-name");
-  const popupReferentInput = document.getElementById("popup-referent-name");
-  const popupSalesInput = document.getElementById("popup-sales-name");
-  const popupConfirmBtn = document.getElementById("popup-confirm-btn");
-  const popupCancelBtn = document.getElementById("popup-cancel-btn");
-
-  // Mostra popup su click normale
-  generatePdfBtn.addEventListener("click", () => {
-    popupOverlay.style.display = "flex";
-  });
-
-  // Conferma popup → salva dati e triggera evento
-  popupConfirmBtn.addEventListener("click", () => {
-    const struttura = popupStructureInput.value.trim();
-    const referente = popupReferentInput.value.trim();
-    const sale = popupSalesInput.value.trim();
-
-    if (!struttura || !referente || !sale) {
-      alert("Compila tutti i campi prima di continuare.");
-      return;
-    }
-
-    preparedForInput.value = struttura;
-    preparedByInput.value = referente;
-
-    window.calculatedOfferData = window.calculatedOfferData || {};
-    window.calculatedOfferData.preparedFor = struttura;
-    window.calculatedOfferData.preparedBy = referente;
-    window.calculatedOfferData.nomeSale = sale;
-
-    popupOverlay.style.display = "none";
-    generatePdfBtn.dispatchEvent(new Event("click-pdf-confirmed"));
-  });
-
-  // Annulla popup
-  popupCancelBtn.addEventListener("click", () => {
-    popupOverlay.style.display = "none";
-  });
-
-
   // Checkbox per lo sconto nel PDF
   const applyDiscountToPdfCheckbox = document.getElementById("apply-discount-to-pdf");
 
@@ -306,7 +263,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // --- PDF Generation Logic ---
   if (generatePdfBtn) {
-    generatePdfBtn.addEventListener("click-pdf-confirmed", async () => {
+    generatePdfBtn.addEventListener("click", async () => {
       console.log("Pulsante 'Genera PDF' cliccato.");
       console.log("Stato di 'hasDiscountApplied' al click PDF:", window.calculatedOfferData.hasDiscountApplied);
 
