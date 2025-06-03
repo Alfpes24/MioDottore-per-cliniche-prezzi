@@ -1,4 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
+  let pdfData = {};
   const generatePdfBtn = document.getElementById("generate-pdf-btn");
 // Gestione popup per inserimento dati PDF
 const popupOverlay = document.getElementById("pdf-popup");
@@ -151,3 +152,34 @@ if (popupConfirm) {
     viewerCountSpan.textContent = randomViewers;
   }
 });
+
+
+async function generaPDF(data) {
+  const existingPdfBytes = await fetch("Modello-preventivo-crm.pdf").then(res => res.arrayBuffer());
+  const pdfDoc = await PDFLib.PDFDocument.load(existingPdfBytes);
+  const form = pdfDoc.getForm();
+
+  const safe = (val) => (val || "").toString();
+
+  form.getTextField("nome_referente").setText(safe(data.referente));
+  form.getTextField("nome_struttura").setText(safe(data.struttura));
+  form.getTextField("Nome_sale").setText(safe(data.sales));
+  form.getTextField("Quota_mensile_scontata").setText(safe(data.promoMonthly));
+  form.getTextField("Quota_mensile_default").setText(safe(data.defaultMonthly));
+  form.getTextField("Quota_formazione_setup").setText(safe(data.setupFee));
+  form.getTextField("n_licenze_noa").setText(safe(data.noa));
+  form.getTextField("quota_mensile_noa").setText(safe(data.noaPrice));
+  form.getTextField("numero_ambulatori").setText(safe(data.rooms));
+  form.getTextField("Cpl").setText(safe(data.cpl));
+  form.getTextField("Scadenza_offerta").setText(safe(data.validUntil));
+  form.getTextField("Data_offerta").setText(new Date().toLocaleDateString("it-IT"));
+
+  form.flatten();
+
+  const pdfBytes = await pdfDoc.save();
+  const blob = new Blob([pdfBytes], { type: "application/pdf" });
+  const link = document.createElement("a");
+  link.href = URL.createObjectURL(blob);
+  link.download = `Preventivo_${safe(data.struttura)}.pdf`;
+  link.click();
+}
