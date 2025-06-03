@@ -9,7 +9,6 @@
 </head>
 <body>
   <main class="layout" id="main-content">
-    <!-- Sezione promozionale -->
     <section class="promo-section">
       <h1>Il paziente al centro,<br>Noa Notes al tuo fianco</h1>
       <p class="description">
@@ -27,7 +26,6 @@
       </div>
     </section>
 
-    <!-- Sezione form per configurazione -->
     <section class="form-section">
       <h2>Calcola il canone per la struttura</h2>
       <form id="calculator-form">
@@ -64,7 +62,6 @@
         <button type="button" id="calculate-btn">Calcola</button>
       </form>
 
-      <!-- Risultati -->
       <div id="results" class="results" style="display:none;">
         <div class="result-group">
           <label>Canone Mensile Predefinito</label>
@@ -89,7 +86,6 @@
         </div>
       </div>
 
-      <!-- Pannello sconti -->
       <div id="discount-panel" class="discount-panel" style="display:none;">
         <div class="discount-header">Offerta Speciale</div>
         <div class="discount-content">
@@ -116,7 +112,6 @@
         </div>
       </div>
 
-      <!-- Icona e pannello CTR -->
       <div id="calculator-icon" class="calculator-icon" style="display:none;">🧮</div>
       <div id="ctr-panel" class="ctr-panel" style="display:none;">
         <div class="result-group"><label>Total CTR Value</label><span id="sales-commissions">0 €</span></div>
@@ -124,12 +119,10 @@
     </section>
   </main>
 
-  <!-- Sidebar per generazione PDF -->
-  <aside class="sidebar" id="pdf-sidebar">
+  <aside class="sidebar" id="pdf-sidebar" style="display: none;">
     <button id="generate-pdf-btn" class="btn-generate-pdf">Genera PDF Preventivo</button>
   </aside>
 
-  <!-- Popup inserimento dati per PDF -->
   <div id="pdf-popup" class="popup-overlay" style="display: none;">
     <div class="popup-box">
       <h3>Compila i dati prima di generare il PDF</h3>
@@ -137,7 +130,7 @@
       <input type="text" id="popup-structure-name" placeholder="Es. Clinica San Paolo" />
       <label>Nome Referente</label>
       <input type="text" id="popup-referent-name" placeholder="Es. Dott. Rossi" />
-      <label>Nome Sale</label>
+      <label>Nome Sales</label>
       <input type="text" id="popup-sales-name" placeholder="Es. Alfonso" />
       <div class="popup-buttons">
         <button id="popup-confirm-btn">Continua</button>
