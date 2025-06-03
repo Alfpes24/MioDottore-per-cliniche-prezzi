@@ -158,4 +158,3 @@ async function generaPDF(data) {
   const existingPdfBytes = await fetch("Modello-preventivo-crm.pdf").then(res => res.arrayBuffer());
   const pdfDoc = await PDFLib.PDFDocument.load(existingPdfBytes);
   const form = pdfDoc.getForm();
-
