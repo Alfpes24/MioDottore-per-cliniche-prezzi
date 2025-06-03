@@ -62,15 +62,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   
   // Popup Elements
-  // Gestione clic su "Genera PDF"
-  generatePdfBtn.addEventListener("click", () => {
-    if (!window.calculatedOfferData || !window.calculatedOfferData.defaultMonthlyPrice) {
-      alert("Prima calcola il canone con il pulsante CALCOLA.");
-      return;
-    }
-    popupOverlay.style.display = "flex";
-  });
-
   const popupOverlay = document.getElementById("pdf-popup");
   const popupStructureInput = document.getElementById("popup-structure-name");
   const popupReferentInput = document.getElementById("popup-referent-name");
@@ -79,7 +70,9 @@ document.addEventListener("DOMContentLoaded", () => {
   const popupCancelBtn = document.getElementById("popup-cancel-btn");
 
   // Mostra popup su click normale
-  );
+  generatePdfBtn.addEventListener("click", () => {
+    popupOverlay.style.display = "flex";
+  });
 
   // Conferma popup → salva dati e triggera evento
   popupConfirmBtn.addEventListener("click", () => {
