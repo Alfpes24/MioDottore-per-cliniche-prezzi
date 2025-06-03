@@ -1,490 +1,471 @@
-document.addEventListener("DOMContentLoaded", () => {
-  console.log("DOM fully loaded and parsed. Initializing script.");
+:root {
+  --primary: #05c3a5;
+  --primary-hover: #049e87;
+  --secondary: #3b82f6;
+  --secondary-hover: #2563eb;
+  --background: #f9fafa;
+  --surface: #ffffff;
+  --text: #1f2937;
+  --muted: #6b7280;
+  --danger: #dc2626;
+  --radius: 12px;
+  --shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
+  --font: 'Segoe UI', 'Inter', sans-serif;
+}
 
-  // --- Controllo Accesso (Spostato qui per non interferire con il DOM) ---
-  const refOk = document.referrer.includes("alfpes24.github.io") || window.opener;
-  const accesso = localStorage.getItem("accessoMioDottore") === "ok";
-  const mainContent = document.getElementById("main-content"); 
+/* Base reset */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
 
-  if (!accesso || !refOk) {
-    if (mainContent) {
-      mainContent.style.display = "none"; 
-      const unauthorizedMessage = document.createElement("h2");
-      unauthorizedMessage.style.color = "red";
-      unauthorizedMessage.style.textAlign = "center";
-      unauthorizedMessage.textContent = "Accesso non autorizzato";
-      document.body.prepend(unauthorizedMessage); 
-    }
-    setTimeout(() => location.replace("https://alfpes24.github.io/"), 1500);
-    return; 
+body {
+  font-family: var(--font);
+  background-color: var(--background);
+  color: var(--text);
+  line-height: 1.6;
+}
+
+/* Layout container */
+.layout {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 40px;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 20px;
+  position: relative;
+}
+
+/* ===== Promo Section ===== */
+.promo-section {
+  flex: 1 1 480px;
+  background: var(--surface);
+  border-radius: var(--radius);
+  padding: 40px;
+  box-shadow: var(--shadow);
+}
+
+.promo-section h1 {
+  font-size: 28px;
+  margin-bottom: 16px;
+  color: var(--primary);
+}
+
+.promo-section .description {
+  font-size: 16px;
+  color: var(--muted);
+  margin-bottom: 24px;
+}
+
+.promo-btn {
+  display: inline-block;
+  padding: 12px 20px;
+  font-weight: 600;
+  background: var(--secondary);
+  color: white;
+  border-radius: var(--radius);
+  text-decoration: none;
+  transition: background 0.3s ease;
+}
+
+.promo-btn:hover {
+  background: var(--secondary-hover);
+}
+
+.trusted-doctors {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 30px;
+}
+
+.trusted-doctors img {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+  box-shadow: var(--shadow);
+}
+
+/* ===== Form Section ===== */
+.form-section {
+  flex: 1 1 480px;
+  background: var(--surface);
+  border-radius: var(--radius);
+  padding: 40px;
+  box-shadow: var(--shadow);
+}
+
+.form-section h2 {
+  font-size: 24px;
+  margin-bottom: 24px;
+  color: var(--primary);
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 6px;
+  font-size: 15px;
+}
+
+input,
+select {
+  width: 100%;
+  padding: 12px 14px;
+  font-size: 15px;
+  border: 1px solid #d1d5db;
+  border-radius: var(--radius);
+  background-color: #f8fafc;
+  transition: border 0.3s ease;
+}
+
+input:focus,
+select:focus {
+  border-color: var(--primary);
+  background-color: #ecfdf5;
+  outline: none;
+}
+
+/* ===== Buttons ===== */
+button {
+  width: 100%;
+  padding: 14px;
+  font-weight: 600;
+  font-size: 16px;
+  background-color: var(--primary);
+  color: white;
+  border: none;
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: var(--primary-hover);
+}
+
+.btn-check {
+  padding: 10px 18px;
+  font-size: 14px;
+  background-color: #e2e8f0;
+  color: #374151;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.btn-check:hover {
+  background-color: #cbd5e1;
+}
+
+.btn-procedi,
+.lock-price-btn {
+  padding: 10px 18px;
+  background-color: var(--secondary);
+  color: white;
+  font-weight: 600;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: background-color 0.3s ease;
+}
+
+.btn-procedi:hover,
+.lock-price-btn:hover {
+  background-color: var(--secondary-hover);
+}
+
+/* ===== Risultati & Pannelli ===== */
+.results,
+.ctr-panel {
+  margin-top: 30px;
+  padding: 24px;
+  background-color: #f0fdf4;
+  border: 1px solid #ccfbf1;
+  border-radius: var(--radius);
+}
+
+.result-group {
+  margin-bottom: 20px;
+}
+
+.result-group label {
+  font-size: 14px;
+  color: var(--muted);
+}
+
+.result-group span {
+  display: block;
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+/* ===== Pannello Promozionale ===== */
+.discount-panel {
+  margin-top: 30px;
+  padding: 30px;
+  background-color: #fff;
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.discount-header {
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--primary);
+  margin-bottom: 20px;
+}
+
+.discount-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+}
+
+.original-prices,
+.promo-prices {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.original-price-label,
+.promo-price-label {
+  font-size: 16px;
+  color: var(--muted);
+  margin-bottom: 5px;
+}
+
+.original-price del {
+  color: var(--muted);
+  font-size: 18px;
+  margin-right: 8px;
+}
+
+.promo-price {
+  font-size: 28px;
+  color: var(--primary);
+  font-weight: 800;
+  animation: pulse 1.5s infinite;
+}
+
+.promo-setup-fee {
+  font-size: 18px;
+  color: var(--primary);
+  font-weight: 600;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* ===== Countdown & Spinner ===== */
+.spinner {
+  width: 30px;
+  height: 30px;
+  border: 4px solid #e5e7eb;
+  border-top: 4px solid var(--primary);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 10px auto;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+#countdown {
+  text-align: center;
+  font-size: 14px;
+  color: var(--muted);
+  margin-top: 8px;
+}
+
+/* ===== Elementi dinamici ===== */
+.blinking {
+  color: var(--danger);
+  font-weight: bold;
+  animation: blink 1.2s infinite;
+  cursor: pointer;
+}
+
+@keyframes blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
+
+.blinking-date {
+  display: block;
+  font-size: 14px;
+  color: var(--danger);
+  animation: blink 1.5s infinite;
+  margin-top: 5px;
+}
+
+.live-viewers {
+  display: flex;
+  align-items: center;
+  margin-top: 15px;
+  gap: 10px;
+  font-size: 15px;
+}
+
+.live-viewers img {
+  width: 24px;
+  height: 24px;
+}
+
+/* ===== Icona calcolatrice / CTR ===== */
+.calculator-icon {
+  font-size: 24px;
+  text-align: center;
+  cursor: pointer;
+  margin-top: 20px;
+  color: var(--secondary);
+  transition: transform 0.2s ease;
+}
+
+.calculator-icon:hover {
+  transform: scale(1.1);
+  color: var(--secondary-hover);
+}
+
+/* ===== New Sidebar Styles ===== */
+.sidebar {
+  position: fixed;
+  top: 50%;
+  right: 20px;
+  transform: translateY(-50%);
+  background-color: var(--surface);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  z-index: 1000;
+  /* La visibilità iniziale sarà controllata dal JavaScript */
+  display: none; /* Inizialmente nascosta */
+}
+
+.sidebar .btn-generate-pdf {
+  width: auto;
+  padding: 10px 15px;
+  font-size: 14px;
+  background-color: var(--primary);
+  color: white;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: background-color 0.3s ease;
+}
+
+.sidebar .btn-generate-pdf:hover {
+  background-color: var(--primary-hover);
+}
+
+
+/* ===== Responsive ===== */
+@media (max-width: 1250px) {
+  .sidebar {
+    position: relative;
+    top: auto;
+    right: auto;
+    transform: none;
+    margin-top: 20px;
+    width: 100%;
+    order: 3;
+    box-sizing: border-box;
+  }
+  .layout {
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
+@media (max-width: 768px) {
+  .layout {
+    flex-direction: column;
+    gap: 20px;
   }
 
-
-  // --- Get DOM Elements ---
-  const calculateBtn = document.getElementById("calculate-btn");
-  const checkBtn = document.getElementById("check-btn");
-  const procediBtn = document.querySelector(".btn-procedi");
-  const generatePdfBtn = document.getElementById("generate-pdf-btn");
-  const pdfSidebar = document.getElementById("pdf-sidebar");
-
-  const defaultMonthlyPriceField = document.getElementById("default-monthly-price");
-  const setupFeeField = document.getElementById("setup-fee");
-  const resultsBox = document.getElementById("results");
-  const checkSection = document.getElementById("check-section");
-  const discountPanel = document.getElementById("discount-panel");
-  const discountMessage = document.getElementById("discount-message");
-  const discountDate = document.getElementById("discount-date");
-
-  const originalMonthlyPriceField = document.getElementById("original-monthly-price");
-  const promoMonthlyPriceField = document.getElementById("promo-monthly-price");
-  const originalSetupFeeField = document.getElementById("original-setup-fee");
-  const promoSetupFeeField = document.getElementById("promo-setup-fee");
-
-  const salesCommissionsField = document.getElementById("sales-commissions");
-  const calculatorIcon = document.getElementById("calculator-icon");
-  const ctrPanel = document.getElementById("ctr-panel");
-  const loadingSpinner = document.getElementById("loading-spinner");
-  const countdown = document.getElementById("countdown");
-  const viewerBox = document.getElementById("live-viewers");
-  const viewerCountSpan = document.getElementById("viewer-count");
-
-  // Input fields for calculation
-  const roomsInput = document.getElementById("rooms");
-  const doctorsInput = document.getElementById("doctors");
-  const cplSelect = document.getElementById("cpl");
-  const additionalLocationsInput = document.getElementById("additional-locations");
-  const noaInput = document.getElementById("noa");
-  const noaPriceSelect = document.getElementById("noa-price");
-
-  // Input fields for PDF customization
-  const preparedForInput = document.getElementById("prepared-for");
-  const preparedByInput = document.getElementById("prepared-by");
-
-  
-  // Popup Elements
-  // Gestione clic su "Genera PDF"
-  generatePdfBtn.addEventListener("click", () => {
-    if (!window.calculatedOfferData || !window.calculatedOfferData.defaultMonthlyPrice) {
-      alert("Prima calcola il canone con il pulsante CALCOLA.");
-      return;
-    }
-    popupOverlay.style.display = "flex";
-  });
-
-  const popupOverlay = document.getElementById("pdf-popup");
-  const popupStructureInput = document.getElementById("popup-structure-name");
-  const popupReferentInput = document.getElementById("popup-referent-name");
-  const popupSalesInput = document.getElementById("popup-sales-name");
-  const popupConfirmBtn = document.getElementById("popup-confirm-btn");
-  const popupCancelBtn = document.getElementById("popup-cancel-btn");
-
-  // Mostra popup su click normale
-  );
-
-  // Conferma popup → salva dati e triggera evento
-  popupConfirmBtn.addEventListener("click", () => {
-    const struttura = popupStructureInput.value.trim();
-    const referente = popupReferentInput.value.trim();
-    const sale = popupSalesInput.value.trim();
-
-    if (!struttura || !referente || !sale) {
-      alert("Compila tutti i campi prima di continuare.");
-      return;
-    }
-
-    preparedForInput.value = struttura;
-    preparedByInput.value = referente;
-
-    window.calculatedOfferData = window.calculatedOfferData || {};
-    window.calculatedOfferData.preparedFor = struttura;
-    window.calculatedOfferData.preparedBy = referente;
-    window.calculatedOfferData.nomeSale = sale;
-
-    popupOverlay.style.display = "none";
-    generatePdfBtn.dispatchEvent(new Event("click-pdf-confirmed"));
-  });
-
-  // Annulla popup
-  popupCancelBtn.addEventListener("click", () => {
-    popupOverlay.style.display = "none";
-  });
-
-
-  // Checkbox per lo sconto nel PDF
-  const applyDiscountToPdfCheckbox = document.getElementById("apply-discount-to-pdf");
-
-  // Log all critical elements at startup to quickly identify if any are missing
-  console.log("--- Elementi DOM al caricamento (dopo controllo accesso) ---");
-  console.log("calculateBtn:", calculateBtn);
-  console.log("checkBtn:", checkBtn);
-  console.log("generatePdfBtn:", generatePdfBtn);
-  console.log("pdfSidebar:", pdfSidebar);
-  console.log("discountPanel:", discountPanel);
-  console.log("roomsInput:", roomsInput);
-  console.log("preparedForInput:", preparedForInput);
-  console.log("applyDiscountToPdfCheckbox:", applyDiscountToPdfCheckbox); 
-  console.log("--- Fine elementi DOM ---");
-
-  // Critical error check: if calculateBtn is not found, the script cannot proceed meaningfully
-  if (!calculateBtn) {
-    console.error("ERRORE CRITICO: Pulsante 'Calcola' (ID: calculate-btn) non trovato nell'HTML. Si prega di verificare l'ID.");
-    return; 
-  }
-  if (!generatePdfBtn) {
-    console.error("ERRORE CRITICO: Pulsante 'Genera PDF Preventivo' (ID: generate-pdf-btn) non trovato. La generazione PDF non funzionerà.");
-  }
-  if (!pdfSidebar) {
-    console.error("ERRORE CRITICO: Elemento 'Sidebar' (ID: pdf-sidebar) non trovato. La barra laterale non apparirà.");
+  .promo-section,
+  .form-section {
+    padding: 30px 20px;
   }
 
-
-  // Define the PDF template URL
-  const PDF_TEMPLATE_URL = "https://alfpes24.github.io/MioDottore-per-cliniche-prezzi/template/Modello-preventivo-crm.pdf";
-  console.log("PDF Template URL:", PDF_TEMPLATE_URL);
-
-  // Global object to store calculated values for PDF generation
-  window.calculatedOfferData = {};
-
-  // --- Event Listeners ---
-  if (calculatorIcon) {
-    calculatorIcon.addEventListener("click", () => {
-      console.log("Calculator icon clicked.");
-      if (ctrPanel) ctrPanel.style.display = ctrPanel.style.display === "none" ? "block" : "none";
-    });
-  } else {
-    console.warn("Elemento 'calculator-icon' non trovato.");
+  .check-buttons {
+    flex-direction: column;
+    align-items: stretch;
   }
+}
 
 
-  // Main Calculate Button Logic
-  calculateBtn.addEventListener("click", () => {
-    console.log("Pulsante 'Calcola' cliccato. Inizio calcoli."); 
+.popup-overlay {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+}
 
-    // --- Get input values and convert to numbers ---
-    const rooms = parseInt(roomsInput ? roomsInput.value : "0") || 0;
-    const doctors = parseInt(doctorsInput ? doctorsInput.value : "0") || 0;
-    const cpl = parseInt(cplSelect ? cplSelect.value : "0") || 0;
-    const additionalLocations = parseInt(additionalLocationsInput ? additionalLocationsInput.value : "0") || 0;
-    const noa = parseInt(noaInput ? noaInput.value : "0") || 0;
-    const noaPrice = parseInt(noaPriceSelect ? noaPriceSelect.value : "0") || 0;
+.popup-box {
+  background: white;
+  border-radius: var(--radius);
+  padding: 30px;
+  width: 100%;
+  max-width: 400px;
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
 
-    console.log("Valori di input per il calcolo:", { rooms, doctors, cpl, additionalLocations, noa, noaPrice });
+.popup-box h3 {
+  margin-bottom: 8px;
+  color: var(--primary);
+  font-size: 20px;
+}
 
-    // --- Price Tables and Calculations ---
-    const setupFeeTable = [500, 500, 500, 500, 500, 600, 600, 750, 750, 750, 1000];
-    const pricePerRoomTable = [269, 170, 153, 117, 96, 88, 80, 75, 72, 67, 62];
-    const index = rooms >= 11 ? 10 : Math.max(rooms - 1, 0);
+.popup-box input {
+  width: 100%;
+  padding: 10px;
+  border-radius: var(--radius);
+  border: 1px solid #ccc;
+  font-size: 14px;
+}
 
-    const setupFeeDefault = setupFeeTable[index];
-    const setupFeeDisplayed = setupFeeDefault * 2; 
-
-    const monthlyPrice = pricePerRoomTable[index] * rooms;
-    const locationsCost = additionalLocations * 99;
-    const noaTotalPrice = noa * noaPrice;
-
-    const totalMonthlyPrice = monthlyPrice + locationsCost + noaTotalPrice;
-    const defaultMonthlyPrice = totalMonthlyPrice * 1.25;
-
-    const commissionCpl = doctors * (cpl === 17 ? 8 : 6);
-    const totalCommission = monthlyPrice + commissionCpl + locationsCost + noaTotalPrice + setupFeeDefault / 12;
-
-    console.log("Dettagli prezzi calcolati:", { setupFeeDefault, monthlyPrice, totalMonthlyPrice, defaultMonthlyPrice, totalCommission });
-
-    // --- Update Displayed Results ---
-    if (defaultMonthlyPriceField) defaultMonthlyPriceField.textContent = defaultMonthlyPrice.toFixed(2) + " €";
-    if (setupFeeField) setupFeeField.textContent = setupFeeDisplayed.toFixed(2) + " €";
-    if (salesCommissionsField) salesCommissionsField.textContent = totalCommission.toFixed(2) + " €";
-
-    if (originalMonthlyPriceField) originalMonthlyPriceField.textContent = defaultMonthlyPrice.toFixed(2) + " €";
-    if (promoMonthlyPriceField) promoMonthlyPriceField.textContent = totalMonthlyPrice.toFixed(2) + " €";
-    if (originalSetupFeeField) originalSetupFeeField.textContent = setupFeeDefault.toFixed(2) + " €";
-    if (promoSetupFeeField) promoSetupFeeField.textContent = setupFeeDefault.toFixed(2) + " €";
-
-    // --- Toggle Visibility of Sections/Buttons (Stato iniziale dopo il calcolo) ---
-    if (resultsBox) resultsBox.style.display = "block";
-    if (discountPanel) discountPanel.style.display = "none"; 
-    if (calculatorIcon) calculatorIcon.style.display = "none";
-    if (discountMessage) discountMessage.style.display = "none";
-    if (viewerBox) viewerBox.style.display = "none";
-    if (ctrPanel) ctrPanel.style.display = "none";
-
-    if (procediBtn) procediBtn.style.display = "inline-block";
-    if (checkBtn) checkBtn.style.display = noa >= 1 ? "inline-block" : "none";
-
-    if (pdfSidebar) pdfSidebar.style.display = "flex"; 
-
-
-    // --- Store calculated data for PDF generation ---
-    window.calculatedOfferData = {
-      rooms: rooms,
-      doctors: doctors,
-      cpl: cpl, 
-      additionalLocations: additionalLocations,
-      noaLicenses: noa,
-      noaPrice: noaPrice,
-      defaultMonthlyPrice: defaultMonthlyPrice.toFixed(2), 
-      setupFeeOnetime: setupFeeDefault.toFixed(2), 
-      setupFeeDisplayed: setupFeeDisplayed.toFixed(2), 
-      promoMonthlyPrice: totalMonthlyPrice.toFixed(2), 
-      salesCommissions: totalCommission.toFixed(2), 
-      offerDate: new Date().toLocaleDateString("it-IT"),
-      validUntilDate: "", 
-      pdfTemplateUrl: PDF_TEMPLATE_URL,
-      preparedFor: preparedForInput ? preparedForInput.value : "",
-      preparedBy: preparedByInput ? preparedByInput.value : "",
-      hasDiscountApplied: false 
-    };
-    console.log("Dati offerta calcolati e aggiornati:", window.calculatedOfferData);
-  });
-
-
-  if (checkBtn) {
-    checkBtn.addEventListener("click", () => {
-      console.log("Pulsante 'Check Sconti' cliccato. Inizio conto alla rovescia."); 
-      if (loadingSpinner) loadingSpinner.style.display = "block";
-      if (countdown) countdown.textContent = "Attendere 15 secondi...";
-      let seconds = 15;
-
-      if (applyDiscountToPdfCheckbox) applyDiscountToPdfCheckbox.disabled = true;
-
-      const interval = setInterval(() => {
-        seconds--;
-        if (countdown) countdown.textContent = `Attendere ${seconds} secondi...`;
-
-        console.log("Conto alla rovescia: " + seconds + " secondi rimanenti.");
-
-        if (seconds <= 0) {
-          console.log("Conto alla rovescia terminato (seconds <= 0). Eseguo blocco finale."); 
-          clearInterval(interval);
-          if (loadingSpinner) loadingSpinner.style.display = "none";
-          if (discountPanel) discountPanel.style.display = "block"; 
-          if (calculatorIcon) calculatorIcon.style.display = "block";
-          if (discountMessage) {
-            discountMessage.textContent = "Sono presenti sconti clicca qui";
-            discountMessage.style.display = "inline-block";
-          }
-
-          const today = new Date();
-          const validUntil = new Date();
-          validUntil.setDate(today.getDate() + 10);
-          const validUntilDateString = validUntil.toLocaleDateString("it-IT");
-          if (discountDate) discountDate.textContent = `Valido fino al: ${validUntilDateString}`;
-
-          window.calculatedOfferData.validUntilDate = validUntilDateString;
-          console.log("Sconto valido fino al:", validUntilDateString);
-          
-          if (applyDiscountToPdfCheckbox) {
-            applyDiscountToPdfCheckbox.disabled = false;
-            applyDiscountToPdfCheckbox.checked = true; 
-            applyDiscountToPdfCheckbox.dispatchEvent(new Event('change')); 
-          }
-
-          if (viewerBox) viewerBox.style.display = "flex";
-          updateViewerCount();
-          setInterval(updateViewerCount, 20000); 
-
-        }
-      }, 1000);
-    });
-  } else {
-    console.warn("Elemento 'check-btn' non trovato nell'HTML. L'event listener non verrà collegato.");
-  }
-
-  if (applyDiscountToPdfCheckbox) {
-    applyDiscountToPdfCheckbox.addEventListener('change', () => {
-      window.calculatedOfferData.hasDiscountApplied = applyDiscountToPdfCheckbox.checked;
-      console.log("Checkbox 'Includi sconto nel PDF' cambiata. hasDiscountApplied:", window.calculatedOfferData.hasDiscountApplied);
-    });
-    window.calculatedOfferData.hasDiscountApplied = applyDiscountToPdfCheckbox.checked; 
-  } else {
-    console.warn("Elemento 'apply-discount-to-pdf' non trovato nell'HTML. La logica dello sconto nel PDF potrebbe non funzionare correttamente.");
-  }
-
-
-  if (discountMessage) {
-    discountMessage.addEventListener("click", () => {
-      console.log("Messaggio sconto cliccato. Scrolling al pannello sconti.");
-      if (discountPanel) discountPanel.scrollIntoView({ behavior: "smooth" });
-    });
-  } else {
-    console.warn("Elemento 'discount-message' non trovato.");
-  }
-
-
-  // --- PDF Generation Logic ---
-  if (generatePdfBtn) {
-    generatePdfBtn.addEventListener("click-pdf-confirmed", async () => {
-      console.log("Pulsante 'Genera PDF' cliccato.");
-      console.log("Stato di 'hasDiscountApplied' al click PDF:", window.calculatedOfferData.hasDiscountApplied);
-
-
-      if (!window.calculatedOfferData || !window.calculatedOfferData.pdfTemplateUrl) {
-        alert("Si prega di calcolare prima l'offerta.");
-        console.error("Generazione PDF interrotta: dati calcolati o URL template PDF mancanti.");
-        return;
-      }
-
-      if (typeof PDFLib === 'undefined' || !PDFLib.PDFDocument) {
-          alert("Errore: La libreria PDF non è stata caricata correttamente. Assicurati che <script src='https://unpkg.com/pdf-lib/dist/pdf-lib.min.js'></script> sia nel tuo HTML, prima del tuo script.js.");
-          console.error("PDFLib non è definito. Assicurati che lo script CDN di pdf-lib sia caricato.");
-          return;
-      }
-
-      try {
-        console.log("Caricamento template PDF da:", window.calculatedOfferData.pdfTemplateUrl);
-        const existingPdfBytes = await fetch(window.calculatedOfferData.pdfTemplateUrl).then(res => {
-          if (!res.ok) {
-            throw new Error(`Errore HTTP! stato: ${res.status} durante il caricamento del template PDF.`);
-          }
-          return res.arrayBuffer();
-        });
-        const { PDFDocument } = PDFLib;
-
-        const pdfDoc = await PDFDocument.load(existingPdfBytes);
-        console.log("Template PDF caricato con successo.");
-
-        const form = pdfDoc.getForm();
-        console.log("Modulo PDF ottenuto.");
-
-        // --- Popola i campi del PDF usando i nomi CONFERMATI dalla tua ultima lista ---
-
-        // Field: "Nome del referente" (Nome_referente)
-        // Corrisponde all'input HTML 'prepared-by'
-        try {
-          form.getTextField('Nome_referente').setText(window.calculatedOfferData.preparedBy || '');
-          console.log("Campo 'Nome_referente' compilato con:", window.calculatedOfferData.preparedBy);
-        } catch (e) { console.warn("Campo PDF 'Nome_referente' non trovato o errore:", e); }
-
-        // Field: "Nome della struttura (pagina 1)" (nome_struttura)
-        // Corrisponde all'input HTML 'prepared-for'
-        try {
-          form.getTextField('nome_struttura').setText(window.calculatedOfferData.preparedFor || '');
-          console.log("Campo 'nome_struttura' compilato con:", window.calculatedOfferData.preparedFor);
-        } catch (e) { console.warn("Campo PDF 'nome_struttura' non trovato o errore:", e); }
-
-        // Field: "Nome venditore (pagina 1)" (Nome_sale)
-        // Corrisponde all'input HTML 'prepared-by'
-        try {
-          form.getTextField('Nome_sale').setText(window.calculatedOfferData.preparedBy || '');
-          console.log("Campo 'Nome_sale' compilato con:", window.calculatedOfferData.preparedBy);
-        } catch (e) { console.warn("Campo PDF 'Nome_sale' non trovato o errore:", e); }
-
-        // Field: "Data generazione del preventivo" (Data_offerta)
-        try {
-          form.getTextField('Data_offerta').setText(window.calculatedOfferData.offerDate || '');
-          console.log("Campo 'Data_offerta' compilato con:", window.calculatedOfferData.offerDate);
-        } catch (e) { console.warn("Campo PDF 'Data_offerta' non trovato o errore:", e); }
-
-        // Field: "Nome struttura (pagina 2)" (Nome_struttura1)
-        // Corrisponde all'input HTML 'prepared-for'
-        try {
-          form.getTextField('Nome_struttura1').setText(window.calculatedOfferData.preparedFor || '');
-          console.log("Campo 'Nome_struttura1' compilato con:", window.calculatedOfferData.preparedFor);
-        } catch (e) { console.warn("Campo PDF 'Nome_struttura1' non trovato o errore:", e); }
-
-        // Field: "Data scadenza offerta" (Scadenza_offerta)
-        try {
-          form.getTextField('Scadenza_offerta').setText(window.calculatedOfferData.validUntilDate || '');
-          console.log("Campo 'Scadenza_offerta' compilato con:", window.calculatedOfferData.validUntilDate);
-        } catch (e) { console.warn("Campo PDF 'Scadenza_offerta' non trovato o errore:", e); }
-
-        // Field: "Nome venditore (pagina 2)" (Nome_sale1)
-        // Corrisponde all'input HTML 'prepared-by'
-        try {
-          form.getTextField('Nome_sale1').setText(window.calculatedOfferData.preparedBy || '');
-          console.log("Campo 'Nome_sale1' compilato con:", window.calculatedOfferData.preparedBy);
-        } catch (e) { console.warn("Campo PDF 'Nome_sale1' non trovato o errore:", e); }
-
-        // Field: "Numero ambulatori inseriti" (numero_ambulatori)
-        // Corrisponde all'input HTML 'rooms'
-        try {
-          form.getTextField('numero_ambulatori').setText(String(window.calculatedOfferData.rooms || '0'));
-          console.log("Campo 'numero_ambulatori' compilato con:", window.calculatedOfferData.rooms);
-        } catch (e) { console.warn("Campo PDF 'numero_ambulatori' non trovato o errore:", e); }
-
-        // Field: "Capoluogo / Non capoluogo" (Cpl)
-        // Inseriamo la tariffa in Euro
-        try {
-          const cplTariffa = window.calculatedOfferData.cpl === 17 ? '17 €' : '13 €';
-          form.getTextField('Cpl').setText(cplTariffa);
-          console.log("Campo 'Cpl' compilato con tariffa:", cplTariffa);
-        } catch (e) { console.warn("Campo PDF 'Cpl' non trovato o errore:", e); }
-
-        // Field: "Canone mensile predefinito (pagina 1)" (Quota_mensile_default)
-        try {
-          form.getTextField('Quota_mensile_default').setText(window.calculatedOfferData.defaultMonthlyPrice + ' €' || '0 €');
-          console.log("Campo 'Quota_mensile_default' compilato con:", window.calculatedOfferData.defaultMonthlyPrice);
-        } catch (e) { console.warn("Campo PDF 'Quota_mensile_default' non trovato o errore:", e); }
-
-
-        // Field: "Totale (canone + setup)" (Quota_scontata)
-        // Questo campo viene compilato con il riepilogo dello sconto SOLO SE la checkbox è spuntata.
-        try {
-          if (window.calculatedOfferData.hasDiscountApplied) {
-            const prezzoOriginale = window.calculatedOfferData.defaultMonthlyPrice;
-            const prezzoScontato = window.calculatedOfferData.promoMonthlyPrice;
-            const setupOriginale = window.calculatedOfferData.setupFeeDisplayed; 
-            const setupScontato = window.calculatedOfferData.setupFeeOnetime; 
-
-            // Creiamo la stringa esattamente come mostrato nell'immagine
-            const riepilogoScontoString =
-              `Prezzo Originale: ${prezzoOriginale} €\n` +
-              `Setup Fee: ${setupOriginale} €\n\n` + 
-              `Prezzo Scontato: ${prezzoScontato} €\n` +
-              `Setup Scontato: ${setupScontato} €`;
-
-            form.getTextField('Quota_scontata').setText(riepilogoScontoString);
-            console.log("Campo 'Quota_scontata' compilato con riepilogo sconto:", riepilogoScontoString);
-          } else {
-            form.getTextField('Quota_scontata').setText(''); // Svuota il campo
-            console.log("Campo 'Quota_scontata' lasciato vuoto perché la checkbox sconto non è spuntata.");
-          }
-        } catch (e) { console.warn("Campo PDF 'Quota_scontata' non trovato o errore:", e); }
-
-        // Field: "Canone mensile scontato (se applicabile)" (Quota_mensile_scontata)
-        // Questo deve essere sempre il promoMonthlyPrice (prezzo scontato dopo il calcolo).
-        try {
-          form.getTextField('Quota_mensile_scontata').setText(window.calculatedOfferData.promoMonthlyPrice + ' €' || '0 €');
-          console.log("Campo 'Quota_mensile_scontata' compilato con:", window.calculatedOfferData.promoMonthlyPrice);
-        } catch (e) { console.warn("Campo PDF 'Quota_mensile_scontata' non trovato o errore:", e); }
-
-
-        // Flatten the form fields to make them part of the document content
-        form.flatten();
-        console.log("Campi del modulo PDF appiattiti.");
-
-        // Save the modified PDF
-        const pdfBytes = await pdfDoc.save();
-        console.log("PDF salvato in byte.");
-
-        // Create a Blob from the PDF bytes and create a download link
-        const blob = new Blob([pdfBytes], { type: 'application/pdf' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        const clientNameForFilename = (window.calculatedOfferData.preparedFor || 'Clinica').replace(/\s/g, '_').replace(/[^\w-]/g, '');
-        const dateForFilename = new Date().toLocaleDateString('it-IT').replace(/\//g, '-');
-        a.download = `Preventivo_MioDottore_${clientNameForFilename}_${dateForFilename}.pdf`;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
-        console.log("Download PDF avviato.");
-
-      } catch (error) {
-        console.error("Errore durante la generazione del PDF:", error);
-        alert("Si è verificato un errore durante la generazione del PDF. Controlla la console per i dettagli.");
-      }
-    });
-  } else {
-    console.warn("Elemento 'generate-pdf-btn' non trovato. La generazione PDF non funzionerà.");
-  }
-
-
-  // --- Helper Functions ---
-  function updateViewerCount() {
-    const randomViewers = Math.floor(Math.random() * 5) + 1;
-    if (viewerCountSpan) viewerCountSpan.textContent = randomViewers;
-    console.log("Numero di visualizzatori aggiornato a:", randomViewers);
-  }
-});
+.popup-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
