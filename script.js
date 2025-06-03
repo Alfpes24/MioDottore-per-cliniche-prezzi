@@ -212,13 +212,9 @@ document.addEventListener("DOMContentLoaded", () => {
         form.getTextField("Quota_formazione_setup").setText(`${d.setupFeeOnetime.toFixed(2)} € (scontato)`);
 
         const quotaScontataText =
-          `Prezzo Originale: ~~${d.defaultMonthlyPrice.toFixed(2)} €~~
-` +
-          `Setup Fee: ~~${d.setupFeeDisplayed.toFixed(2)} €~~
-
-` +
-          `Prezzo Scontato: ${d.promoMonthlyPrice.toFixed(2)} €
-` +
+          `Prezzo Originale: ~~${d.defaultMonthlyPrice.toFixed(2)} €~~\n` +
+          `Setup Fee: ~~${d.setupFeeDisplayed.toFixed(2)} €~~\n\n` +
+          `Prezzo Scontato: ${d.promoMonthlyPrice.toFixed(2)} €\n` +
           `Setup Scontato: ${d.setupFeeOnetime.toFixed(2)} €`;
         form.getTextField("Quota_scontata").setText(quotaScontataText);
       } else {
