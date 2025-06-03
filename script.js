@@ -86,7 +86,7 @@ if (popupConfirm) {
     const noaTotalPrice = noa * noaPrice;
 
     const totalMonthlyPrice = monthlyPrice + locationsCost + noaTotalPrice;
-    const defaultMonthlyPrice = totalMonthlyPrice * 1.25;
+    const defaultMonthlyPrice = totalMonthlyPrice * 2;
 
     const commissionCpl = doctors * (cpl === 17 ? 8 : 6);
     const totalCommission = monthlyPrice + commissionCpl + locationsCost + noaTotalPrice + setupFeeDefault / 12;
