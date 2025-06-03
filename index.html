@@ -9,113 +9,83 @@
   <script src="https://unpkg.com/pdf-lib/dist/pdf-lib.min.js"></script>
 </head>
 <body>
-  <div class="layout">
-    <div class="promo-section">
-      <h1>Preventivo CRM per Cliniche</h1>
-      <p class="description">Calcola un'offerta personalizzata per la tua struttura sanitaria in pochi clic.</p>
-      <a class="promo-btn" href="#">Chiedici come funziona</a>
-      <div class="trusted-doctors">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png" alt="Doc">
-        <span>+100 medici già attivi</span>
-      </div>
-      <div class="live-viewers">👀 Utenti collegati: <span id="viewer-count">12</span></div>
-    </div>
-
-    <div class="form-section">
-      <form id="calculator-form">
-        <div class="form-group">
-          <label for="rooms">Numero ambulatori:</label>
-          <input type="number" id="rooms" min="0" />
-        </div>
-        <div class="form-group">
-          <label for="doctors">Numero dottori:</label>
-          <input type="number" id="doctors" min="0" />
-        </div>
-        <div class="form-group">
-          <label for="additional-locations">Numero sedi aggiuntive:</label>
-          <input type="number" id="additional-locations" min="0" />
-        </div>
-        <div class="form-group">
-          <label for="noa">Numero licenze NOA:</label>
-          <input type="number" id="noa" min="0" />
-        </div>
-        <div class="form-group">
-          <label for="noa-price">Prezzo mensile per licenza NOA (€):</label>
-          <input type="number" id="noa-price" min="0" step="0.01" />
-        </div>
-        <div class="form-group">
-          <label for="cpl">Costo per lead (€):</label>
-          <input type="text" id="cpl" />
-        </div>
-        <button type="button" id="calculate-btn">Calcola</button>
-      </form>
-
-      <div class="results" style="display:none;">
-        <h2>Risultati</h2>
-        <div class="result-group">
-          <span>Canone mensile a listino:</span>
-          <strong id="default-monthly-price">-- €</strong>
-        </div>
-        <div class="result-group">
-          <span>Setup fee a listino:</span>
-          <strong id="setup-fee">-- €</strong>
-        </div>
-        <div class="result-group" id="ctr-panel" style="display:none;">
-          <span>CTR totale:</span>
-          <strong id="calculator-icon">-- punti CTR</strong>
-        </div>
-        <button type="button" id="check-btn">Verifica condizioni riservate</button>
-      </div>
-
-      <div id="check-section" style="display:none;">
-        <div id="loading-spinner" class="spinner"></div>
-        <div id="countdown">Attendere 15 secondi...</div>
-      </div>
-
-      <div id="discount-panel" class="discount-panel" style="display:none;">
-        <div class="discount-header">🎁 Sono presenti sconti attivi!</div>
-        <div class="result-group">
-          <span>Prezzo mensile originale:</span>
-          <span id="original-monthly-price">-- €</span>
-        </div>
-        <div class="result-group">
-          <span>Prezzo mensile scontato:</span>
-          <span id="promo-monthly-price">-- €</span>
-        </div>
-        <div class="result-group">
-          <span>Setup fee originale:</span>
-          <span id="original-setup-fee">-- €</span>
-        </div>
-        <div class="result-group">
-          <span>Setup fee scontato:</span>
-          <span id="promo-setup-fee">-- €</span>
-        </div>
-        <div class="result-group">
-          <span>Commissioni vendita:</span>
-          <span id="sales-commissions">-- €</span>
-        </div>
-        <div id="discount-message" class="blinking">Offerta valida fino al <span id="discount-date">--/--/----</span></div>
-      </div>
-
-      <button type="button" id="generate-pdf-btn" class="btn-generate-pdf">Genera PDF Preventivo</button>
-    </div>
+  <div class="header">
+    <h1>Preventivo CRM MioDottore</h1>
+    <p class="subtitle">Simula un’offerta riservata per la tua struttura sanitaria</p>
   </div>
 
-  <div class="popup-overlay" id="pdf-popup" style="display:none;">
+  <div class="live-counter">
+    👀 Utenti collegati ora: <span id="viewer-count">14</span>
+  </div>
+
+  <main class="main-container">
+    <section class="config-form">
+      <h2>Configurazione struttura</h2>
+      <form id="calculator-form">
+        <label>Numero ambulatori:
+          <input type="number" id="rooms" min="0">
+        </label>
+        <label>Numero medici:
+          <input type="number" id="doctors" min="0">
+        </label>
+        <label>Numero sedi aggiuntive:
+          <input type="number" id="additional-locations" min="0">
+        </label>
+        <label>Numero licenze NOA:
+          <input type="number" id="noa" min="0">
+        </label>
+        <label>Prezzo mensile NOA (€):
+          <input type="number" id="noa-price" min="0" step="0.01">
+        </label>
+        <label>Cost per lead (CPL):
+          <input type="text" id="cpl">
+        </label>
+        <button type="button" id="calculate-btn">Calcola</button>
+      </form>
+    </section>
+
+    <section class="results" style="display:none;">
+      <h2>Risultati a listino</h2>
+      <p>Canone mensile a listino: <strong id="default-monthly-price">-- €</strong></p>
+      <p>Setup fee a listino: <strong id="setup-fee">-- €</strong></p>
+      <button id="check-btn">Verifica condizioni riservate</button>
+    </section>
+
+    <section id="check-section" style="display:none;">
+      <div class="loading-spinner"></div>
+      <p id="countdown">Attendere 15 secondi...</p>
+    </section>
+
+    <section id="discount-panel" style="display:none;">
+      <h2 class="blinking">🎁 Sono presenti sconti!</h2>
+      <p>Prezzo mensile originale: <span id="original-monthly-price">-- €</span></p>
+      <p>Prezzo mensile scontato: <span id="promo-monthly-price">-- €</span></p>
+      <p>Setup fee originale: <span id="original-setup-fee">-- €</span></p>
+      <p>Setup fee scontato: <span id="promo-setup-fee">-- €</span></p>
+      <p>Commissioni vendita: <span id="sales-commissions">-- €</span></p>
+      <p id="discount-message">Offerta valida fino al <span id="discount-date">--/--/----</span></p>
+    </section>
+
+    <section id="ctr-panel" style="display:none;">
+      <h2>Valore CTR</h2>
+      <p><span id="calculator-icon">-- punti CTR</span></p>
+    </section>
+
+    <button id="generate-pdf-btn" class="btn-generate-pdf">Genera PDF Preventivo</button>
+  </main>
+
+  <div id="pdf-popup" class="popup-overlay" style="display:none;">
     <div class="popup-box">
-      <h2>Inserisci i tuoi dati</h2>
-      <div class="form-group">
-        <label for="popup-structure-name">Nome Struttura</label>
-        <input type="text" id="popup-structure-name" />
-      </div>
-      <div class="form-group">
-        <label for="popup-referent-name">Referente</label>
-        <input type="text" id="popup-referent-name" />
-      </div>
-      <div class="form-group">
-        <label for="popup-sales-name">Venditore</label>
-        <input type="text" id="popup-sales-name" />
-      </div>
+      <h2>Dati preventivo</h2>
+      <label>Nome struttura:
+        <input type="text" id="popup-structure-name">
+      </label>
+      <label>Referente:
+        <input type="text" id="popup-referent-name">
+      </label>
+      <label>Venditore:
+        <input type="text" id="popup-sales-name">
+      </label>
       <div class="popup-buttons">
         <button id="popup-cancel-btn">Annulla</button>
         <button id="popup-confirm-btn">Continua</button>
