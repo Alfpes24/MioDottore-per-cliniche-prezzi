@@ -1,3 +1,4 @@
+
 :root {
   --primary: #05c3a5;
   --primary-hover: #049e87;
@@ -8,7 +9,7 @@
   --text: #1f2937;
   --muted: #6b7280;
   --radius: 16px;
-  --shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+  --shadow: 0 4px 14px rgba(0, 0, 0, 0.05);
   --font: 'Segoe UI', 'Inter', sans-serif;
 }
 
@@ -27,8 +28,8 @@ body {
 .layout {
   display: flex;
   flex-wrap: wrap;
-  gap: 40px;
   justify-content: center;
+  gap: 40px;
   max-width: 1200px;
   margin: 0 auto;
 }
@@ -44,15 +45,14 @@ body {
 .card h1,
 .card h2 {
   margin-top: 0;
-  margin-bottom: 10px;
   color: var(--primary);
   font-size: 1.6rem;
 }
 
 .card .description {
+  font-size: 0.95rem;
   color: var(--muted);
   margin-bottom: 20px;
-  font-size: 0.95rem;
 }
 
 .promo-btn {
@@ -76,7 +76,7 @@ body {
 .trusted-doctors {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
   margin-top: 20px;
 }
 
@@ -84,15 +84,7 @@ body {
   width: 40px;
   height: 40px;
   border-radius: 50%;
-}
-
-.trusted-doctors p {
-  font-size: 0.9rem;
-  margin: 0;
-}
-
-.trusted-doctors strong {
-  color: var(--text);
+  object-fit: cover;
 }
 
 form label {
@@ -128,6 +120,56 @@ input[type="submit"] {
 
 button:hover {
   background-color: var(--primary-hover);
+}
+
+.btn-generate-pdf {
+  background-color: var(--secondary);
+}
+
+.btn-generate-pdf:hover {
+  background-color: var(--secondary-hover);
+}
+
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.popup-box {
+  background: white;
+  padding: 30px;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  width: 90%;
+  max-width: 500px;
+}
+
+.popup-box label {
+  display: block;
+  margin-bottom: 10px;
+}
+
+.popup-box input {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: var(--radius);
+  margin-bottom: 12px;
+}
+
+.popup-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 20px;
 }
 
 @media (max-width: 768px) {
