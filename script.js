@@ -1,75 +1,122 @@
 document.addEventListener("DOMContentLoaded", () => {
+// Gestione popup per inserimento dati PDF
+const popupOverlay = document.getElementById("pdf-popup");
+const popupStructure = document.getElementById("popup-structure-name");
+const popupReferent = document.getElementById("popup-referent-name");
+const popupSales = document.getElementById("popup-sales-name");
+const popupConfirm = document.getElementById("popup-confirm-btn");
+const popupCancel = document.getElementById("popup-cancel-btn");
+
+if (popupCancel) {
+  popupCancel.addEventListener("click", () => {
+    popupOverlay.style.display = "none";
+  });
+}
+
+if (generatePdfBtn) {
+  generatePdfBtn.addEventListener("click", () => {
+    popupOverlay.style.display = "flex";
+  });
+}
+
+if (popupConfirm) {
+  popupConfirm.addEventListener("click", () => {
+    popupOverlay.style.display = "none";
+    const struttura = popupStructure.value.trim();
+    const referente = popupReferent.value.trim();
+    const sales = popupSales.value.trim();
+
+    // Inietta i valori nei campi PDF
+    if (pdfData) {
+      pdfData.struttura = struttura;
+      pdfData.referente = referente;
+      pdfData.sales = sales;
+    }
+
+    // Prosegui con la generazione del PDF
+    generaPDF(pdfData);
+  });
+}
   const calculateBtn = document.getElementById("calculate-btn");
   const checkBtn = document.getElementById("check-btn");
   const procediBtn = document.querySelector(".btn-procedi");
-  const generatePdfBtn = document.getElementById("generate-pdf-btn");
-  const pdfSidebar = document.getElementById("pdf-sidebar");
+  const defaultMonthlyPriceField = document.getElementById("default-monthly-price");
+  const setupFeeField = document.getElementById("setup-fee");
+  const resultsBox = document.getElementById("results");
+  const checkSection = document.getElementById("check-section");
+  const discountPanel = document.getElementById("discount-panel");
+  const discountMessage = document.getElementById("discount-message");
+  const discountDate = document.getElementById("discount-date");
 
-  const popupOverlay = document.getElementById("pdf-popup");
-  const popupStructure = document.getElementById("popup-structure-name");
-  const popupReferent = document.getElementById("popup-referent-name");
-  const popupSales = document.getElementById("popup-sales-name");
-  const popupConfirm = document.getElementById("popup-confirm-btn");
-  const popupCancel = document.getElementById("popup-cancel-btn");
+  const originalMonthlyPriceField = document.getElementById("original-monthly-price");
+  const promoMonthlyPriceField = document.getElementById("promo-monthly-price");
+  const originalSetupFeeField = document.getElementById("original-setup-fee");
+  const promoSetupFeeField = document.getElementById("promo-setup-fee");
 
-  const applyDiscountToPdfCheckbox = document.getElementById("apply-discount-to-pdf");
+  const salesCommissionsField = document.getElementById("sales-commissions");
+  const calculatorIcon = document.getElementById("calculator-icon");
+  const ctrPanel = document.getElementById("ctr-panel");
+  const loadingSpinner = document.getElementById("loading-spinner");
+  const countdown = document.getElementById("countdown");
+  const viewerBox = document.getElementById("live-viewers");
+  const viewerCountSpan = document.getElementById("viewer-count");
+  const noaInput = document.getElementById("noa");
 
-  let offerData = {};
+  calculatorIcon.addEventListener("click", () => {
+    ctrPanel.style.display = ctrPanel.style.display === "none" ? "block" : "none";
+  });
 
   calculateBtn.addEventListener("click", () => {
     const rooms = parseInt(document.getElementById("rooms").value) || 0;
     const doctors = parseInt(document.getElementById("doctors").value) || 0;
     const cpl = parseInt(document.getElementById("cpl").value) || 0;
-    const locations = parseInt(document.getElementById("additional-locations").value) || 0;
-    const noa = parseInt(document.getElementById("noa").value) || 0;
+    const additionalLocations = parseInt(document.getElementById("additional-locations").value) || 0;
+    const noa = parseInt(noaInput.value) || 0;
     const noaPrice = parseInt(document.getElementById("noa-price").value) || 0;
 
-    const priceTable = [269, 170, 153, 117, 96, 88, 80, 75, 72, 67, 62];
-    const setupTable = [500, 500, 500, 500, 500, 600, 600, 750, 750, 750, 1000];
-    const index = rooms >= 11 ? 10 : rooms;
+    const setupFeeTable = [500, 500, 500, 500, 500, 600, 600, 750, 750, 750, 1000];
+    const pricePerRoomTable = [269, 170, 153, 117, 96, 88, 80, 75, 72, 67, 62];
+    const index = rooms >= 11 ? 10 : Math.max(rooms - 1, 0);
 
-    const pricePerRoom = priceTable[index];
-    const setupFee = setupTable[index];
+    const setupFeeDefault = setupFeeTable[index];
+    const setupFeeDisplayed = setupFeeDefault * 2;
 
-    const baseMonthly = pricePerRoom * rooms + locations * 99 + noa * noaPrice;
-    const fullMonthly = baseMonthly * 1.25;
-    const commission = pricePerRoom * rooms + (cpl === 17 ? 8 : 6) * doctors;
+    const monthlyPrice = pricePerRoomTable[index] * rooms;
+    const locationsCost = additionalLocations * 99;
+    const noaTotalPrice = noa * noaPrice;
 
-    document.getElementById("default-monthly-price").textContent = fullMonthly.toFixed(2) + " €";
-    document.getElementById("setup-fee").textContent = (setupFee * 2).toFixed(2) + " €";
+    const totalMonthlyPrice = monthlyPrice + locationsCost + noaTotalPrice;
+    const defaultMonthlyPrice = totalMonthlyPrice * 1.25;
 
-    document.getElementById("original-monthly-price").textContent = fullMonthly.toFixed(2) + " €";
-    document.getElementById("promo-monthly-price").textContent = baseMonthly.toFixed(2) + " €";
-    document.getElementById("original-setup-fee").textContent = setupFee.toFixed(2) + " €";
-    document.getElementById("promo-setup-fee").textContent = setupFee.toFixed(2) + " €";
-    document.getElementById("sales-commissions").textContent = commission.toFixed(2) + " €";
+    const commissionCpl = doctors * (cpl === 17 ? 8 : 6);
+    const totalCommission = monthlyPrice + commissionCpl + locationsCost + noaTotalPrice + setupFeeDefault / 12;
 
-    document.getElementById("results").style.display = "block";
-    if (noa > 0) checkBtn.style.display = "inline-block";
+    setupFeeField.textContent = setupFeeDisplayed.toFixed(2) + " €";
+
+    defaultMonthlyPriceField.textContent = defaultMonthlyPrice.toFixed(2) + " €";
+    salesCommissionsField.textContent = totalCommission.toFixed(2) + " €";
+
+    // Modified to display the doubled setup fee in the discount panel
+    originalMonthlyPriceField.textContent = defaultMonthlyPrice.toFixed(2) + " €";
+    promoMonthlyPriceField.textContent = totalMonthlyPrice.toFixed(2) + " €";
+    originalSetupFeeField.textContent = setupFeeDisplayed.toFixed(2) + " €"; // Changed this line
+    promoSetupFeeField.textContent = setupFeeDefault.toFixed(2) + " €";
+
+    resultsBox.style.display = "block";
+    discountPanel.style.display = "none";
+    calculatorIcon.style.display = "none";
+    discountMessage.style.display = "none";
+    viewerBox.style.display = "none";
+    ctrPanel.style.display = "none";
+
     procediBtn.style.display = "inline-block";
-    pdfSidebar.style.display = "flex";
-
-    offerData = {
-      rooms,
-      doctors,
-      cpl,
-      locations,
-      noa,
-      noaPrice,
-      baseMonthly,
-      fullMonthly,
-      setupFee,
-      commission,
-      validUntil: "",
-      discount: false
-    };
+    checkBtn.style.display = noa >= 1 ? "inline-block" : "none";
   });
 
   checkBtn.addEventListener("click", () => {
-    let seconds = 15;
-    document.getElementById("loading-spinner").style.display = "block";
-    const countdown = document.getElementById("countdown");
+    loadingSpinner.style.display = "block";
     countdown.textContent = "Attendere 15 secondi...";
+    let seconds = 15;
 
     const interval = setInterval(() => {
       seconds--;
@@ -77,44 +124,29 @@ document.addEventListener("DOMContentLoaded", () => {
 
       if (seconds <= 0) {
         clearInterval(interval);
-        document.getElementById("loading-spinner").style.display = "none";
-        document.getElementById("discount-panel").style.display = "block";
-        document.getElementById("calculator-icon").style.display = "block";
-        document.getElementById("discount-message").textContent = "Sono presenti sconti clicca qui";
-        document.getElementById("discount-message").style.display = "inline-block";
+        loadingSpinner.style.display = "none";
+        discountPanel.style.display = "block";
+        calculatorIcon.style.display = "block";
+        discountMessage.textContent = "Sono presenti sconti clicca qui";
+        discountMessage.style.display = "inline-block";
 
-        const date = new Date();
-        date.setDate(date.getDate() + 10);
-        const scadenza = date.toLocaleDateString("it-IT");
-        document.getElementById("discount-date").textContent = "Valido fino al: " + scadenza;
-        document.getElementById("live-viewers").style.display = "flex";
+        const today = new Date();
+        today.setDate(today.getDate() + 10);
+        discountDate.textContent = `Valido fino al: ${today.toLocaleDateString("it-IT")}`;
 
-        offerData.validUntil = scadenza;
-        offerData.discount = true;
-        applyDiscountToPdfCheckbox.checked = true;
+        viewerBox.style.display = "flex";
+        updateViewerCount();
+        setInterval(updateViewerCount, 20000);
       }
     }, 1000);
   });
 
-  generatePdfBtn.addEventListener("click", () => {
-    popupOverlay.style.display = "flex";
+  discountMessage.addEventListener("click", () => {
+    discountPanel.scrollIntoView({ behavior: "smooth" });
   });
 
-  popupCancel.addEventListener("click", () => {
-    popupOverlay.style.display = "none";
-  });
-
-  popupConfirm.addEventListener("click", () => {
-    offerData.structureName = popupStructure.value;
-    offerData.referentName = popupReferent.value;
-    offerData.salesName = popupSales.value;
-    popupOverlay.style.display = "none";
-
-    const filename = `Preventivo_${offerData.structureName.replace(/\s+/g, "_")}.pdf`;
-    const blob = new Blob([JSON.stringify(offerData, null, 2)], { type: "application/json" });
-    const link = document.createElement("a");
-    link.href = URL.createObjectURL(blob);
-    link.download = filename;
-    link.click();
-  });
+  function updateViewerCount() {
+    const randomViewers = Math.floor(Math.random() * 5) + 1;
+    viewerCountSpan.textContent = randomViewers;
+  }
 });
