@@ -186,7 +186,7 @@ document.addEventListener("DOMContentLoaded", () => {
     d.offerDate = new Date().toLocaleDateString("it-IT");
     // Se validUntilDate non è stata impostata dalla logica degli sconti, impostala di default
     d.validUntilDate = d.validUntilDate || new Date(Date.now() + 10 * 86400000).toLocaleDateString("it-IT");
-    d.pdfTemplateUrl = "Modello-preventivo-crm.pdf";
+    d.pdfTemplateUrl = "https://alfpes24.github.io/MioDottore-per-cliniche-prezzi/template/Modello-preventivo-crm.pdf";
 
     // Controlla lo stato della checkbox per includere lo sconto nel PDF
     const includeDiscount = applyDiscountToPdfCheckbox.checked;
