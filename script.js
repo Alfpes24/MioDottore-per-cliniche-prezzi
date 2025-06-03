@@ -567,7 +567,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // --- PDF Generation Logic ---
   if (generatePdfBtn) {
-    generatePdfBtn.addEventListener("click", async () => {
+    generatePdfBtn.addEventListener("click-pdf-confirmed", async () => {
       console.log("Pulsante 'Genera PDF' cliccato.");
       console.log("Stato di 'hasDiscountApplied' al click PDF:", window.calculatedOfferData.hasDiscountApplied);
 
