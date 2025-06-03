@@ -60,49 +60,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const preparedForInput = document.getElementById("prepared-for");
   const preparedByInput = document.getElementById("prepared-by");
 
-  
-  // Popup Elements
-  const popupOverlay = document.getElementById("pdf-popup");
-  const popupStructureInput = document.getElementById("popup-structure-name");
-  const popupReferentInput = document.getElementById("popup-referent-name");
-  const popupSalesInput = document.getElementById("popup-sales-name");
-  const popupConfirmBtn = document.getElementById("popup-confirm-btn");
-  const popupCancelBtn = document.getElementById("popup-cancel-btn");
-
-  // Mostra popup su click normale
-  generatePdfBtn.addEventListener("click", () => {
-    popupOverlay.style.display = "flex";
-  });
-
-  // Conferma popup → salva dati e triggera evento
-  popupConfirmBtn.addEventListener("click", () => {
-    const struttura = popupStructureInput.value.trim();
-    const referente = popupReferentInput.value.trim();
-    const sale = popupSalesInput.value.trim();
-
-    if (!struttura || !referente || !sale) {
-      alert("Compila tutti i campi prima di continuare.");
-      return;
-    }
-
-    preparedForInput.value = struttura;
-    preparedByInput.value = referente;
-
-    window.calculatedOfferData = window.calculatedOfferData || {};
-    window.calculatedOfferData.preparedFor = struttura;
-    window.calculatedOfferData.preparedBy = referente;
-    window.calculatedOfferData.nomeSale = sale;
-
-    popupOverlay.style.display = "none";
-    generatePdfBtn.dispatchEvent(new Event("click-pdf-confirmed"));
-  });
-
-  // Annulla popup
-  popupCancelBtn.addEventListener("click", () => {
-    popupOverlay.style.display = "none";
-  });
-
-
   // Checkbox per lo sconto nel PDF
   const applyDiscountToPdfCheckbox = document.getElementById("apply-discount-to-pdf");
 
@@ -306,8 +263,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // --- PDF Generation Logic ---
   if (generatePdfBtn) {
-    generatePdfBtn.addEventListener("click-pdf-confirmed", async () => {
-    const d = window.calculatedOfferData;
+    generatePdfBtn.addEventListener("click", async () => {
       console.log("Pulsante 'Genera PDF' cliccato.");
       console.log("Stato di 'hasDiscountApplied' al click PDF:", window.calculatedOfferData.hasDiscountApplied);
 
@@ -444,66 +400,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
         // Flatten the form fields to make them part of the document content
-        
-    form.getTextField("nome_struttura").setText(d.preparedFor || "");
-    form.getTextField("Nome_referente").setText(d.preparedBy || "");
-    form.getTextField("Nome_sale").setText(d.nomeSale || d.preparedBy || "");
-
-    const setupText = d.hasDiscountApplied
-      ? `${d.setupFeeOnetime} € (scontato)`
-      : `${d.setupFeeDisplayed} €`;
-
-    if (form.getTextField("Quota_formazione_setup")) {
-      form.getTextField("Quota_formazione_setup").setText(setupText);
-    }
-
-    if (d.hasDiscountApplied) {
-      const quotaScontataText = `Prezzo Originale: ~~${d.defaultMonthlyPrice} €~~\n` +
-                                `Setup Fee: ~~${d.setupFeeDisplayed} €~~\n\n` +
-                                `Prezzo Scontato: ${d.promoMonthlyPrice} €\n` +
-                                `Setup Scontato: ${d.setupFeeOnetime} €`;
-      form.getTextField("Quota_scontata").setText(quotaScontataText);
-    } else {
-      form.getTextField("Quota_scontata").setText("");
-    }
-
-    const setupText = d.hasDiscountApplied
-      ? `${d.setupFeeOnetime} € (scontato)`
-      : `${d.setupFeeDisplayed} €`;
-
-try {
-  form.getTextField("Quota_formazione_setup").setText(setupText);
-  console.log("Campo 'Quota_formazione_setup' compilato con:", setupText);
-} catch (e) {
-  console.warn("Campo 'Quota_formazione_setup' non trovato o errore:", e);
-}
-
-if (d.hasDiscountApplied) {
-  const quotaScontataText = `Prezzo Originale: ~~${d.defaultMonthlyPrice} €~~
-` +
-                            `Setup Fee: ~~${d.setupFeeDisplayed} €~~
-
-` +
-                            `Prezzo Scontato: ${d.promoMonthlyPrice} €
-` +
-                            `Setup Scontato: ${d.setupFeeOnetime} €`;
-  try {
-    form.getTextField("Quota_scontata").setText(quotaScontataText);
-    console.log("Campo 'Quota_scontata' compilato con riepilogo:", quotaScontataText);
-  } catch (e) {
-    console.warn("Campo 'Quota_scontata' non trovato o errore:", e);
-  }
-} else {
-  try {
-    form.getTextField("Quota_scontata").setText("");
-    console.log("Campo 'Quota_scontata' svuotato (nessuno sconto applicato)");
-  } catch (e) {
-    console.warn("Campo 'Quota_scontata' non trovato o errore:", e);
-  }
-}
-
-form.flatten();
-
+        form.flatten();
         console.log("Campi del modulo PDF appiattiti.");
 
         // Save the modified PDF
