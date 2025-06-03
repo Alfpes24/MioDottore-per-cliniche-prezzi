@@ -100,8 +100,46 @@ document.addEventListener("DOMContentLoaded", () => {
     calculatorIcon.addEventListener("click", () => {
       console.log("Calculator icon clicked.");
       if (ctrPanel) ctrPanel.style.display = ctrPanel.style.display === "none" ? "block" : "none";
-    });
-  } else {
+    
+
+  // --- Gestione del popup "Genera PDF" ---
+  const popupOverlay = document.getElementById("pdf-popup");
+  const popupStructureInput = document.getElementById("popup-structure-name");
+  const popupReferentInput = document.getElementById("popup-referent-name");
+  const popupSalesInput = document.getElementById("popup-sales-name");
+  const popupConfirmBtn = document.getElementById("popup-confirm-btn");
+  const popupCancelBtn = document.getElementById("popup-cancel-btn");
+
+  generatePdfBtn.addEventListener("click", (e) => {
+    e.preventDefault();
+    if (popupOverlay) popupOverlay.style.display = "flex";
+  });
+
+  popupCancelBtn.addEventListener("click", () => {
+    if (popupOverlay) popupOverlay.style.display = "none";
+  });
+
+  popupConfirmBtn.addEventListener("click", () => {
+    const struttura = popupStructureInput.value.trim();
+    const referente = popupReferentInput.value.trim();
+    const sale = popupSalesInput.value.trim();
+
+    if (!struttura || !referente || !sale) {
+      alert("Compila tutti i campi prima di continuare.");
+      return;
+    }
+
+    window.calculatedOfferData.preparedFor = struttura;
+    window.calculatedOfferData.preparedBy = referente;
+    window.calculatedOfferData.nomeSale = sale;
+
+    popupOverlay.style.display = "none";
+
+    // Trigger download PDF
+    generatePdfBtn.dispatchEvent(new Event("click-pdf-confirmed"));
+  });
+
+});  } else {
     console.warn("Elemento 'calculator-icon' non trovato.");
   }
 
@@ -118,8 +156,46 @@ document.addEventListener("DOMContentLoaded", () => {
     const noa = parseInt(noaInput ? noaInput.value : "0") || 0;
     const noaPrice = parseInt(noaPriceSelect ? noaPriceSelect.value : "0") || 0;
 
-    console.log("Valori di input per il calcolo:", { rooms, doctors, cpl, additionalLocations, noa, noaPrice });
+    console.log("Valori di input per il calcolo:", { rooms, doctors, cpl, additionalLocations, noa, noaPrice 
 
+  // --- Gestione del popup "Genera PDF" ---
+  const popupOverlay = document.getElementById("pdf-popup");
+  const popupStructureInput = document.getElementById("popup-structure-name");
+  const popupReferentInput = document.getElementById("popup-referent-name");
+  const popupSalesInput = document.getElementById("popup-sales-name");
+  const popupConfirmBtn = document.getElementById("popup-confirm-btn");
+  const popupCancelBtn = document.getElementById("popup-cancel-btn");
+
+  generatePdfBtn.addEventListener("click", (e) => {
+    e.preventDefault();
+    if (popupOverlay) popupOverlay.style.display = "flex";
+  });
+
+  popupCancelBtn.addEventListener("click", () => {
+    if (popupOverlay) popupOverlay.style.display = "none";
+  });
+
+  popupConfirmBtn.addEventListener("click", () => {
+    const struttura = popupStructureInput.value.trim();
+    const referente = popupReferentInput.value.trim();
+    const sale = popupSalesInput.value.trim();
+
+    if (!struttura || !referente || !sale) {
+      alert("Compila tutti i campi prima di continuare.");
+      return;
+    }
+
+    window.calculatedOfferData.preparedFor = struttura;
+    window.calculatedOfferData.preparedBy = referente;
+    window.calculatedOfferData.nomeSale = sale;
+
+    popupOverlay.style.display = "none";
+
+    // Trigger download PDF
+    generatePdfBtn.dispatchEvent(new Event("click-pdf-confirmed"));
+  });
+
+});
     // --- Price Tables and Calculations ---
     const setupFeeTable = [500, 500, 500, 500, 500, 600, 600, 750, 750, 750, 1000];
     const pricePerRoomTable = [269, 170, 153, 117, 96, 88, 80, 75, 72, 67, 62];
@@ -133,13 +209,51 @@ document.addEventListener("DOMContentLoaded", () => {
     const noaTotalPrice = noa * noaPrice;
 
     const totalMonthlyPrice = monthlyPrice + locationsCost + noaTotalPrice;
-    const defaultMonthlyPrice = totalMonthlyPrice * 2;
+    const defaultMonthlyPrice = totalMonthlyPrice * 1.25;
 
     const commissionCpl = doctors * (cpl === 17 ? 8 : 6);
     const totalCommission = monthlyPrice + commissionCpl + locationsCost + noaTotalPrice + setupFeeDefault / 12;
 
-    console.log("Dettagli prezzi calcolati:", { setupFeeDefault, monthlyPrice, totalMonthlyPrice, defaultMonthlyPrice, totalCommission });
+    console.log("Dettagli prezzi calcolati:", { setupFeeDefault, monthlyPrice, totalMonthlyPrice, defaultMonthlyPrice, totalCommission 
 
+  // --- Gestione del popup "Genera PDF" ---
+  const popupOverlay = document.getElementById("pdf-popup");
+  const popupStructureInput = document.getElementById("popup-structure-name");
+  const popupReferentInput = document.getElementById("popup-referent-name");
+  const popupSalesInput = document.getElementById("popup-sales-name");
+  const popupConfirmBtn = document.getElementById("popup-confirm-btn");
+  const popupCancelBtn = document.getElementById("popup-cancel-btn");
+
+  generatePdfBtn.addEventListener("click", (e) => {
+    e.preventDefault();
+    if (popupOverlay) popupOverlay.style.display = "flex";
+  });
+
+  popupCancelBtn.addEventListener("click", () => {
+    if (popupOverlay) popupOverlay.style.display = "none";
+  });
+
+  popupConfirmBtn.addEventListener("click", () => {
+    const struttura = popupStructureInput.value.trim();
+    const referente = popupReferentInput.value.trim();
+    const sale = popupSalesInput.value.trim();
+
+    if (!struttura || !referente || !sale) {
+      alert("Compila tutti i campi prima di continuare.");
+      return;
+    }
+
+    window.calculatedOfferData.preparedFor = struttura;
+    window.calculatedOfferData.preparedBy = referente;
+    window.calculatedOfferData.nomeSale = sale;
+
+    popupOverlay.style.display = "none";
+
+    // Trigger download PDF
+    generatePdfBtn.dispatchEvent(new Event("click-pdf-confirmed"));
+  });
+
+});
     // --- Update Displayed Results ---
     if (defaultMonthlyPriceField) defaultMonthlyPriceField.textContent = defaultMonthlyPrice.toFixed(2) + " €";
     if (setupFeeField) setupFeeField.textContent = setupFeeDisplayed.toFixed(2) + " €";
@@ -185,8 +299,46 @@ document.addEventListener("DOMContentLoaded", () => {
       hasDiscountApplied: false 
     };
     console.log("Dati offerta calcolati e aggiornati:", window.calculatedOfferData);
+  
+
+  // --- Gestione del popup "Genera PDF" ---
+  const popupOverlay = document.getElementById("pdf-popup");
+  const popupStructureInput = document.getElementById("popup-structure-name");
+  const popupReferentInput = document.getElementById("popup-referent-name");
+  const popupSalesInput = document.getElementById("popup-sales-name");
+  const popupConfirmBtn = document.getElementById("popup-confirm-btn");
+  const popupCancelBtn = document.getElementById("popup-cancel-btn");
+
+  generatePdfBtn.addEventListener("click", (e) => {
+    e.preventDefault();
+    if (popupOverlay) popupOverlay.style.display = "flex";
   });
 
+  popupCancelBtn.addEventListener("click", () => {
+    if (popupOverlay) popupOverlay.style.display = "none";
+  });
+
+  popupConfirmBtn.addEventListener("click", () => {
+    const struttura = popupStructureInput.value.trim();
+    const referente = popupReferentInput.value.trim();
+    const sale = popupSalesInput.value.trim();
+
+    if (!struttura || !referente || !sale) {
+      alert("Compila tutti i campi prima di continuare.");
+      return;
+    }
+
+    window.calculatedOfferData.preparedFor = struttura;
+    window.calculatedOfferData.preparedBy = referente;
+    window.calculatedOfferData.nomeSale = sale;
+
+    popupOverlay.style.display = "none";
+
+    // Trigger download PDF
+    generatePdfBtn.dispatchEvent(new Event("click-pdf-confirmed"));
+  });
+
+});
 
   if (checkBtn) {
     checkBtn.addEventListener("click", () => {
@@ -235,8 +387,46 @@ document.addEventListener("DOMContentLoaded", () => {
 
         }
       }, 1000);
-    });
-  } else {
+    
+
+  // --- Gestione del popup "Genera PDF" ---
+  const popupOverlay = document.getElementById("pdf-popup");
+  const popupStructureInput = document.getElementById("popup-structure-name");
+  const popupReferentInput = document.getElementById("popup-referent-name");
+  const popupSalesInput = document.getElementById("popup-sales-name");
+  const popupConfirmBtn = document.getElementById("popup-confirm-btn");
+  const popupCancelBtn = document.getElementById("popup-cancel-btn");
+
+  generatePdfBtn.addEventListener("click", (e) => {
+    e.preventDefault();
+    if (popupOverlay) popupOverlay.style.display = "flex";
+  });
+
+  popupCancelBtn.addEventListener("click", () => {
+    if (popupOverlay) popupOverlay.style.display = "none";
+  });
+
+  popupConfirmBtn.addEventListener("click", () => {
+    const struttura = popupStructureInput.value.trim();
+    const referente = popupReferentInput.value.trim();
+    const sale = popupSalesInput.value.trim();
+
+    if (!struttura || !referente || !sale) {
+      alert("Compila tutti i campi prima di continuare.");
+      return;
+    }
+
+    window.calculatedOfferData.preparedFor = struttura;
+    window.calculatedOfferData.preparedBy = referente;
+    window.calculatedOfferData.nomeSale = sale;
+
+    popupOverlay.style.display = "none";
+
+    // Trigger download PDF
+    generatePdfBtn.dispatchEvent(new Event("click-pdf-confirmed"));
+  });
+
+});  } else {
     console.warn("Elemento 'check-btn' non trovato nell'HTML. L'event listener non verrà collegato.");
   }
 
@@ -244,8 +434,46 @@ document.addEventListener("DOMContentLoaded", () => {
     applyDiscountToPdfCheckbox.addEventListener('change', () => {
       window.calculatedOfferData.hasDiscountApplied = applyDiscountToPdfCheckbox.checked;
       console.log("Checkbox 'Includi sconto nel PDF' cambiata. hasDiscountApplied:", window.calculatedOfferData.hasDiscountApplied);
-    });
-    window.calculatedOfferData.hasDiscountApplied = applyDiscountToPdfCheckbox.checked; 
+    
+
+  // --- Gestione del popup "Genera PDF" ---
+  const popupOverlay = document.getElementById("pdf-popup");
+  const popupStructureInput = document.getElementById("popup-structure-name");
+  const popupReferentInput = document.getElementById("popup-referent-name");
+  const popupSalesInput = document.getElementById("popup-sales-name");
+  const popupConfirmBtn = document.getElementById("popup-confirm-btn");
+  const popupCancelBtn = document.getElementById("popup-cancel-btn");
+
+  generatePdfBtn.addEventListener("click", (e) => {
+    e.preventDefault();
+    if (popupOverlay) popupOverlay.style.display = "flex";
+  });
+
+  popupCancelBtn.addEventListener("click", () => {
+    if (popupOverlay) popupOverlay.style.display = "none";
+  });
+
+  popupConfirmBtn.addEventListener("click", () => {
+    const struttura = popupStructureInput.value.trim();
+    const referente = popupReferentInput.value.trim();
+    const sale = popupSalesInput.value.trim();
+
+    if (!struttura || !referente || !sale) {
+      alert("Compila tutti i campi prima di continuare.");
+      return;
+    }
+
+    window.calculatedOfferData.preparedFor = struttura;
+    window.calculatedOfferData.preparedBy = referente;
+    window.calculatedOfferData.nomeSale = sale;
+
+    popupOverlay.style.display = "none";
+
+    // Trigger download PDF
+    generatePdfBtn.dispatchEvent(new Event("click-pdf-confirmed"));
+  });
+
+});    window.calculatedOfferData.hasDiscountApplied = applyDiscountToPdfCheckbox.checked; 
   } else {
     console.warn("Elemento 'apply-discount-to-pdf' non trovato nell'HTML. La logica dello sconto nel PDF potrebbe non funzionare correttamente.");
   }
@@ -254,9 +482,85 @@ document.addEventListener("DOMContentLoaded", () => {
   if (discountMessage) {
     discountMessage.addEventListener("click", () => {
       console.log("Messaggio sconto cliccato. Scrolling al pannello sconti.");
-      if (discountPanel) discountPanel.scrollIntoView({ behavior: "smooth" });
-    });
-  } else {
+      if (discountPanel) discountPanel.scrollIntoView({ behavior: "smooth" 
+
+  // --- Gestione del popup "Genera PDF" ---
+  const popupOverlay = document.getElementById("pdf-popup");
+  const popupStructureInput = document.getElementById("popup-structure-name");
+  const popupReferentInput = document.getElementById("popup-referent-name");
+  const popupSalesInput = document.getElementById("popup-sales-name");
+  const popupConfirmBtn = document.getElementById("popup-confirm-btn");
+  const popupCancelBtn = document.getElementById("popup-cancel-btn");
+
+  generatePdfBtn.addEventListener("click", (e) => {
+    e.preventDefault();
+    if (popupOverlay) popupOverlay.style.display = "flex";
+  });
+
+  popupCancelBtn.addEventListener("click", () => {
+    if (popupOverlay) popupOverlay.style.display = "none";
+  });
+
+  popupConfirmBtn.addEventListener("click", () => {
+    const struttura = popupStructureInput.value.trim();
+    const referente = popupReferentInput.value.trim();
+    const sale = popupSalesInput.value.trim();
+
+    if (!struttura || !referente || !sale) {
+      alert("Compila tutti i campi prima di continuare.");
+      return;
+    }
+
+    window.calculatedOfferData.preparedFor = struttura;
+    window.calculatedOfferData.preparedBy = referente;
+    window.calculatedOfferData.nomeSale = sale;
+
+    popupOverlay.style.display = "none";
+
+    // Trigger download PDF
+    generatePdfBtn.dispatchEvent(new Event("click-pdf-confirmed"));
+  });
+
+});    
+
+  // --- Gestione del popup "Genera PDF" ---
+  const popupOverlay = document.getElementById("pdf-popup");
+  const popupStructureInput = document.getElementById("popup-structure-name");
+  const popupReferentInput = document.getElementById("popup-referent-name");
+  const popupSalesInput = document.getElementById("popup-sales-name");
+  const popupConfirmBtn = document.getElementById("popup-confirm-btn");
+  const popupCancelBtn = document.getElementById("popup-cancel-btn");
+
+  generatePdfBtn.addEventListener("click", (e) => {
+    e.preventDefault();
+    if (popupOverlay) popupOverlay.style.display = "flex";
+  });
+
+  popupCancelBtn.addEventListener("click", () => {
+    if (popupOverlay) popupOverlay.style.display = "none";
+  });
+
+  popupConfirmBtn.addEventListener("click", () => {
+    const struttura = popupStructureInput.value.trim();
+    const referente = popupReferentInput.value.trim();
+    const sale = popupSalesInput.value.trim();
+
+    if (!struttura || !referente || !sale) {
+      alert("Compila tutti i campi prima di continuare.");
+      return;
+    }
+
+    window.calculatedOfferData.preparedFor = struttura;
+    window.calculatedOfferData.preparedBy = referente;
+    window.calculatedOfferData.nomeSale = sale;
+
+    popupOverlay.style.display = "none";
+
+    // Trigger download PDF
+    generatePdfBtn.dispatchEvent(new Event("click-pdf-confirmed"));
+  });
+
+});  } else {
     console.warn("Elemento 'discount-message' non trovato.");
   }
 
@@ -287,8 +591,46 @@ document.addEventListener("DOMContentLoaded", () => {
             throw new Error(`Errore HTTP! stato: ${res.status} durante il caricamento del template PDF.`);
           }
           return res.arrayBuffer();
-        });
-        const { PDFDocument } = PDFLib;
+        
+
+  // --- Gestione del popup "Genera PDF" ---
+  const popupOverlay = document.getElementById("pdf-popup");
+  const popupStructureInput = document.getElementById("popup-structure-name");
+  const popupReferentInput = document.getElementById("popup-referent-name");
+  const popupSalesInput = document.getElementById("popup-sales-name");
+  const popupConfirmBtn = document.getElementById("popup-confirm-btn");
+  const popupCancelBtn = document.getElementById("popup-cancel-btn");
+
+  generatePdfBtn.addEventListener("click", (e) => {
+    e.preventDefault();
+    if (popupOverlay) popupOverlay.style.display = "flex";
+  });
+
+  popupCancelBtn.addEventListener("click", () => {
+    if (popupOverlay) popupOverlay.style.display = "none";
+  });
+
+  popupConfirmBtn.addEventListener("click", () => {
+    const struttura = popupStructureInput.value.trim();
+    const referente = popupReferentInput.value.trim();
+    const sale = popupSalesInput.value.trim();
+
+    if (!struttura || !referente || !sale) {
+      alert("Compila tutti i campi prima di continuare.");
+      return;
+    }
+
+    window.calculatedOfferData.preparedFor = struttura;
+    window.calculatedOfferData.preparedBy = referente;
+    window.calculatedOfferData.nomeSale = sale;
+
+    popupOverlay.style.display = "none";
+
+    // Trigger download PDF
+    generatePdfBtn.dispatchEvent(new Event("click-pdf-confirmed"));
+  });
+
+});        const { PDFDocument } = PDFLib;
 
         const pdfDoc = await PDFDocument.load(existingPdfBytes);
         console.log("Template PDF caricato con successo.");
@@ -408,8 +750,46 @@ document.addEventListener("DOMContentLoaded", () => {
         console.log("PDF salvato in byte.");
 
         // Create a Blob from the PDF bytes and create a download link
-        const blob = new Blob([pdfBytes], { type: 'application/pdf' });
-        const url = URL.createObjectURL(blob);
+        const blob = new Blob([pdfBytes], { type: 'application/pdf' 
+
+  // --- Gestione del popup "Genera PDF" ---
+  const popupOverlay = document.getElementById("pdf-popup");
+  const popupStructureInput = document.getElementById("popup-structure-name");
+  const popupReferentInput = document.getElementById("popup-referent-name");
+  const popupSalesInput = document.getElementById("popup-sales-name");
+  const popupConfirmBtn = document.getElementById("popup-confirm-btn");
+  const popupCancelBtn = document.getElementById("popup-cancel-btn");
+
+  generatePdfBtn.addEventListener("click", (e) => {
+    e.preventDefault();
+    if (popupOverlay) popupOverlay.style.display = "flex";
+  });
+
+  popupCancelBtn.addEventListener("click", () => {
+    if (popupOverlay) popupOverlay.style.display = "none";
+  });
+
+  popupConfirmBtn.addEventListener("click", () => {
+    const struttura = popupStructureInput.value.trim();
+    const referente = popupReferentInput.value.trim();
+    const sale = popupSalesInput.value.trim();
+
+    if (!struttura || !referente || !sale) {
+      alert("Compila tutti i campi prima di continuare.");
+      return;
+    }
+
+    window.calculatedOfferData.preparedFor = struttura;
+    window.calculatedOfferData.preparedBy = referente;
+    window.calculatedOfferData.nomeSale = sale;
+
+    popupOverlay.style.display = "none";
+
+    // Trigger download PDF
+    generatePdfBtn.dispatchEvent(new Event("click-pdf-confirmed"));
+  });
+
+});        const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
         const clientNameForFilename = (window.calculatedOfferData.preparedFor || 'Clinica').replace(/\s/g, '_').replace(/[^\w-]/g, '');
@@ -425,8 +805,46 @@ document.addEventListener("DOMContentLoaded", () => {
         console.error("Errore durante la generazione del PDF:", error);
         alert("Si è verificato un errore durante la generazione del PDF. Controlla la console per i dettagli.");
       }
-    });
-  } else {
+    
+
+  // --- Gestione del popup "Genera PDF" ---
+  const popupOverlay = document.getElementById("pdf-popup");
+  const popupStructureInput = document.getElementById("popup-structure-name");
+  const popupReferentInput = document.getElementById("popup-referent-name");
+  const popupSalesInput = document.getElementById("popup-sales-name");
+  const popupConfirmBtn = document.getElementById("popup-confirm-btn");
+  const popupCancelBtn = document.getElementById("popup-cancel-btn");
+
+  generatePdfBtn.addEventListener("click", (e) => {
+    e.preventDefault();
+    if (popupOverlay) popupOverlay.style.display = "flex";
+  });
+
+  popupCancelBtn.addEventListener("click", () => {
+    if (popupOverlay) popupOverlay.style.display = "none";
+  });
+
+  popupConfirmBtn.addEventListener("click", () => {
+    const struttura = popupStructureInput.value.trim();
+    const referente = popupReferentInput.value.trim();
+    const sale = popupSalesInput.value.trim();
+
+    if (!struttura || !referente || !sale) {
+      alert("Compila tutti i campi prima di continuare.");
+      return;
+    }
+
+    window.calculatedOfferData.preparedFor = struttura;
+    window.calculatedOfferData.preparedBy = referente;
+    window.calculatedOfferData.nomeSale = sale;
+
+    popupOverlay.style.display = "none";
+
+    // Trigger download PDF
+    generatePdfBtn.dispatchEvent(new Event("click-pdf-confirmed"));
+  });
+
+});  } else {
     console.warn("Elemento 'generate-pdf-btn' non trovato. La generazione PDF non funzionerà.");
   }
 
@@ -437,4 +855,43 @@ document.addEventListener("DOMContentLoaded", () => {
     if (viewerCountSpan) viewerCountSpan.textContent = randomViewers;
     console.log("Numero di visualizzatori aggiornato a:", randomViewers);
   }
+
+
+  // --- Gestione del popup "Genera PDF" ---
+  const popupOverlay = document.getElementById("pdf-popup");
+  const popupStructureInput = document.getElementById("popup-structure-name");
+  const popupReferentInput = document.getElementById("popup-referent-name");
+  const popupSalesInput = document.getElementById("popup-sales-name");
+  const popupConfirmBtn = document.getElementById("popup-confirm-btn");
+  const popupCancelBtn = document.getElementById("popup-cancel-btn");
+
+  generatePdfBtn.addEventListener("click", (e) => {
+    e.preventDefault();
+    if (popupOverlay) popupOverlay.style.display = "flex";
+  });
+
+  popupCancelBtn.addEventListener("click", () => {
+    if (popupOverlay) popupOverlay.style.display = "none";
+  });
+
+  popupConfirmBtn.addEventListener("click", () => {
+    const struttura = popupStructureInput.value.trim();
+    const referente = popupReferentInput.value.trim();
+    const sale = popupSalesInput.value.trim();
+
+    if (!struttura || !referente || !sale) {
+      alert("Compila tutti i campi prima di continuare.");
+      return;
+    }
+
+    window.calculatedOfferData.preparedFor = struttura;
+    window.calculatedOfferData.preparedBy = referente;
+    window.calculatedOfferData.nomeSale = sale;
+
+    popupOverlay.style.display = "none";
+
+    // Trigger download PDF
+    generatePdfBtn.dispatchEvent(new Event("click-pdf-confirmed"));
+  });
+
 });
