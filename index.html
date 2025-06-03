@@ -8,7 +8,8 @@
   <script src="https://unpkg.com/pdf-lib/dist/pdf-lib.min.js"></script>
 </head>
 <body>
-  <main class="layout" id="main-content"> <section class="promo-section">
+  <main class="layout" id="main-content">
+    <section class="promo-section">
       <h1>Il paziente al centro,<br>Noa Notes al tuo fianco</h1>
       <p class="description">
         Noa Notes crea un riepilogo dettagliato delle informazioni più importanti scambiate con il paziente durante la visita.
@@ -30,7 +31,7 @@
       <form id="calculator-form">
         <div class="form-group">
           <label for="rooms">N° Ambulatori</label>
-          <input type="number" id="rooms" min="1" value="1" required />
+          <input type="number" id="rooms" min="0" value="0" required />
         </div>
         <div class="form-group">
           <label for="doctors">N° Dottori</label>
@@ -58,9 +59,6 @@
             <option value="39">39 €</option>
           </select>
         </div>
-
-        
-
         <button type="button" id="calculate-btn">Calcola</button>
       </form>
 
@@ -73,18 +71,16 @@
           <label>Setup Fee (una tantum)</label>
           <span id="setup-fee">0 €</span>
         </div>
-
         <div class="result-group" id="check-section">
           <div class="check-buttons">
             <button id="check-btn" class="btn-check" style="display:none;">Check Sconti</button>
-            <a href="https://apps.docusign.com/send/templates?view=shared&folder=d71d9886-1424-4799-9155-4de52c347f6b" class="btn-procedi" target="_blank" style="display:none;">Procedi</a>
-            </div>
+            <a href="#" class="btn-procedi" target="_blank" style="display:none;">Procedi</a>
+          </div>
           <div id="loading-spinner" style="display:none;">
             <div class="spinner"></div>
             <div id="countdown"></div>
           </div>
         </div>
-
         <div class="result-group">
           <span id="discount-message" class="blinking" style="display:none;"></span>
         </div>
@@ -104,24 +100,7 @@
             <div class="promo-setup-fee" id="promo-setup-fee">0 €</div>
           </div>
           <div id="discount-date" class="blinking-date"></div>
-          <a href="https://apps.docusign.com/send/templates?view=shared&folder=d71d9886-1424-4799-9155-4de52c347f6b"
-             class="lock-price-btn" target="_blank">Blocca il prezzo</a>
-          
-          <div style="margin-top: 20px; display: flex; align-items: center; justify-content: center; gap: 8px;">
-            <input type="checkbox" id="apply-discount-to-pdf" style="width: auto;">
-            <label for="apply-discount-to-pdf" style="margin-bottom: 0; font-weight: normal; color: var(--text);">Includi sconto nel PDF</label>
-          </div>
-          
         </div>
-        <div id="live-viewers" class="live-viewers" style="display:none;">
-          <img src="https://cdn-icons-png.flaticon.com/512/709/709586.png" alt="Occhi" />
-          <span id="viewer-count">1</span> persone stanno guardando l’offerta ora
-        </div>
-      </div>
-
-      <div id="calculator-icon" class="calculator-icon" style="display:none;">🧮</div>
-      <div id="ctr-panel" class="ctr-panel" style="display:none;">
-        <div class="result-group"><label>Total CTR Value</label><span id="sales-commissions">0 €</span></div>
       </div>
     </section>
   </main>
@@ -131,25 +110,5 @@
   </aside>
 
   <script src="script.js"></script>
-
-<div id="pdf-popup" class="popup-overlay" style="display: none;">
-  <div class="popup-box">
-    <h3>Compila i dati prima di generare il PDF</h3>
-    <label>Nome Struttura</label>
-    <input type="text" id="popup-structure-name" placeholder="Es. Clinica San Paolo" />
-
-    <label>Nome Referente</label>
-    <input type="text" id="popup-referent-name" placeholder="Es. Dott. Rossi" />
-
-    <label>Nome Sale</label>
-    <input type="text" id="popup-sales-name" placeholder="Es. Alfonso" />
-
-    <div class="popup-buttons">
-      <button id="popup-confirm-btn">Continua</button>
-      <button id="popup-cancel-btn" class="btn-check">Annulla</button>
-    </div>
-  </div>
-</div>
-
 </body>
 </html>
