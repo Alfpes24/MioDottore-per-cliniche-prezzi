@@ -18,21 +18,22 @@
         <img src="https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png" alt="Doc">
         <span>+100 medici già attivi</span>
       </div>
+      <div class="live-viewers">👀 Utenti collegati: <span id="viewer-count">12</span></div>
     </div>
 
     <div class="form-section">
       <form id="calculator-form">
         <div class="form-group">
-          <label for="ambulatori">Numero ambulatori:</label>
-          <input type="number" id="ambulatori" min="0" />
+          <label for="rooms">Numero ambulatori:</label>
+          <input type="number" id="rooms" min="0" />
         </div>
         <div class="form-group">
-          <label for="medici">Numero dottori:</label>
-          <input type="number" id="medici" min="0" />
+          <label for="doctors">Numero dottori:</label>
+          <input type="number" id="doctors" min="0" />
         </div>
         <div class="form-group">
-          <label for="sedi">Numero sedi aggiuntive:</label>
-          <input type="number" id="sedi" min="0" />
+          <label for="additional-locations">Numero sedi aggiuntive:</label>
+          <input type="number" id="additional-locations" min="0" />
         </div>
         <div class="form-group">
           <label for="noa">Numero licenze NOA:</label>
@@ -50,21 +51,53 @@
       </form>
 
       <div class="results" style="display:none;">
-        <h2>Risultati a listino</h2>
+        <h2>Risultati</h2>
         <div class="result-group">
           <span>Canone mensile a listino:</span>
-          <strong id="canone-listino">-- €</strong>
+          <strong id="default-monthly-price">-- €</strong>
         </div>
         <div class="result-group">
           <span>Setup fee a listino:</span>
-          <strong id="setup-listino">-- €</strong>
+          <strong id="setup-fee">-- €</strong>
+        </div>
+        <div class="result-group" id="ctr-panel" style="display:none;">
+          <span>CTR totale:</span>
+          <strong id="calculator-icon">-- punti CTR</strong>
+        </div>
+        <button type="button" id="check-btn">Verifica condizioni riservate</button>
+      </div>
+
+      <div id="check-section" style="display:none;">
+        <div id="loading-spinner" class="spinner"></div>
+        <div id="countdown">Attendere 15 secondi...</div>
+      </div>
+
+      <div id="discount-panel" class="discount-panel" style="display:none;">
+        <div class="discount-header">🎁 Sono presenti sconti attivi!</div>
+        <div class="result-group">
+          <span>Prezzo mensile originale:</span>
+          <span id="original-monthly-price">-- €</span>
         </div>
         <div class="result-group">
-          <span>Valore CTR:</span>
-          <strong id="ctr-value">-- punti CTR</strong>
+          <span>Prezzo mensile scontato:</span>
+          <span id="promo-monthly-price">-- €</span>
         </div>
-        <button type="button" id="generate-pdf-btn" class="btn-generate-pdf">Genera PDF Preventivo</button>
+        <div class="result-group">
+          <span>Setup fee originale:</span>
+          <span id="original-setup-fee">-- €</span>
+        </div>
+        <div class="result-group">
+          <span>Setup fee scontato:</span>
+          <span id="promo-setup-fee">-- €</span>
+        </div>
+        <div class="result-group">
+          <span>Commissioni vendita:</span>
+          <span id="sales-commissions">-- €</span>
+        </div>
+        <div id="discount-message" class="blinking">Offerta valida fino al <span id="discount-date">--/--/----</span></div>
       </div>
+
+      <button type="button" id="generate-pdf-btn" class="btn-generate-pdf">Genera PDF Preventivo</button>
     </div>
   </div>
 
