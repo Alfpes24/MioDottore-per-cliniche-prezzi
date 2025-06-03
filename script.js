@@ -1,4 +1,3 @@
-document.addEventListener("DOMContentLoaded", () => {
   let pdfData = {};
   const generatePdfBtn = document.getElementById("generate-pdf-btn");
 // Gestione popup per inserimento dati PDF
