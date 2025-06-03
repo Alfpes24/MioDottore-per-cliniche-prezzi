@@ -307,6 +307,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // --- PDF Generation Logic ---
   if (generatePdfBtn) {
     generatePdfBtn.addEventListener("click-pdf-confirmed", async () => {
+    const d = window.calculatedOfferData;
       console.log("Pulsante 'Genera PDF' cliccato.");
       console.log("Stato di 'hasDiscountApplied' al click PDF:", window.calculatedOfferData.hasDiscountApplied);
 
@@ -466,7 +467,42 @@ document.addEventListener("DOMContentLoaded", () => {
       form.getTextField("Quota_scontata").setText("");
     }
 
-    form.flatten();
+    const setupText = d.hasDiscountApplied
+      ? `${d.setupFeeOnetime} € (scontato)`
+      : `${d.setupFeeDisplayed} €`;
+
+try {
+  form.getTextField("Quota_formazione_setup").setText(setupText);
+  console.log("Campo 'Quota_formazione_setup' compilato con:", setupText);
+} catch (e) {
+  console.warn("Campo 'Quota_formazione_setup' non trovato o errore:", e);
+}
+
+if (d.hasDiscountApplied) {
+  const quotaScontataText = `Prezzo Originale: ~~${d.defaultMonthlyPrice} €~~
+` +
+                            `Setup Fee: ~~${d.setupFeeDisplayed} €~~
+
+` +
+                            `Prezzo Scontato: ${d.promoMonthlyPrice} €
+` +
+                            `Setup Scontato: ${d.setupFeeOnetime} €`;
+  try {
+    form.getTextField("Quota_scontata").setText(quotaScontataText);
+    console.log("Campo 'Quota_scontata' compilato con riepilogo:", quotaScontataText);
+  } catch (e) {
+    console.warn("Campo 'Quota_scontata' non trovato o errore:", e);
+  }
+} else {
+  try {
+    form.getTextField("Quota_scontata").setText("");
+    console.log("Campo 'Quota_scontata' svuotato (nessuno sconto applicato)");
+  } catch (e) {
+    console.warn("Campo 'Quota_scontata' non trovato o errore:", e);
+  }
+}
+
+form.flatten();
 
         console.log("Campi del modulo PDF appiattiti.");
 
