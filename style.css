@@ -13,7 +13,6 @@
   --font: 'Segoe UI', 'Inter', sans-serif;
 }
 
-/* Base reset */
 * {
   box-sizing: border-box;
   margin: 0;
@@ -24,350 +23,163 @@ body {
   font-family: var(--font);
   background-color: var(--background);
   color: var(--text);
+  padding: 20px;
   line-height: 1.6;
 }
 
-/* Layout container */
-.layout {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 40px;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 40px 20px;
+.header {
+  text-align: center;
+  margin-bottom: 30px;
 }
 
-/* ===== Promo Section ===== */
-.promo-section {
-  flex: 1 1 480px;
-  background: var(--surface);
-  border-radius: var(--radius);
-  padding: 40px;
-  box-shadow: var(--shadow);
-}
-
-.promo-section h1 {
-  font-size: 28px;
-  margin-bottom: 16px;
+.header h1 {
+  font-size: 2.5rem;
   color: var(--primary);
 }
 
-.promo-section .description {
-  font-size: 16px;
+.subtitle {
   color: var(--muted);
-  margin-bottom: 24px;
+  font-size: 1.2rem;
 }
 
-.promo-btn {
-  display: inline-block;
-  padding: 12px 20px;
-  font-weight: 600;
-  background: var(--secondary);
-  color: white;
-  border-radius: var(--radius);
-  text-decoration: none;
-  transition: background 0.3s ease;
+.live-counter {
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 1rem;
+  color: var(--secondary);
 }
 
-.promo-btn:hover {
-  background: var(--secondary-hover);
-}
-
-.trusted-doctors {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-top: 30px;
-}
-
-.trusted-doctors img {
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  object-fit: cover;
-  box-shadow: var(--shadow);
-}
-
-/* ===== Form Section ===== */
-.form-section {
-  flex: 1 1 480px;
+.main-container {
+  max-width: 900px;
+  margin: 0 auto;
   background: var(--surface);
   border-radius: var(--radius);
-  padding: 40px;
   box-shadow: var(--shadow);
+  padding: 30px;
 }
 
-.form-section h2 {
-  font-size: 24px;
-  margin-bottom: 24px;
+.config-form {
+  margin-bottom: 30px;
+}
+
+.config-form h2 {
+  margin-bottom: 20px;
   color: var(--primary);
 }
 
-.form-group {
-  margin-bottom: 20px;
-}
-
-.form-group label {
+.config-form label {
   display: block;
-  font-weight: 600;
-  margin-bottom: 6px;
-  font-size: 15px;
+  margin-bottom: 10px;
+  font-weight: bold;
 }
 
-input,
-select {
+.config-form input {
   width: 100%;
-  padding: 12px 14px;
-  font-size: 15px;
-  border: 1px solid #d1d5db;
+  padding: 8px;
+  border: 1px solid var(--muted);
   border-radius: var(--radius);
-  background-color: #f8fafc;
-  transition: border 0.3s ease;
+  margin-top: 5px;
+  margin-bottom: 15px;
 }
 
-input:focus,
-select:focus {
-  border-color: var(--primary);
-  background-color: #ecfdf5;
-  outline: none;
-}
-
-/* ===== Buttons ===== */
 button {
-  width: 100%;
-  padding: 14px;
-  font-weight: 600;
-  font-size: 16px;
   background-color: var(--primary);
   color: white;
+  padding: 10px 20px;
   border: none;
   border-radius: var(--radius);
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  font-size: 1rem;
+  margin-top: 10px;
 }
 
 button:hover {
   background-color: var(--primary-hover);
 }
 
-.btn-check {
-  padding: 10px 18px;
-  font-size: 14px;
-  background-color: #e2e8f0;
-  color: #374151;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-}
-
-.btn-check:hover {
-  background-color: #cbd5e1;
-}
-
-.btn-procedi,
-.lock-price-btn {
-  padding: 10px 18px;
-  background-color: var(--secondary);
-  color: white;
-  font-weight: 600;
-  border-radius: 8px;
-  text-decoration: none;
-  transition: background-color 0.3s ease;
-}
-
-.btn-procedi:hover,
-.lock-price-btn:hover {
-  background-color: var(--secondary-hover);
-}
-
-/* ===== Risultati & Pannelli ===== */
-.results,
-.ctr-panel {
+.results, #discount-panel, #ctr-panel {
   margin-top: 30px;
-  padding: 24px;
   background-color: #f0fdf4;
-  border: 1px solid #ccfbf1;
+  border-left: 5px solid var(--primary);
+  padding: 20px;
   border-radius: var(--radius);
 }
 
-.result-group {
-  margin-bottom: 20px;
+.blinking {
+  animation: blinking 1.5s infinite;
+  color: var(--danger);
+  font-weight: bold;
 }
 
-.result-group label {
-  font-size: 14px;
-  color: var(--muted);
+@keyframes blinking {
+  0% { opacity: 1; }
+  50% { opacity: 0.2; }
+  100% { opacity: 1; }
 }
 
-.result-group span {
-  display: block;
-  font-size: 18px;
-  font-weight: 600;
-  color: var(--text);
-}
-
-/* ===== Pannello Promozionale ===== */
-.discount-panel {
-  margin-top: 30px;
-  padding: 30px;
-  background-color: #fff; /* Sfondo bianco per risaltare */
-  border-radius: 16px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1); /* Ombra più pronunciata */
-  text-align: center;
-}
-
-.discount-header {
-  font-size: 26px;
-  font-weight: 700;
-  color: var(--primary);
-  margin-bottom: 20px;
-}
-
-.discount-content {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 15px;
-}
-
-.original-prices,
-.promo-prices {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start; /* Allinea a sinistra */
-}
-
-.original-price-label,
-.promo-price-label {
-  font-size: 16px;
-  color: var(--muted);
-  margin-bottom: 5px;
-}
-
-.original-price del {
-  color: var(--muted);
-  font-size: 18px; /* Aumenta la dimensione */
-  margin-right: 8px;
-}
-
-.promo-price {
-  font-size: 28px; /* Aumenta la dimensione e il peso */
-  color: var(--primary);
-  font-weight: 800;
-  animation: pulse 1.5s infinite; /* Aggiunge un'animazione */
-}
-
-.promo-setup-fee {
-  font-size: 18px; /* Aumenta la dimensione e il peso */
-  color: var(--primary);
-  font-weight: 600;
-}
-
-@keyframes pulse {
-  0% {
-    transform: scale(1);
-  }
-  50% {
-    transform: scale(1.05);
-  }
-  100% {
-    transform: scale(1);
-  }
-}
-
-/* ===== Countdown & Spinner ===== */
-.spinner {
-  width: 30px;
-  height: 30px;
-  border: 4px solid #e5e7eb;
-  border-top: 4px solid var(--primary);
+.loading-spinner {
+  border: 5px solid #eee;
+  border-top: 5px solid var(--primary);
   border-radius: 50%;
+  width: 40px;
+  height: 40px;
   animation: spin 1s linear infinite;
-  margin: 10px auto;
+  margin: 20px auto;
 }
 
 @keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
+  to { transform: rotate(360deg); }
 }
 
-#countdown {
-  text-align: center;
-  font-size: 14px;
-  color: var(--muted);
-  margin-top: 8px;
-}
-
-/* ===== Elementi dinamici ===== */
-.blinking {
-  color: var(--danger);
-  font-weight: bold;
-  animation: blink 1.2s infinite;
-  cursor: pointer;
-}
-
-@keyframes blink {
-  0%,
-  100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0;
-  }
-}
-
-.blinking-date {
-  display: block;
-  font-size: 14px;
-  color: var(--danger);
-  animation: blink 1.5s infinite;
-  margin-top: 5px;
-}
-
-.live-viewers {
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.5);
   display: flex;
   align-items: center;
-  margin-top: 15px;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.popup-box {
+  background: white;
+  padding: 30px;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  width: 90%;
+  max-width: 500px;
+}
+
+.popup-box h2 {
+  margin-bottom: 20px;
+}
+
+.popup-box label {
+  display: block;
+  margin-bottom: 10px;
+}
+
+.popup-box input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid var(--muted);
+  border-radius: var(--radius);
+}
+
+.popup-buttons {
+  display: flex;
+  justify-content: flex-end;
   gap: 10px;
-  font-size: 15px;
-}
-
-.live-viewers img {
-  width: 24px;
-  height: 24px;
-}
-
-/* ===== Icona calcolatrice / CTR ===== */
-.calculator-icon {
-  font-size: 24px;
-  text-align: center;
-  cursor: pointer;
   margin-top: 20px;
-  color: var(--secondary);
-  transition: transform 0.2s ease;
 }
 
-.calculator-icon:hover {
-  transform: scale(1.1);
-  color: var(--secondary-hover);
+.btn-generate-pdf {
+  background-color: var(--secondary);
 }
 
-/* ===== Responsive ===== */
-@media (max-width: 768px) {
-  .layout {
-    flex-direction: column;
-    gap: 20px;
-  }
-
-  .promo-section,
-  .form-section {
-    padding: 30px 20px;
-  }
-
-  .check-buttons {
-    flex-direction: column;
-    align-items: stretch;
-  }
+.btn-generate-pdf:hover {
+  background-color: var(--secondary-hover);
 }
