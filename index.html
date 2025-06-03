@@ -138,5 +138,25 @@
   </aside>
 
   <script src="script.js"></script>
+
+<div id="pdf-popup" class="popup-overlay" style="display: none;">
+  <div class="popup-box">
+    <h3>Compila i dati prima di generare il PDF</h3>
+    <label>Nome Struttura</label>
+    <input type="text" id="popup-structure-name" placeholder="Es. Clinica San Paolo" />
+
+    <label>Nome Referente</label>
+    <input type="text" id="popup-referent-name" placeholder="Es. Dott. Rossi" />
+
+    <label>Nome Sale</label>
+    <input type="text" id="popup-sales-name" placeholder="Es. Alfonso" />
+
+    <div class="popup-buttons">
+      <button id="popup-confirm-btn">Continua</button>
+      <button id="popup-cancel-btn" class="btn-check">Annulla</button>
+    </div>
+  </div>
+</div>
+
 </body>
 </html>
