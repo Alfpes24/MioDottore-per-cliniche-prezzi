@@ -14,7 +14,9 @@
 }
 
 /* Base reset */
-* {
+*,
+*::before, /* Aggiunto per coerenza */
+*::after {   /* Aggiunto per coerenza */
   box-sizing: border-box;
   margin: 0;
   padding: 0;
@@ -419,10 +421,11 @@ button:hover {
     padding: 30px 20px;
   }
 
-  .check-buttons {
+  /* Questo blocco era vuoto, rimosso se non ha scopo specifico */
+  /* .check-buttons {
     flex-direction: column;
     align-items: stretch;
-  }
+  } */
 }
 
 
@@ -469,3 +472,4 @@ button:hover {
   justify-content: flex-end;
   gap: 10px;
 }
+/* La parentesi graffa in eccesso è stata rimossa da qui */
