@@ -417,9 +417,9 @@ if (!calculateBtn) {
         // Field: "Nome venditore (pagina 2)" (Nome_sale1)
         // Corrisponde all'input HTML 'prepared-by'
         try {
-          form.getTextField('Nome_sale1').setText(window.calculatedOfferData.preparedBy || '');
-          console.log("Campo 'Nome_sale1' compilato con:", window.calculatedOfferData.preparedBy);
-        } catch (e) { console.warn("Campo PDF 'Nome_sale1' non trovato o errore:", e); }
+          form.getTextField('Nome_sale').setText(window.calculatedOfferData.preparedBy || '');
+          console.log("Campo 'Nome_sale' compilato con:", window.calculatedOfferData.preparedBy);
+        } catch (e) { console.warn("Campo PDF 'Nome_sale' non trovato o errore:", e); }
 
         // Field: "Numero ambulatori inseriti" (numero_ambulatori)
         // Corrisponde all'input HTML 'rooms'
