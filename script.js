@@ -146,7 +146,8 @@ async function generatePdfImmediately() {
   console.log("--- Fine elementi DOM ---");
 
   // Critical error check: if calculateBtn is not found, the script cannot proceed meaningfully
-  if (!calculateBtn) {
+console.log("Verifica ID 'calculate-btn':", document.getElementById("calculate-btn"));
+if (!calculateBtn) {
     console.error("ERRORE CRITICO: Pulsante 'Calcola' (ID: calculate-btn) non trovato nell'HTML. Si prega di verificare l'ID.");
     return; 
   }
