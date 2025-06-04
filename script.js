@@ -493,17 +493,3 @@ try {
     console.log("Numero di visualizzatori aggiornato a:", randomViewers);
   }
 });
-  window.calculatedOfferData = {
-    ...window.calculatedOfferData,
-    rooms,
-    doctors,
-    cpl,
-    additionalLocations,
-    licenzeNoa: noa,
-    noaTotale: noaTotalPrice.toFixed(2),
-    defaultMonthlyPrice: defaultMonthlyPrice.toFixed(2),
-    promoMonthlyPrice: totalMonthlyPrice.toFixed(2),
-    setupFeeDisplayed: setupFeeDisplayed.toFixed(2),
-    setupFeeOnetime: setupFeeDefault.toFixed(2),
-    offerDate: new Date().toLocaleDateString("it-IT")
-  };
