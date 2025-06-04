@@ -155,11 +155,7 @@ const refOk = isDev || document.referrer.includes("alfpes24.github.io") || windo
   const rooms = parseInt(roomsInput?.value || "0");
   const doctors = parseInt(doctorsInput?.value || "0");
 
-  if (rooms === 0 || doctors === 0) {
-    alert("Inserisci almeno 1 ambulatorio e 1 medico.");
-    return;
-  }
-
+  
   if (rooms === 0 || doctors === 0) {
     alert("Inserisci almeno 1 ambulatorio e 1 medico.");
     return;
