@@ -249,6 +249,7 @@ if (!calculateBtn) {
   salesCommission: totalCommission.toFixed(2),
   pdfTemplateUrl: PDF_TEMPLATE_URL,
   offerDate: new Date().toLocaleDateString('it-IT')
+      hasDiscountApplied: false
 };
 
 
