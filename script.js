@@ -72,6 +72,10 @@ const refOk = isDev || document.referrer.includes("alfpes24.github.io") || windo
 
   // Mostra popup su click normale
   generatePdfBtn.addEventListener("click", () => {
+        if (!window.calculatedOfferData || !window.calculatedOfferData.rooms) {
+      alert("Calcola prima l'offerta prima di generare il PDF.");
+      return;
+    }
     popupOverlay.style.display = "flex";
   });
 
@@ -301,10 +305,6 @@ const refOk = isDev || document.referrer.includes("alfpes24.github.io") || windo
   // --- PDF Generation Logic ---
   if (generatePdfBtn) {
     generatePdfBtn.addEventListener("click-pdf-confirmed", async () => {
-  if (!window.calculatedOfferData || !window.calculatedOfferData.rooms) {
-    alert("Calcola prima l'offerta prima di generare il PDF.");
-    return;
-  }
 
       console.log("Pulsante 'Genera PDF' cliccato.");
       console.log("Stato di 'hasDiscountApplied' al click PDF:", window.calculatedOfferData.hasDiscountApplied);
