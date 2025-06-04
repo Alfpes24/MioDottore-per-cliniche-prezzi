@@ -248,22 +248,23 @@ if (!calculateBtn) {
 
     if (pdfSidebar) pdfSidebar.style.display = "flex"; 
     window.calculatedOfferData = {
-  rooms,
-  doctors,
-  cpl,
-  additionalLocations,
-  licenzeNoa: noa,
-  noaTotale: noaTotalPrice,
-  noaPrice,
-  defaultMonthlyPrice: defaultMonthlyPrice.toFixed(2),
-  promoMonthlyPrice: totalMonthlyPrice.toFixed(2),
-  setupFeeDisplayed: setupFeeDisplayed.toFixed(2),
-  setupFeeOnetime: setupFeeDefault.toFixed(2),
-  salesCommission: totalCommission.toFixed(2),
-  pdfTemplateUrl: PDF_TEMPLATE_URL,
-  offerDate: new Date().toLocaleDateString('it-IT'),
+      rooms,
+      doctors,
+      cpl,
+      additionalLocations,
+      licenzeNoa: noa,
+      noaPrice,
+      noaTotale: noaTotalPrice.toFixed(2),
+      defaultMonthlyPrice: defaultMonthlyPrice.toFixed(2),
+      promoMonthlyPrice: totalMonthlyPrice.toFixed(2),
+      setupFeeDisplayed: setupFeeDisplayed.toFixed(2),
+      setupFeeOnetime: setupFeeDefault.toFixed(2),
+      salesCommission: totalCommission.toFixed(2),
+      pdfTemplateUrl: PDF_TEMPLATE_URL,
+      offerDate: new Date().toLocaleDateString('it-IT'),
       hasDiscountApplied: false
-};
+    };
+    
 
 
 
@@ -432,7 +433,9 @@ if (!calculateBtn) {
         // Field: "Nome venditore (pagina 2)" (Nome_sale1)
         // Corrisponde all'input HTML 'prepared-by'
         try {
-          form.getTextField('Nome_sale').setText(window.calculatedOfferData.preparedBy || '');
+          form.getTextField('Nome_sale').setText(window.calculatedOfferData.nomeSale || '');
+          form.getTextField('Nome_sale1').setText(window.calculatedOfferData.nomeSale || '');
+
           console.log("Campo 'Nome_sale' compilato con:", window.calculatedOfferData.preparedBy);
         } catch (e) { console.warn("Campo PDF 'Nome_sale' non trovato o errore:", e); }
 
