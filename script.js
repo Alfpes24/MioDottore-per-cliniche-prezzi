@@ -234,6 +234,23 @@ if (!calculateBtn) {
     if (checkBtn) checkBtn.style.display = noa >= 1 ? "inline-block" : "none";
 
     if (pdfSidebar) pdfSidebar.style.display = "flex"; 
+    window.calculatedOfferData = {
+  rooms,
+  doctors,
+  cpl,
+  additionalLocations,
+  licenzeNoa: noa,
+  noaTotale: noaTotalPrice,
+  noaPrice,
+  defaultMonthlyPrice: defaultMonthlyPrice.toFixed(2),
+  promoMonthlyPrice: totalMonthlyPrice.toFixed(2),
+  setupFeeDisplayed: setupFeeDisplayed.toFixed(2),
+  setupFeeOnetime: setupFeeDefault.toFixed(2),
+  salesCommission: totalCommission.toFixed(2),
+  pdfTemplateUrl: PDF_TEMPLATE_URL,
+  offerDate: new Date().toLocaleDateString('it-IT')
+};
+
 
 
     // --- Store calculated data for PDF generation ---
