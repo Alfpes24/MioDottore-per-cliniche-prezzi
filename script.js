@@ -485,33 +485,3 @@ document.addEventListener("DOMContentLoaded", () => {
     console.log("Numero di visualizzatori aggiornato a:", randomViewers);
   }
 });
-
-
-
-document.addEventListener("DOMContentLoaded", () => {
-  const calculateBtn = document.getElementById("calculate-btn");
-  if (!calculateBtn) {
-    console.error("Pulsante Calcola non trovato!");
-    return;
-  }
-
-  calculateBtn.addEventListener("click", () => {
-    const noa = parseInt(document.getElementById("noa").value) || 0;
-    const noaPrice = parseInt(document.getElementById("noa-price").value) || 0;
-
-    const licenzeNoa = isNaN(noa) ? 0 : noa;
-    const noaTotale = isNaN(noaPrice) || isNaN(noa) ? 0 : noa * noaPrice;
-
-    window.calculatedOfferData = {
-      ...(window.calculatedOfferData || {}),
-      licenzeNoa,
-      noaTotale
-    };
-
-    const defaultPriceDisplay = document.getElementById("default-monthly-price");
-    if (defaultPriceDisplay) defaultPriceDisplay.textContent = `${noaTotale} €`;
-
-    const resultsPanel = document.getElementById("results");
-    if (resultsPanel) resultsPanel.style.display = "block";
-  });
-});
