@@ -80,25 +80,43 @@ const refOk = isDev || document.referrer.includes("alfpes24.github.io") || windo
   });
 
   // Conferma popup → salva dati e triggera evento
-  popupConfirmBtn.addEventListener("click", () => {
-    const struttura = popupStructureInput.value.trim();
-    const referente = popupReferentInput.value.trim();
-    const sale = popupSalesInput.value.trim();
-  
-    if (!struttura || !referente || !sale) {
-      alert("Compila tutti i campi prima di continuare.");
-      return;
-    }
-  
-    if (preparedForInput) preparedForInput.value = struttura;
-    if (preparedByInput) preparedByInput.value = referente;
-  
-    window.calculatedOfferData = window.calculatedOfferData || {};
-    window.calculatedOfferData.preparedFor = struttura;
-    window.calculatedOfferData.preparedBy = referente;
-    window.calculatedOfferData.nomeSale = sale;
-  
-    popupOverlay.style.display = "none";
+ // ✅ MODIFICA FINALE - Trigger diretto al click sul bottone di conferma del popup
+
+// Popup Confirm Button Event
+popupConfirmBtn.addEventListener("click", () => {
+  const struttura = popupStructureInput.value.trim();
+  const referente = popupReferentInput.value.trim();
+  const sale = popupSalesInput.value.trim();
+
+  if (!struttura || !referente || !sale) {
+    alert("Compila tutti i campi prima di continuare.");
+    return;
+  }
+
+  if (preparedForInput) preparedForInput.value = struttura;
+  if (preparedByInput) preparedByInput.value = referente;
+
+  window.calculatedOfferData = window.calculatedOfferData || {};
+  window.calculatedOfferData.preparedFor = struttura;
+  window.calculatedOfferData.preparedBy = referente;
+  window.calculatedOfferData.nomeSale = sale;
+
+  popupOverlay.style.display = "none";
+
+  // ✅ Chiamata diretta alla funzione di generazione PDF
+  if (typeof generatePdfImmediately === 'function') {
+    generatePdfImmediately();
+  } else {
+    console.error("Funzione 'generatePdfImmediately' non trovata.");
+  }
+});
+
+// ✅ Estrarre la funzione principale in modo riutilizzabile
+async function generatePdfImmediately() {
+  const event = new Event("click-pdf-confirmed");
+  generatePdfBtn.dispatchEvent(event);
+}
+
   
     // Emetti evento personalizzato che avvia il download del PDF
     const event = new Event("click-pdf-confirmed");
