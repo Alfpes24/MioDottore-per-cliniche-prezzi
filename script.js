@@ -186,11 +186,11 @@ if (!calculateBtn) {
   // Main Calculate Button Logic
   calculateBtn.addEventListener("click", () => {
   const rooms = parseInt(roomsInput?.value || "0");
-  const doctors = parseInt(doctorsInput?.value || "0");
+  const doctors = parseInt(doctorsInput?.value || "5");
 
   
   if (rooms === 0 || doctors === 0) {
-    alert("Inserisci almeno 1 ambulatorio e 1 medico.");
+    alert("Inserisci almeno 1 ambulatorio e 5 medici.");
     return;
   }
     console.log("Pulsante 'Calcola' cliccato. Inizio calcoli."); 
@@ -252,6 +252,8 @@ if (!calculateBtn) {
       doctors,
       cpl,
       additionalLocations,
+      sediAggiuntive: additionalLocations,
+      sediTotale: (additionalLocations * 99).toFixed(2),
       licenzeNoa: noa,
       noaPrice,
       noaTotale: noaTotalPrice.toFixed(2),
@@ -264,6 +266,7 @@ if (!calculateBtn) {
       offerDate: new Date().toLocaleDateString('it-IT'),
       hasDiscountApplied: false
     };
+    
     
 
 
@@ -458,16 +461,16 @@ if (!calculateBtn) {
         try {
           form.getTextField('Quota_mensile_default').setText(window.calculatedOfferData.defaultMonthlyPrice + ' €' || '0 €');
 
-try {
-  const noaLicenze = String(window.calculatedOfferData.licenzeNoa || 0);
-  const noaTotale = String(window.calculatedOfferData.noaTotale || 0) + " €";
-
-  form.getTextField('n_licenze_noa').setText(noaLicenze);
-  form.getTextField('n_licenze_noa_2').setText(noaLicenze);
-  form.getTextField('quota_mensile_noa').setText(noaTotale);
-} catch (e) {
-  console.warn("Errore nel compilare i campi NOA:", e);
-}
+          try {
+            const sedi = String(window.calculatedOfferData.sediAggiuntive || 0);
+            const quotaSedi = String(window.calculatedOfferData.sediTotale || 0) + " €";
+          
+            form.getTextField('n_sedi_aggiuntive').setText(sedi);
+            form.getTextField('quota_mensile_sedi').setText(quotaSedi);
+            console.log("Campi sedi compilati con:", sedi, quotaSedi);
+          } catch (e) {
+            console.warn("Errore nel compilare i campi sedi aggiuntive:", e);
+          }
 
           console.log("Campo 'Quota_mensile_default' compilato con:", window.calculatedOfferData.defaultMonthlyPrice);
         } catch (e) { console.warn("Campo PDF 'Quota_mensile_default' non trovato o errore:", e); }
