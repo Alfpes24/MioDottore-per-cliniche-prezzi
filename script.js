@@ -579,3 +579,20 @@ try {
     console.log("Numero di visualizzatori aggiornato a:", randomViewers);
   }
 });
+
+// Funzionalità per pulsante "📧 Invia Mail"
+const emailButton = document.getElementById("email-button");
+if (emailButton) {
+  emailButton.addEventListener("click", () => {
+    const struttura = document.getElementById("popup-structure-name")?.value || "Nome struttura";
+    const referente = document.getElementById("popup-referent-name")?.value || "Referente";
+    const venditore = document.getElementById("popup-sales-name")?.value || "Tuo consulente";
+
+    const subject = encodeURIComponent(`Preventivo MioDottore per ${struttura}`);
+    const body = encodeURIComponent(
+      `Buongiorno ${referente},\n\nIn allegato trova il preventivo MioDottore per la struttura ${struttura}.\nPer qualsiasi informazione resto a disposizione.\n\nCordiali saluti,\n${venditore}`
+    );
+
+    const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=&su=${subject}&body=${body}`;
+    window.open(gmailUrl, '_blank');
+  });
