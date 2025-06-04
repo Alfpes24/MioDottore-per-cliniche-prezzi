@@ -85,8 +85,8 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    preparedForInput.value = struttura;
-    preparedByInput.value = referente;
+    if (preparedForInput) preparedForInput.value = struttura;
+    if (preparedByInput) preparedByInput.value = referente;
 
     window.calculatedOfferData = window.calculatedOfferData || {};
     window.calculatedOfferData.preparedFor = struttura;
