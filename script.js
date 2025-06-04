@@ -248,7 +248,7 @@ if (!calculateBtn) {
   setupFeeOnetime: setupFeeDefault.toFixed(2),
   salesCommission: totalCommission.toFixed(2),
   pdfTemplateUrl: PDF_TEMPLATE_URL,
-  offerDate: new Date().toLocaleDateString('it-IT')
+  offerDate: new Date().toLocaleDateString('it-IT'),
       hasDiscountApplied: false
 };
 
