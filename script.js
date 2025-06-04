@@ -167,8 +167,8 @@ const refOk = isDev || document.referrer.includes("alfpes24.github.io") || windo
     console.log("Pulsante 'Calcola' cliccato. Inizio calcoli."); 
 
     // --- Get input values and convert to numbers ---
-    const rooms = parseInt(roomsInput ? roomsInput.value : "0") || 0;
-    const doctors = parseInt(doctorsInput ? doctorsInput.value : "0") || 0;
+    
+    
     const cpl = parseInt(cplSelect ? cplSelect.value : "0") || 0;
     const additionalLocations = parseInt(additionalLocationsInput ? additionalLocationsInput.value : "0") || 0;
     const noa = parseInt(noaInput ? noaInput.value : "0") || 0;
