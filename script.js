@@ -410,6 +410,18 @@ document.addEventListener("DOMContentLoaded", () => {
         // Field: "Canone mensile predefinito (pagina 1)" (Quota_mensile_default)
         try {
           form.getTextField('Quota_mensile_default').setText(window.calculatedOfferData.defaultMonthlyPrice + ' €' || '0 €');
+
+try {
+  const noaLicenze = String(window.calculatedOfferData.licenzeNoa || 0);
+  const noaTotale = String(window.calculatedOfferData.noaTotale || 0) + " €";
+
+  form.getTextField('n_licenze_noa').setText(noaLicenze);
+  form.getTextField('n_licenze_noa_2').setText(noaLicenze);
+  form.getTextField('quota_mensile_noa').setText(noaTotale);
+} catch (e) {
+  console.warn("Errore nel compilare i campi NOA:", e);
+}
+
           console.log("Campo 'Quota_mensile_default' compilato con:", window.calculatedOfferData.defaultMonthlyPrice);
         } catch (e) { console.warn("Campo PDF 'Quota_mensile_default' non trovato o errore:", e); }
 
