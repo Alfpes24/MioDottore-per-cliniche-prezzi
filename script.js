@@ -254,6 +254,7 @@ const refOk = isDev || document.referrer.includes("alfpes24.github.io") || windo
           const validUntilDateString = validUntil.toLocaleDateString("it-IT");
           if (discountDate) discountDate.textContent = `Valido fino al: ${validUntilDateString}`;
 
+          window.calculatedOfferData = window.calculatedOfferData || {};
           window.calculatedOfferData.validUntilDate = validUntilDateString;
           console.log("Sconto valido fino al:", validUntilDateString);
           
@@ -276,9 +277,11 @@ const refOk = isDev || document.referrer.includes("alfpes24.github.io") || windo
 
   if (applyDiscountToPdfCheckbox) {
     applyDiscountToPdfCheckbox.addEventListener('change', () => {
-      window.calculatedOfferData.hasDiscountApplied = applyDiscountToPdfCheckbox.checked;
+      window.calculatedOfferData = window.calculatedOfferData || {};
+    window.calculatedOfferData.hasDiscountApplied = applyDiscountToPdfCheckbox.checked;
       console.log("Checkbox 'Includi sconto nel PDF' cambiata. hasDiscountApplied:", window.calculatedOfferData.hasDiscountApplied);
     });
+    window.calculatedOfferData = window.calculatedOfferData || {};
     window.calculatedOfferData.hasDiscountApplied = applyDiscountToPdfCheckbox.checked; 
   } else {
     console.warn("Elemento 'apply-discount-to-pdf' non trovato nell'HTML. La logica dello sconto nel PDF potrebbe non funzionare correttamente.");
