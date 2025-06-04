@@ -136,7 +136,9 @@ document.addEventListener("DOMContentLoaded", () => {
   console.log("PDF Template URL:", PDF_TEMPLATE_URL);
 
   // Global object to store calculated values for PDF generation
-  window.calculatedOfferData = {};
+  window.calculatedOfferData = {
+  licenzeNoa: isNaN(noa) ? 0 : noa,
+  noaTotale: isNaN(noaPrice) || isNaN(noa) ? 0 : noa * noaPrice,};
 
   // --- Event Listeners ---
   if (calculatorIcon) {
@@ -209,6 +211,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // --- Store calculated data for PDF generation ---
     window.calculatedOfferData = {
+  licenzeNoa: isNaN(noa) ? 0 : noa,
+  noaTotale: isNaN(noaPrice) || isNaN(noa) ? 0 : noa * noaPrice,
       rooms: rooms,
       doctors: doctors,
       cpl: cpl, 
