@@ -2,7 +2,8 @@ document.addEventListener("DOMContentLoaded", () => {
   console.log("DOM fully loaded and parsed. Initializing script.");
 
   // --- Controllo Accesso (Spostato qui per non interferire con il DOM) ---
-  const refOk = document.referrer.includes("alfpes24.github.io") || window.opener;
+  const isDev = location.hostname === 'localhost';
+const refOk = isDev || document.referrer.includes("alfpes24.github.io") || window.opener;
   const accesso = localStorage.getItem("accessoMioDottore") === "ok";
   const mainContent = document.getElementById("main-content"); 
 
@@ -136,9 +137,7 @@ document.addEventListener("DOMContentLoaded", () => {
   console.log("PDF Template URL:", PDF_TEMPLATE_URL);
 
   // Global object to store calculated values for PDF generation
-  window.calculatedOfferData = {
-  licenzeNoa: isNaN(noa) ? 0 : noa,
-  noaTotale: isNaN(noaPrice) || isNaN(noa) ? 0 : noa * noaPrice,};
+  
 
   // --- Event Listeners ---
   if (calculatorIcon) {
@@ -153,6 +152,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Main Calculate Button Logic
   calculateBtn.addEventListener("click", () => {
+  if (rooms === 0 || doctors === 0) {
+    alert("Inserisci almeno 1 ambulatorio e 1 medico.");
+    return;
+  }
     console.log("Pulsante 'Calcola' cliccato. Inizio calcoli."); 
 
     // --- Get input values and convert to numbers ---
@@ -210,27 +213,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
     // --- Store calculated data for PDF generation ---
-    window.calculatedOfferData = {
-  licenzeNoa: isNaN(noa) ? 0 : noa,
-  noaTotale: isNaN(noaPrice) || isNaN(noa) ? 0 : noa * noaPrice,
-      rooms: rooms,
-      doctors: doctors,
-      cpl: cpl, 
-      additionalLocations: additionalLocations,
-      noaLicenses: noa,
-      noaPrice: noaPrice,
-      defaultMonthlyPrice: defaultMonthlyPrice.toFixed(2), 
-      setupFeeOnetime: setupFeeDefault.toFixed(2), 
-      setupFeeDisplayed: setupFeeDisplayed.toFixed(2), 
-      promoMonthlyPrice: totalMonthlyPrice.toFixed(2), 
-      salesCommissions: totalCommission.toFixed(2), 
-      offerDate: new Date().toLocaleDateString("it-IT"),
-      validUntilDate: "", 
-      pdfTemplateUrl: PDF_TEMPLATE_URL,
-      preparedFor: preparedForInput ? preparedForInput.value : "",
-      preparedBy: preparedByInput ? preparedByInput.value : "",
-      hasDiscountApplied: false 
-    };
+    
     console.log("Dati offerta calcolati e aggiornati:", window.calculatedOfferData);
   });
 
