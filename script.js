@@ -116,11 +116,6 @@ async function generatePdfImmediately() {
   const event = new Event("click-pdf-confirmed");
   generatePdfBtn.dispatchEvent(event);
 }
-
-  
-    // Emetti evento personalizzato che avvia il download del PDF
-    
-  });
   
 
   // Annulla popup
