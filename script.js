@@ -99,7 +99,7 @@ const refOk = isDev || document.referrer.includes("alfpes24.github.io") || windo
   window.calculatedOfferData.nomeSale = sale;
 
   popupOverlay.style.display = "none";
-  generatePdfBtn.click(); // <<< Modifica chiave
+  generatePdfBtn.dispatchEvent(new CustomEvent("click-pdf-confirmed"));
 });
 
 
