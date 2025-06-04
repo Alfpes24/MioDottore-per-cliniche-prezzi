@@ -489,6 +489,42 @@ try {
           form.getTextField('Quota_mensile_scontata').setText(window.calculatedOfferData.promoMonthlyPrice + ' €' || '0 €');
           console.log("Campo 'Quota_mensile_scontata' compilato con:", window.calculatedOfferData.promoMonthlyPrice);
         } catch (e) { console.warn("Campo PDF 'Quota_mensile_scontata' non trovato o errore:", e); }
+        // Campo: quota_mensile_totale
+try {
+  form.getTextField('quota_mensile_totale').setText(window.calculatedOfferData.promoMonthlyPrice + ' €');
+  console.log("Campo 'quota_mensile_totale' compilato con:", window.calculatedOfferData.promoMonthlyPrice);
+} catch (e) { console.warn("Campo 'quota_mensile_totale' non trovato:", e); }
+
+// Campo: setup_fee
+try {
+  form.getTextField('setup_fee').setText(window.calculatedOfferData.setupFeeOnetime + ' €');
+  console.log("Campo 'setup_fee' compilato con:", window.calculatedOfferData.setupFeeOnetime);
+} catch (e) { console.warn("Campo 'setup_fee' non trovato:", e); }
+
+// Campo: setup_fee_originale
+try {
+  form.getTextField('setup_fee_originale').setText(window.calculatedOfferData.setupFeeDisplayed + ' €');
+  console.log("Campo 'setup_fee_originale' compilato con:", window.calculatedOfferData.setupFeeDisplayed);
+} catch (e) { console.warn("Campo 'setup_fee_originale' non trovato:", e); }
+
+// Campo: commissione_totale
+try {
+  form.getTextField('commissione_totale').setText(window.calculatedOfferData.salesCommission + ' €');
+  console.log("Campo 'commissione_totale' compilato con:", window.calculatedOfferData.salesCommission);
+} catch (e) { console.warn("Campo 'commissione_totale' non trovato:", e); }
+
+// Campo: medici
+try {
+  form.getTextField('medici').setText(String(window.calculatedOfferData.doctors || '0'));
+  console.log("Campo 'medici' compilato con:", window.calculatedOfferData.doctors);
+} catch (e) { console.warn("Campo 'medici' non trovato:", e); }
+
+// Campo: sedi_aggiuntive
+try {
+  form.getTextField('sedi_aggiuntive').setText(String(window.calculatedOfferData.additionalLocations || '0'));
+  console.log("Campo 'sedi_aggiuntive' compilato con:", window.calculatedOfferData.additionalLocations);
+} catch (e) { console.warn("Campo 'sedi_aggiuntive' non trovato:", e); }
+
 
 
         // Flatten the form fields to make them part of the document content
