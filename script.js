@@ -25,7 +25,20 @@ const refOk = isDev || document.referrer.includes("alfpes24.github.io") || windo
   const calculateBtn = document.getElementById("calculate-btn");
   const checkBtn = document.getElementById("check-btn");
   const procediBtn = document.querySelector(".btn-procedi");
-  const generatePdfBtn = document.getElementById("generate-pdf-btn");
+  const generatePdfBtn = document.getElementById("generate-pdf-btn");  
+  const sendEmailBtn = document.getElementById("send-email-btn");
+  if (sendEmailBtn) {
+    sendEmailBtn.addEventListener("click", () => {
+      const destinatario = ""; // Lascia vuoto per farlo scegliere all'utente
+      const oggetto = encodeURIComponent("Preventivo MioDottore");
+      const corpo = encodeURIComponent(
+        `Ciao,\n\nTi invio in allegato il preventivo per il gestionale MioDottore.\n\nPer qualsiasi domanda resto a disposizione.\n\nCordiali saluti,\n\n${window.calculatedOfferData?.preparedBy || "Il tuo consulente"}`
+      );
+  
+      const mailtoUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${destinatario}&su=${oggetto}&body=${corpo}`;
+      window.open(mailtoUrl, "_blank");
+    });
+  }
   const pdfSidebar = document.getElementById("pdf-sidebar");
 
   const defaultMonthlyPriceField = document.getElementById("default-monthly-price");
