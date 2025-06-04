@@ -152,6 +152,14 @@ const refOk = isDev || document.referrer.includes("alfpes24.github.io") || windo
 
   // Main Calculate Button Logic
   calculateBtn.addEventListener("click", () => {
+  const rooms = parseInt(roomsInput?.value || "0");
+  const doctors = parseInt(doctorsInput?.value || "0");
+
+  if (rooms === 0 || doctors === 0) {
+    alert("Inserisci almeno 1 ambulatorio e 1 medico.");
+    return;
+  }
+
   if (rooms === 0 || doctors === 0) {
     alert("Inserisci almeno 1 ambulatorio e 1 medico.");
     return;
@@ -294,6 +302,11 @@ const refOk = isDev || document.referrer.includes("alfpes24.github.io") || windo
   // --- PDF Generation Logic ---
   if (generatePdfBtn) {
     generatePdfBtn.addEventListener("click-pdf-confirmed", async () => {
+  if (!window.calculatedOfferData || !window.calculatedOfferData.rooms) {
+    alert("Calcola prima l'offerta prima di generare il PDF.");
+    return;
+  }
+
       console.log("Pulsante 'Genera PDF' cliccato.");
       console.log("Stato di 'hasDiscountApplied' al click PDF:", window.calculatedOfferData.hasDiscountApplied);
 
