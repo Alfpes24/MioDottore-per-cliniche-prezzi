@@ -458,26 +458,30 @@ try {
         // Field: "Totale (canone + setup)" (Quota_scontata)
         // Questo campo viene compilato con il riepilogo dello sconto SOLO SE la checkbox è spuntata.
         try {
-          if (window.calculatedOfferData.hasDiscountApplied) {
-            const prezzoOriginale = window.calculatedOfferData.defaultMonthlyPrice;
-            const prezzoScontato = window.calculatedOfferData.promoMonthlyPrice;
-            const setupOriginale = window.calculatedOfferData.setupFeeDisplayed; 
-            const setupScontato = window.calculatedOfferData.setupFeeOnetime; 
+  const quotaField = form.getTextField('Quota_scontata');
 
-            // Creiamo la stringa esattamente come mostrato nell'immagine
-            const riepilogoScontoString =
-              `Prezzo Originale: ${prezzoOriginale} €\n` +
-              `Setup Fee: ${setupOriginale} €\n\n` + 
-              `Prezzo Scontato: ${prezzoScontato} €\n` +
-              `Setup Scontato: ${setupScontato} €`;
+  if (window.calculatedOfferData.hasDiscountApplied) {
+    const prezzoOriginale = window.calculatedOfferData.defaultMonthlyPrice;
+    const prezzoScontato = window.calculatedOfferData.promoMonthlyPrice;
+    const setupOriginale = window.calculatedOfferData.setupFeeDisplayed;
+    const setupScontato = window.calculatedOfferData.setupFeeOnetime;
 
-            form.getTextField('Quota_scontata').setText(riepilogoScontoString);
-            console.log("Campo 'Quota_scontata' compilato con riepilogo sconto:", riepilogoScontoString);
-          } else {
-            form.getTextField('Quota_scontata').setText(''); // Svuota il campo
-            console.log("Campo 'Quota_scontata' lasciato vuoto perché la checkbox sconto non è spuntata.");
-          }
-        } catch (e) { console.warn("Campo PDF 'Quota_scontata' non trovato o errore:", e); }
+    const riepilogoScontoString =
+      `Prezzo Originale: ${prezzoOriginale} €\n` +
+      `Setup Fee: ${setupOriginale} €\n\n` +
+      `Prezzo Scontato: ${prezzoScontato} €\n` +
+      `Setup Scontato: ${setupScontato} €`;
+
+    quotaField.setText(riepilogoScontoString);
+    console.log("Campo 'Quota_scontata' compilato con riepilogo sconto:", riepilogoScontoString);
+  } else {
+    quotaField.setText('');
+    console.log("Campo 'Quota_scontata' lasciato vuoto perché la checkbox sconto non è spuntata.");
+  }
+} catch (e) {
+  console.warn("Campo PDF 'Quota_scontata' non trovato o errore:", e);
+}
+
 
         // Field: "Canone mensile scontato (se applicabile)" (Quota_mensile_scontata)
         // Questo deve essere sempre il promoMonthlyPrice (prezzo scontato dopo il calcolo).
