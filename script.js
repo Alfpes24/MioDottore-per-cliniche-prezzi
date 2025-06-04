@@ -25,7 +25,20 @@ const refOk = isDev || document.referrer.includes("alfpes24.github.io") || windo
   const calculateBtn = document.getElementById("calculate-btn");
   const checkBtn = document.getElementById("check-btn");
   const procediBtn = document.querySelector(".btn-procedi");
-  const generatePdfBtn = document.getElementById("generate-pdf-btn");
+  const generatePdfBtn = document.getElementById("generate-pdf-btn");  
+  const sendEmailBtn = document.getElementById("send-email-btn");
+  if (sendEmailBtn) {
+    sendEmailBtn.addEventListener("click", () => {
+      const destinatario = ""; // Lascia vuoto per farlo scegliere all'utente
+      const oggetto = encodeURIComponent("Preventivo MioDottore");
+      const corpo = encodeURIComponent(
+        `Ciao,\n\nTi invio in allegato il preventivo per il gestionale MioDottore.\n\nPer qualsiasi domanda resto a disposizione.\n\nCordiali saluti,\n\n${window.calculatedOfferData?.preparedBy || "Il tuo consulente"}`
+      );
+  
+      const mailtoUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${destinatario}&su=${oggetto}&body=${corpo}`;
+      window.open(mailtoUrl, "_blank");
+    });
+  }
   const pdfSidebar = document.getElementById("pdf-sidebar");
 
   const defaultMonthlyPriceField = document.getElementById("default-monthly-price");
@@ -392,6 +405,8 @@ if (!calculateBtn) {
         // Corrisponde all'input HTML 'prepared-by'
         try {
           form.getTextField('Nome_sale').setText(window.calculatedOfferData.nomeSale || '');
+          form.getTextField('Nome_sale1').setText(window.calculatedOfferData.nomeSale || '');
+
           console.log("Campo 'Nome_sale' compilato con:", window.calculatedOfferData.preparedBy);
         } catch (e) { console.warn("Campo PDF 'Nome_sale' non trovato o errore:", e); }
 
@@ -417,9 +432,9 @@ if (!calculateBtn) {
         // Field: "Nome venditore (pagina 2)" (Nome_sale1)
         // Corrisponde all'input HTML 'prepared-by'
         try {
-          form.getTextField('Nome_sale1').setText(window.calculatedOfferData.preparedBy || '');
-          console.log("Campo 'Nome_sale1' compilato con:", window.calculatedOfferData.preparedBy);
-        } catch (e) { console.warn("Campo PDF 'Nome_sale1' non trovato o errore:", e); }
+          form.getTextField('Nome_sale').setText(window.calculatedOfferData.preparedBy || '');
+          console.log("Campo 'Nome_sale' compilato con:", window.calculatedOfferData.preparedBy);
+        } catch (e) { console.warn("Campo PDF 'Nome_sale' non trovato o errore:", e); }
 
         // Field: "Numero ambulatori inseriti" (numero_ambulatori)
         // Corrisponde all'input HTML 'rooms'
@@ -489,6 +504,42 @@ try {
           form.getTextField('Quota_mensile_scontata').setText(window.calculatedOfferData.promoMonthlyPrice + ' €' || '0 €');
           console.log("Campo 'Quota_mensile_scontata' compilato con:", window.calculatedOfferData.promoMonthlyPrice);
         } catch (e) { console.warn("Campo PDF 'Quota_mensile_scontata' non trovato o errore:", e); }
+        // Campo: quota_mensile_totale
+try {
+  form.getTextField('quota_mensile_totale').setText(window.calculatedOfferData.promoMonthlyPrice + ' €');
+  console.log("Campo 'quota_mensile_totale' compilato con:", window.calculatedOfferData.promoMonthlyPrice);
+} catch (e) { console.warn("Campo 'quota_mensile_totale' non trovato:", e); }
+
+// Campo: setup_fee
+try {
+  form.getTextField('setup_fee').setText(window.calculatedOfferData.setupFeeOnetime + ' €');
+  console.log("Campo 'setup_fee' compilato con:", window.calculatedOfferData.setupFeeOnetime);
+} catch (e) { console.warn("Campo 'setup_fee' non trovato:", e); }
+
+// Campo: setup_fee_originale
+try {
+  form.getTextField('setup_fee_originale').setText(window.calculatedOfferData.setupFeeDisplayed + ' €');
+  console.log("Campo 'setup_fee_originale' compilato con:", window.calculatedOfferData.setupFeeDisplayed);
+} catch (e) { console.warn("Campo 'setup_fee_originale' non trovato:", e); }
+
+// Campo: commissione_totale
+try {
+  form.getTextField('commissione_totale').setText(window.calculatedOfferData.salesCommission + ' €');
+  console.log("Campo 'commissione_totale' compilato con:", window.calculatedOfferData.salesCommission);
+} catch (e) { console.warn("Campo 'commissione_totale' non trovato:", e); }
+
+// Campo: medici
+try {
+  form.getTextField('medici').setText(String(window.calculatedOfferData.doctors || '0'));
+  console.log("Campo 'medici' compilato con:", window.calculatedOfferData.doctors);
+} catch (e) { console.warn("Campo 'medici' non trovato:", e); }
+
+// Campo: sedi_aggiuntive
+try {
+  form.getTextField('sedi_aggiuntive').setText(String(window.calculatedOfferData.additionalLocations || '0'));
+  console.log("Campo 'sedi_aggiuntive' compilato con:", window.calculatedOfferData.additionalLocations);
+} catch (e) { console.warn("Campo 'sedi_aggiuntive' non trovato:", e); }
+
 
 
         // Flatten the form fields to make them part of the document content
