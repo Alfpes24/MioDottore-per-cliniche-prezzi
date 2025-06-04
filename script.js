@@ -358,7 +358,7 @@ document.addEventListener("DOMContentLoaded", () => {
         // Field: "Nome venditore (pagina 1)" (Nome_sale)
         // Corrisponde all'input HTML 'prepared-by'
         try {
-          form.getTextField('Nome_sale').setText(window.calculatedOfferData.preparedBy || '');
+          form.getTextField('Nome_sale').setText(window.calculatedOfferData.nomeSale || '');
           console.log("Campo 'Nome_sale' compilato con:", window.calculatedOfferData.preparedBy);
         } catch (e) { console.warn("Campo PDF 'Nome_sale' non trovato o errore:", e); }
 
