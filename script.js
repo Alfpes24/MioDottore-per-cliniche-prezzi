@@ -149,7 +149,6 @@ async function generatePdfImmediately() {
 console.log("Verifica ID 'calculate-btn':", document.getElementById("calculate-btn"));
 if (!calculateBtn) {
     console.error("ERRORE CRITICO: Pulsante 'Calcola' (ID: calculate-btn) non trovato nell'HTML. Si prega di verificare l'ID.");
-    return; 
   }
   if (!generatePdfBtn) {
     console.error("ERRORE CRITICO: Pulsante 'Genera PDF Preventivo' (ID: generate-pdf-btn) non trovato. La generazione PDF non funzionerà.");
