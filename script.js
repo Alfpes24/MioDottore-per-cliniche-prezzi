@@ -81,26 +81,27 @@ const refOk = isDev || document.referrer.includes("alfpes24.github.io") || windo
 
   // Conferma popup → salva dati e triggera evento
   popupConfirmBtn.addEventListener("click", () => {
-    const struttura = popupStructureInput.value.trim();
-    const referente = popupReferentInput.value.trim();
-    const sale = popupSalesInput.value.trim();
+  const struttura = popupStructureInput.value.trim();
+  const referente = popupReferentInput.value.trim();
+  const sale = popupSalesInput.value.trim();
 
-    if (!struttura || !referente || !sale) {
-      alert("Compila tutti i campi prima di continuare.");
-      return;
-    }
+  if (!struttura || !referente || !sale) {
+    alert("Compila tutti i campi prima di continuare.");
+    return;
+  }
 
-    if (preparedForInput) preparedForInput.value = struttura;
-    if (preparedByInput) preparedByInput.value = referente;
+  if (preparedForInput) preparedForInput.value = struttura;
+  if (preparedByInput) preparedByInput.value = referente;
 
-    window.calculatedOfferData = window.calculatedOfferData || {};
-    window.calculatedOfferData.preparedFor = struttura;
-    window.calculatedOfferData.preparedBy = referente;
-    window.calculatedOfferData.nomeSale = sale;
+  window.calculatedOfferData = window.calculatedOfferData || {};
+  window.calculatedOfferData.preparedFor = struttura;
+  window.calculatedOfferData.preparedBy = referente;
+  window.calculatedOfferData.nomeSale = sale;
 
-    popupOverlay.style.display = "none";
-    generatePdfBtn.dispatchEvent(new Event("click-pdf-confirmed"));
-  });
+  popupOverlay.style.display = "none";
+  generatePdfBtn.click(); // <<< Modifica chiave
+});
+
 
   // Annulla popup
   popupCancelBtn.addEventListener("click", () => {
